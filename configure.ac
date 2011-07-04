@@ -1,0 +1,16 @@
+AC_INIT(machineReassignemnent, 0.1)
+
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE([-Wall foreign])
+
+AC_CONFIG_MACRO_DIR([m4])
+AM_INIT_AUTOMAKE
+AC_PROG_CXX
+AC_PROG_LIBTOOL
+AC_PROG_MAKE_SET
+
+AC_CONFIG_FILES([Makefile])
+
+AC_OUTPUT
+
+

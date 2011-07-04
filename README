@@ -1,0 +1,36 @@
+====== Compilation  ======
+À titre indicatif, pour compiler dans un dossier "build", avec le flag de debug (-g), executer, depuis la racine de l'arborescence :
+> ./autogen.sh 
+> mkdir build
+> cd build/
+> ../configure CPPFLAGS="-g"
+> make -j
+
+Puis, pour lancer le binaire faire, depuis le dossier build : ./machineReassignment
+
+(Pour supprimer les fichiers de compil, depuis le dossier de compil : make clea)
+
+====== Ajouter un fichier de sources ======
+  * Si c'est un fichier d'entete, rien à faire.
+  * Si c'est un .cc, l'ajouter dans le Makefile.am (selon les versions des autotools, il peut etre necessaire, pour compiler, de recommencer depuis ./autogen.sh)
+
+
+====== Git : guide basique d'utilisation ======
+===== Pour commiter =====
+  * Pour chaque fichier a commiter (y compris pour ajouter les nouveaux fichiers) : git add fic1 fic2 ...
+  * git commit
+
+Si tous les fichiers modifiés doivent être commités, on peut utiliser le raccourci : git commit -a
+
+===== Pour récupérer les modifs des autres ======
+  * git fetch
+  * puis, en étant sur la branche master : git merge origin/master
+
+(Si la copie de travail est clean, on peut faire deux en un avec : git pull ; mais ce n'est pas conseillé)
+
+===== Pour envoyer ses modifs commités =====
+  * git push
+
+Si "ça ne passe pas", c'est qu'on n'a pas les derniers changements des autres. Dans ce cas, les récupérer au préalable (fetch), les merger, puis pusher
+Attention : ne *jamais* forcer un push avec l'option -f (à chaque fois qu'on fait ça, Dieu tue un chaton)
+
