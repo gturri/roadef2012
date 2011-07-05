@@ -1,11 +1,11 @@
 SUBDIRS=
 ACLOCAL_AMFLAGS = -I m4
 
-bin_PROGRAMS = machineReassignment
+bin_PROGRAMS = machineReassignment generateurInstance
 if WANT_GTEST
 bin_PROGRAMS += testU
 endif
-EXTRA_PROGRAMS = testU
+EXTRA_PROGRAMS = testU 
 
 machineReassignment_FILES = \
 	$(top_srcdir)/src/tools/random/RandomCoreImpl.cc \
@@ -17,6 +17,13 @@ machineReassignment_SOURCES = \
 	$(machineReassignment_FILES)
 
 machineReassignment_CPPFLAGS = \
+	-I $(top_srcdir)/src
+
+generateurInstance_SOURCES = \
+	$(machineReassignment_FILES) \
+    $(top_srcdir)/src/generateur/generateur_main.cc
+
+generateurInstance_CPPFLAGS = \
 	-I $(top_srcdir)/src
 
 testU_SOURCES = \
