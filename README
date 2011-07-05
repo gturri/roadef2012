@@ -34,3 +34,11 @@ Si tous les fichiers modifiés doivent être commités, on peut utiliser le racc
 Si "ça ne passe pas", c'est qu'on n'a pas les derniers changements des autres. Dans ce cas, les récupérer au préalable (fetch), les merger, puis pusher
 Attention : ne *jamais* forcer un push avec l'option -f (à chaque fois qu'on fait ça, Dieu tue un chaton)
 
+===== Pour compiler les tests U =====
+Pour ne pas les compiler, il suffit de ne rien faire (ou, ce qui revient au meme, de passer au ./configure l'option --without-libgmock)
+
+Pour les compiler, il faut :
+1 - récupérer la lib gmock, la dezipper
+2 - la compiler en faisant "make" dans gmock-1.6.0/make (il est important de compiler dans le sous dossier "make" : c'est là que les autotools s'attendront à trouver le .a)
+3 - Passer à ./configure l'option --with-libgmock-dir=/path/to/gmock-1.6.0
+4 - L'exécution de "make" generera alors, en plus du binaire d'optimisation, un binaire nommé "testU", qu'il suffit d'exécuter pour lancer les tests

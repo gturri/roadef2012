@@ -14,8 +14,8 @@ AC_DEFUN([AC_PATH_GTEST], [
 				ac_save_CPPFLAGS="$CPPFLAGS"
 				CFLAGS="$GMOCK_INCLUDE $GTEST_INCLUDE $CFLAGS"
 				CPPFLAGS="$GMOCK_INCLUDE $GTEST_INCLUDE $CPPFLAGS"
-				AC_CHECK_HEADER(gmock/gmock.h,,[ AC_MSG_ERROR([gmock.h introuvable. Utiliser --without-libgmock pour ne pas compiler les tests unitaires]) ])
-				AC_CHECK_HEADER(gtest/gtest.h,,[ AC_MSG_ERROR([gtest.h introuvable. Utiliser --without-libgmock pour ne pas compiler les tests unitaires]) ])
+                AC_CHECK_FILE($withval/include/gmock/gmock.h,,[AC_MSG_ERROR(Impossible de trouver gmock/gmock.h. Utiliser --without-libgmock pour ne pas compiler les tests U)])
+                AC_CHECK_FILE($withval/gtest/include/gtest/gtest.h,,[AC_MSG_ERROR(Impossible de trouver gmock/gmock.h. Utiliser --without-libgmock pour ne pas compiler les tests U)])
 				AC_CHECK_FILE($GMOCK_LIBS,,[AC_MSG_ERROR(Impossible de trouver gmock_main.a. Utiliser --without-libgmock pour ne pas compiler les tests unitaires)])
 				CFLAGS="$ac_save_CFLAGS"
 				CPPFLAGS="$ac_save_CPPFLAGS"

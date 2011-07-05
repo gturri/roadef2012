@@ -2,6 +2,10 @@ SUBDIRS=
 ACLOCAL_AMFLAGS = -I m4
 
 bin_PROGRAMS = machineReassignment
+if WANT_GTEST
+bin_PROGRAMS += testU
+endif
+EXTRA_PROGRAMS = testU
 
 machineReassignment_FILES = \
 	$(top_srcdir)/src/tools/random/RandomCoreImpl.cc \
@@ -14,3 +18,17 @@ machineReassignment_SOURCES = \
 
 machineReassignment_CPPFLAGS = \
 	-I $(top_srcdir)/src
+
+testU_SOURCES = \
+	$(top_srcdir)/src/gtests/tools/random/RandomGenerateurTest.cc \
+	$(machineReassignment_FILES)
+
+testU_CPPFLAGS = \
+	$(GTEST_INCLUDE) \
+	$(GMOCK_INCLUDE) \
+	-I $(top_srcdir)/src
+
+testU_LDADD = \
+	$(GMOCK_LIBS) \
+	-lpthread
+
