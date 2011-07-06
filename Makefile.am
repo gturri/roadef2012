@@ -8,6 +8,9 @@ endif
 EXTRA_PROGRAMS = testU 
 
 machineReassignment_FILES = \
+	$(top_srcdir)/src/dtoin/RessourceDtoin.cc \
+	$(top_srcdir)/src/bo/RessourceBO.cc \
+	$(top_srcdir)/src/bo/ContextBO.cc \
 	$(top_srcdir)/src/tools/random/RandomCoreImpl.cc \
 	$(top_srcdir)/src/tools/random/RandomCoreMT.cc \
 	$(top_srcdir)/src/tools/random/RandomGenerateur.cc
@@ -27,6 +30,7 @@ generateurInstance_CPPFLAGS = \
 	-I $(top_srcdir)/src
 
 testU_SOURCES = \
+	$(top_srcdir)/src/gtests/dtoin/RessourceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/tools/random/RandomGenerateurTest.cc \
 	$(machineReassignment_FILES)
 
