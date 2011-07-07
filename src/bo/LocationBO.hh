@@ -4,12 +4,21 @@
 using namespace std::tr1;
 
 class ServiceBO;
+class MachineBO;
 
 class LocationBO {
+    public:
+        LocationBO(int id_p);
+        void addMachine(MachineBO* machine_p);
+        int getId() const;
+
     private:
         int id_m;
+
+        /**
+         * Ensemble des machines de la Location
+         */
         unordered_set<MachineBO*> machines_m;
-        unordered_set<ServiceBO*> services_m;
 };
 
 #endif

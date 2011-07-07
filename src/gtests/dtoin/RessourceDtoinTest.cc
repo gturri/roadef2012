@@ -5,16 +5,14 @@
 #include <gtest/gtest.h>
 using namespace std;
 
-TEST(RessourceDtoin, read){
+TEST(dtoin, RessourceDtoin){
     RessourceDtoin reader_l;
     ifstream ifs_l("../src/gtests/dtoin/ressourceDtoinTest.txt");
-    if ( ! ifs_l ){
-        cerr << "Impossible d'ouvrir ressourceDtoinTest.txt dans le test RessourceDtoin_read" << endl;
-    }
+    ASSERT_TRUE( ifs_l ) << "Impossible d'ouvrir ressourceDtoinTest.txt dans le test RessourceDtoin_read" << endl;
     ContextBO context_l;
 
     reader_l.read(ifs_l, &context_l);
-    EXPECT_EQ(context_l.getNbRessources(), 2);
+    ASSERT_EQ(context_l.getNbRessources(), 2);
 
     RessourceBO* ress1_l = context_l.getRessource(0);
     EXPECT_EQ(ress1_l->getId(), 0);

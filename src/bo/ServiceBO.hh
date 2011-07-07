@@ -15,8 +15,8 @@ class ServiceBO {
         unordered_set<ProcessBO*> process_m;
         int spreadMin;
         unordered_set<NeighborhoodBO*> neighborhood_m;
-        unordered_set<Service*> IDependOnThem_m;
-        unordered_set<Service*> theyDependsMe_m;
+        unordered_set<ServiceBO*> IDependOnThem_m;
+        unordered_set<ServiceBO*> theyDependsMe_m;
         int serviceMoveCost_m;
 };
 

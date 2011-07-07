@@ -1,7 +1,7 @@
 #ifndef MACHINEBO_HH
 #define MACHINEBO_HH
-#include <tr1/unordered_map>
-using namespace std::tr1;
+#include <vector>
+using namespace std;
 
 class LocationBO;
 class NeighborhoodBO;
@@ -9,15 +9,28 @@ class RessourceBO;
 
 class MachineBO {
     public:
-        Machine(int id_l, LocationBO* location_l, NeighborhoodBO* neighborhood_l, const unordered_map<RessourceBO*, int>& capa_m, const unordered_map<RessourceBO*, int> safetyCapa_m);
+        MachineBO(int id_p, LocationBO* location_p, NeighborhoodBO* neighborhood_p, const vector<int>& capa_p, const vector<int> safetyCapa_p);
+
+        int getId() const;
+        LocationBO* getLocation() const;
+        NeighborhoodBO* getNeighborhood() const;
+        int getCapa(int idxRess_p) const;
+        int getSafetyCapa(int idxRess_p) const;
 
     private:
         int id_m;
-        LocationBO* location_m;
-        NeighborhoodBO* neighborhood_m;
-        unordered_map<RessourceBO*, int> capa_m;
-        unordered_map<RessourceBO*, int> safetyCapa_m;
-        unordered_map<RessourceBO*, int> capaLeft_m;
+        LocationBO* const location_m;
+        NeighborhoodBO* const neighborhood_m;
+
+        /**
+         * capa_m[idxRess] = capacite de la machine par rapport a cette ressource
+         */
+        const vector<int> capa_m;
+
+        /**
+         * safetyCapa_m[idxRess] = capacite de securite de la machine par rapport a cette ressource
+         */
+        const vector<int> safetyCapa_m;
 };
 
 #endif

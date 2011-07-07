@@ -9,8 +9,13 @@ EXTRA_PROGRAMS = testU
 
 machineReassignment_FILES = \
 	$(top_srcdir)/src/dtoin/RessourceDtoin.cc \
+	$(top_srcdir)/src/dtoin/MachineDtoin.cc \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
 	$(top_srcdir)/src/bo/ContextBO.cc \
+	$(top_srcdir)/src/bo/LocationBO.cc \
+	$(top_srcdir)/src/bo/MMCBO.cc \
+	$(top_srcdir)/src/bo/MachineBO.cc \
+	$(top_srcdir)/src/bo/NeighborhoodBO.cc \
 	$(top_srcdir)/src/tools/random/RandomCoreImpl.cc \
 	$(top_srcdir)/src/tools/random/RandomCoreMT.cc \
 	$(top_srcdir)/src/tools/random/RandomGenerateur.cc
@@ -32,6 +37,7 @@ generateurInstance_CPPFLAGS = \
 testU_SOURCES = \
 	$(top_srcdir)/src/gtests/dtoin/RessourceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/tools/random/RandomGenerateurTest.cc \
+	$(top_srcdir)/src/gtests/dtoin/MachineDtoinTest.cc \
 	$(machineReassignment_FILES)
 
 testU_CPPFLAGS = \

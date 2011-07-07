@@ -1,4 +1,4 @@
-AC_INIT(machineReassignemnent, 0.1)
+AC_INIT(machineReassignmnent, 0.1)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE([-Wall foreign])
