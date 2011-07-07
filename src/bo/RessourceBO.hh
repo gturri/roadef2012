@@ -6,12 +6,24 @@ class RessourceBO {
         RessourceBO(int id_p, bool isTransient_p, int loadCost_p);
         int getId() const;
         bool isTransient() const;
-        int getLoadCost() const;
+        int getWeightLoadCost() const;
 
     private:
+        /**
+         *id 0-based qui correspond a l'ordre dans lequel la ressource est lue
+         */
         int id_m;
+
+        /**
+         * Si TRUE, alors cette ressource n'est pas liberee d'une machine lorsqu'on en enleve un process (cf sujet)
+         */
         bool isTransient_m;
-        int loadCost_m;
+
+        /**
+         * Poids dans la fonction objectif.
+         * Coef multiplicatif a appliquer a la somme des depassement des safety capacity
+         */
+        int weightLoadCost_m;
 };
 
 #endif
