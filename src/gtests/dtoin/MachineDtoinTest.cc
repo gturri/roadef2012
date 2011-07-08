@@ -14,9 +14,9 @@ TEST(dtoin, MachineDtoin){
     MachineDtoin machineReader_l;
     RessourceDtoin ressReader_l;
     ifstream machineIfs_l("../src/gtests/dtoin/machineDtoinTest.txt");
-    ASSERT_TRUE( machineIfs_l ) << "Impossible d'ouvrir machineDtoinTest.txt dans le test RessourceDtoin_read" << endl;
+    ASSERT_TRUE( machineIfs_l ) << "Impossible d'ouvrir machineDtoinTest.txt" << endl;
     ifstream ressIfs_l("../src/gtests/dtoin/ressourceDtoinTest.txt");
-    ASSERT_TRUE( ressIfs_l ) << "Impossible d'ouvrir ressourceDtoinTest.txt dans le test RessourceDtoin_read";
+    ASSERT_TRUE( ressIfs_l ) << "Impossible d'ouvrir ressourceDtoinTest.txt" << endl;
     ContextBO context_l;
 
     ressReader_l.read(ressIfs_l, &context_l);
