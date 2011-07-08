@@ -8,6 +8,7 @@ class MachineBO;
 class LocationBO;
 class NeighborhoodBO;
 class MMCBO;
+class ServiceBO;
 
 //FIXME : Si cette classe grossie trop, ajouter des managerBO pour chaque type d'objet gere actuellement par le ContextBO
 class ContextBO {
@@ -33,6 +34,9 @@ class ContextBO {
         void addMachine(MachineBO* pMachine_p);
         int getNbMachines() const;
         MachineBO* getMachine(int idx_p) const;
+
+        int getNbServices() const;
+        ServiceBO* getService(int idx_p) const;
 
     private:
         vector<RessourceBO*> ressources_m;

@@ -35,9 +35,10 @@ generateurInstance_CPPFLAGS = \
 	-I $(top_srcdir)/src
 
 testU_SOURCES = \
-	$(top_srcdir)/src/gtests/dtoin/RessourceDtoinTest.cc \
-	$(top_srcdir)/src/gtests/tools/random/RandomGenerateurTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/MachineDtoinTest.cc \
+	$(top_srcdir)/src/gtests/dtoin/RessourceDtoinTest.cc \
+	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \
+	$(top_srcdir)/src/gtests/tools/random/RandomGenerateurTest.cc \
 	$(machineReassignment_FILES)
 
 testU_CPPFLAGS = \
