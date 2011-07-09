@@ -16,6 +16,7 @@ TEST(dtoin, MachineDtoin){
     ASSERT_EQ(context_l.getNbNeighborhoods(), 2);
 
     //Machine 0
+    EXPECT_EQ(context_l.getMachine(0)->getId(), 0);
     EXPECT_EQ(context_l.getMachine(0)->getNeighborhood()->getId(), 0);
     EXPECT_EQ(context_l.getMachine(0)->getLocation()->getId(), 0);
     EXPECT_EQ(context_l.getMachine(0)->getCapa(0), 30);
@@ -24,6 +25,7 @@ TEST(dtoin, MachineDtoin){
     EXPECT_EQ(context_l.getMachine(0)->getSafetyCapa(1), 80);
     
     //Machine 1
+    EXPECT_EQ(context_l.getMachine(1)->getId(), 1);
     EXPECT_EQ(context_l.getMachine(1)->getNeighborhood()->getId(), 0);
     EXPECT_EQ(context_l.getMachine(1)->getLocation()->getId(), 0);
     EXPECT_EQ(context_l.getMachine(1)->getCapa(0), 10);
@@ -32,6 +34,7 @@ TEST(dtoin, MachineDtoin){
     EXPECT_EQ(context_l.getMachine(1)->getSafetyCapa(1), 160);
 
     //Machine 2
+    EXPECT_EQ(context_l.getMachine(2)->getId(), 2);
     EXPECT_EQ(context_l.getMachine(2)->getNeighborhood()->getId(), 1);
     EXPECT_EQ(context_l.getMachine(2)->getLocation()->getId(), 1);
     EXPECT_EQ(context_l.getMachine(2)->getCapa(0), 15);
@@ -40,6 +43,7 @@ TEST(dtoin, MachineDtoin){
     EXPECT_EQ(context_l.getMachine(2)->getSafetyCapa(1), 80);
 
     //Machine 3
+    EXPECT_EQ(context_l.getMachine(3)->getId(), 3);
     EXPECT_EQ(context_l.getMachine(3)->getNeighborhood()->getId(), 1);
     EXPECT_EQ(context_l.getMachine(3)->getLocation()->getId(), 2);
     EXPECT_EQ(context_l.getMachine(3)->getCapa(0), 10);
