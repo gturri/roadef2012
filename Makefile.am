@@ -11,6 +11,7 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/dtoin/BalanceCostDtoin.cc \
 	$(top_srcdir)/src/dtoin/MachineDtoin.cc \
 	$(top_srcdir)/src/dtoin/ProcessDtoin.cc \
+	$(top_srcdir)/src/dtoin/PoidsDtoin.cc \
 	$(top_srcdir)/src/dtoin/RessourceDtoin.cc \
 	$(top_srcdir)/src/dtoin/ServiceDtoin.cc \
 	$(top_srcdir)/src/bo/BalanceCostBO.cc \
@@ -44,6 +45,7 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/dtoin/BalanceCostDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/MachineDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/ProcessDtoinTest.cc \
+	$(top_srcdir)/src/gtests/dtoin/PoidsDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/RessourceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \

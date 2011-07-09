@@ -136,3 +136,28 @@ int ContextBO::getNbBalanceCosts() const{
 BalanceCostBO* ContextBO::getBalanceCost(int idx_p) const{
     return balanceCosts_m[idx_p];
 }
+
+void ContextBO::setPoidsPMC(int poids_p){
+    poidsPMC_m = poids_p;
+}
+
+int ContextBO::getPoidsPMC() const{
+    return poidsPMC_m;
+}
+
+void ContextBO::setPoidsSMC(int poids_p){
+    poidsSMC_m = poids_p;
+}
+
+int ContextBO::getPoidsSMC() const{
+    return poidsSMC_m;
+}
+
+void ContextBO::setPoidsMMC(int poids_p){
+    poidsMMC_m = poids_p;
+}
+
+int ContextBO::getPoidsMMC() const{
+    return poidsMMC_m;
+}
+

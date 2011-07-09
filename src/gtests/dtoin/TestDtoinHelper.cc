@@ -1,6 +1,7 @@
 #include "gtests/dtoin/TestDtoinHelper.hh"
 #include "dtoin/BalanceCostDtoin.hh"
 #include "dtoin/MachineDtoin.hh"
+#include "dtoin/PoidsDtoin.hh"
 #include "dtoin/ProcessDtoin.hh"
 #include "dtoin/RessourceDtoin.hh"
 #include "dtoin/ServiceDtoin.hh"
@@ -34,6 +35,12 @@ void TestDtoinHelper::loadTestDataProcess(ContextBO* pContextBO_p){
 void TestDtoinHelper::loadTestDataBalanceCost(ContextBO* pContextBO_p){
     BalanceCostDtoin reader_l;
     istringstream ifs_l(getBalanceCostTestData());
+    reader_l.read(ifs_l, pContextBO_p);
+}
+
+void TestDtoinHelper::loadTestDataPoids(ContextBO* pContextBO_p){
+    PoidsDtoin reader_l;
+    istringstream ifs_l(getPoidsTestData());
     reader_l.read(ifs_l, pContextBO_p);
 }
 
@@ -118,4 +125,10 @@ string TestDtoinHelper::getBalanceCostTestData(){
     return string("1 \
 0 1 20 \
 10");
+}
+
+string TestDtoinHelper::getPoidsTestData(){
+    return string("1 \
+10 \
+100");
 }

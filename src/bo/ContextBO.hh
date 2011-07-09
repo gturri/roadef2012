@@ -49,6 +49,14 @@ class ContextBO {
         int getNbBalanceCosts() const;
         BalanceCostBO* getBalanceCost(int idx_p) const;
 
+        void setPoidsPMC(int poids_p);
+        int getPoidsPMC() const;
+
+        void setPoidsSMC(int poids_p);
+        int getPoidsSMC() const;
+
+        void setPoidsMMC(int poids_p);
+        int getPoidsMMC() const;
 
     private:
         vector<RessourceBO*> ressources_m;
@@ -59,6 +67,22 @@ class ContextBO {
         vector<ProcessBO*> processes_m;
         vector<BalanceCostBO*> balanceCosts_m;
         MMCBO* pMMCBO_m;
+
+        /**
+         * Poids du critere Process Move Cost
+         */
+        int poidsPMC_m;
+
+        /**
+         * Poids du critere Service Move Cost
+         */
+        int poidsSMC_m;
+
+        /**
+         * Poids du critere Machine Move Cost
+         */
+        int poidsMMC_m;
+
 };
 
 #endif
