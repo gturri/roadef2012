@@ -9,12 +9,12 @@ class ServiceBO;
 
 class ProcessBO {
     public:
-        ProcessBO(int id_p, ServiceBO* pService_p, const vector<int>& requirements_p,  int pcm_p);
+        ProcessBO(int id_p, ServiceBO* pService_p, const vector<int>& vRequirements_p,  int pmc_p);
 
         int getId() const;
         ServiceBO* getService() const;
         int getRequirement(int idxRess_p) const;
-        void setMachineInit();
+        void setMachineInit(MachineBO* pMachine_p);
         MachineBO* getMachineInit() const;
         int getPMC() const;
 
@@ -24,18 +24,18 @@ class ProcessBO {
         /**
          * Service auquel appartient le process
          */
-        ServiceBO* const service_m;
+        ServiceBO* const pService_m;
 
         /**
          * Ressources necessaires au process
          * requirements[pRess_l->getId()] => quantite necessaire de ressources du type donne
          */
-        const vector<int> requirements_m;
+        const vector<int> vRequirements_m;
 
         /**
          * Machine sur laquel le process est place initialement
          */
-        MachineBO* machineInit_m;
+        MachineBO* pMachineInit_m;
 
         /**
          * Process move cost

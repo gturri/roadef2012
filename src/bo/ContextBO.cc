@@ -3,6 +3,7 @@
 #include "bo/MachineBO.hh"
 #include "bo/MMCBO.hh"
 #include "bo/NeighborhoodBO.hh"
+#include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
 #include "bo/ServiceBO.hh"
 
@@ -28,6 +29,10 @@ ContextBO::~ContextBO(){
     }
 
     for ( vector<ServiceBO*>::iterator it_l = services_m.begin() ; it_l != services_m.end() ; it_l++ ){
+        delete *it_l;
+    }
+
+    for ( vector<ProcessBO*>::iterator it_l = processes_m.begin() ; it_l != processes_m.end() ; it_l++ ){
         delete *it_l;
     }
 
@@ -101,4 +106,16 @@ int ContextBO::getNbServices() const{
 
 ServiceBO* ContextBO::getService(int idx_p) const{
     return services_m[idx_p];
+}
+
+void ContextBO::addProcess(ProcessBO* pProcess_p){
+    processes_m.push_back(pProcess_p);
+}
+
+int ContextBO::getNbProcesses() const{
+    return processes_m.size();
+}
+
+ProcessBO* ContextBO::getProcess(int idx_p) const{
+    return processes_m[idx_p];
 }

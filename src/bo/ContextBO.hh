@@ -50,6 +50,7 @@ class ContextBO {
         vector<LocationBO*> locations_m;
         vector<NeighborhoodBO*> neighborhoods_m;
         vector<ServiceBO*> services_m;
+        vector<ProcessBO*> processes_m;
         MMCBO* pMMCBO_m;
 };
 

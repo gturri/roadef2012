@@ -9,7 +9,9 @@ ProcessBO::ProcessBO(int id_p, ServiceBO* pService_p, const vector<int>& vRequir
     vRequirements_m(vRequirements_p),
     pMachineInit_m(0),
     pmc_m(pmc_p)
-{}
+{
+    pService_m->addProcess(this);
+}
 
 int ProcessBO::getId() const{
     return id_m;

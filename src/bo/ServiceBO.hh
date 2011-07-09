@@ -5,7 +5,6 @@
 using namespace std::tr1;
 
 class ProcessBO;
-class LocationBO;
 class NeighborhoodBO;
 
 class ServiceBO {
@@ -25,22 +24,28 @@ class ServiceBO {
          */
         bool iDependOn(int idxService_p) const;
 
+        void addProcess(ProcessBO* pProcess_p);
         int getNbProcesses() const;
         bool containsProcess(int idxProcess_p) const;
 
     private:
         const int id_m;
-        unordered_map<LocationBO*, int> nbProcessPerLocation_m;
-        unordered_set<ProcessBO*> process_m;
+
+        /**
+         * Liste des indices de processes appartenant au service
+         */
+        unordered_set<int> sProcess_m;
+
+        /**
+         * Nombre minimum de locations sur lesquels les processes du services
+         * doivent etre deployes
+         */
         const int spreadMin_m;
-        unordered_set<NeighborhoodBO*> neighborhood_m;
 
         /**
          * Contient les indices des services dont "this" depend
          */
         const unordered_set<int> iDependOnThem_m;
-
-        int serviceMoveCost_m;
 };
 
 
