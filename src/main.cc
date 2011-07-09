@@ -1,3 +1,4 @@
+#define TEAM_ID 666 /* TODO : completer quand on sera inscrit et qu'on aura notre identifiant d'equipe */
 #include "dtoin/InstanceReaderDtoin.hh"
 #include "dtoout/InstanceWriterDtoout.hh"
 #include <string>
@@ -64,6 +65,13 @@ int main(int argc, char **argv) {
         << "new sol : ./" << new_solution_filename_l << endl
         << "send our name : " << send_name_l << endl
         << "seed : " << seed_l << endl;
+
+    if ( send_name_l ){
+        cout << TEAM_ID << endl;
+        if ( instance_filename_l == "" ){
+            return 0;
+        }
+    }
 
     ContextBO context_l = InstanceReaderDtoin::read(instance_filename_l);
     InstanceWriterDtoout::write(&context_l, "outfile.txt");
