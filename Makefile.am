@@ -24,10 +24,7 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/NeighborhoodBO.cc \
 	$(top_srcdir)/src/bo/ProcessBO.cc \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
-	$(top_srcdir)/src/bo/ServiceBO.cc \
-	$(top_srcdir)/src/tools/random/RandomCoreImpl.cc \
-	$(top_srcdir)/src/tools/random/RandomCoreMT.cc \
-	$(top_srcdir)/src/tools/random/RandomGenerateur.cc
+	$(top_srcdir)/src/bo/ServiceBO.cc
 
 machineReassignment_SOURCES = \
 	$(top_srcdir)/src/main.cc \
@@ -51,7 +48,6 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/dtoin/RessourceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
-	$(top_srcdir)/src/gtests/tools/random/RandomGenerateurTest.cc \
 	$(machineReassignment_FILES)
 
 testU_CPPFLAGS = \
