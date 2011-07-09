@@ -7,6 +7,10 @@ using namespace std::tr1;
 class ProcessBO;
 class NeighborhoodBO;
 
+/* FIXME : c'est une guerre de recuperer les services qui dependent de celui-ci
+ * (et de recuperer ceux dont celui-ci dependent)
+ * Ne pas hesiter a refactorer (je pense que des getteurs qui calculent brutalement ces donnees puis qui les cachent, ca le fait.)
+ */
 class ServiceBO {
     public:
         ServiceBO(int id_p, int spreadMin_p, const unordered_set<int>& dependances_p);

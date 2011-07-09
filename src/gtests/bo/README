@@ -1,0 +1,5 @@
+Les objets BO se limitent pour la plupart a des getteurs et des setteurs.
+Pas vraiment besoin de tests ici donc. D'autant qu'on teste deja pas mal ces classes
+dans les tests du package dtoin.
+
+(Toutefois, ne pas hesitez a ajouter des tests ici si le besoin s'en fait sentir !)

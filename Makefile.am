@@ -9,11 +9,13 @@ EXTRA_PROGRAMS = testU
 
 machineReassignment_FILES = \
 	$(top_srcdir)/src/dtoin/BalanceCostDtoin.cc \
+	$(top_srcdir)/src/dtoin/InstanceReaderDtoin.cc \
 	$(top_srcdir)/src/dtoin/MachineDtoin.cc \
 	$(top_srcdir)/src/dtoin/ProcessDtoin.cc \
 	$(top_srcdir)/src/dtoin/PoidsDtoin.cc \
 	$(top_srcdir)/src/dtoin/RessourceDtoin.cc \
 	$(top_srcdir)/src/dtoin/ServiceDtoin.cc \
+	$(top_srcdir)/src/dtoout/InstanceWriterDtoout.cc \
 	$(top_srcdir)/src/bo/BalanceCostBO.cc \
 	$(top_srcdir)/src/bo/ContextBO.cc \
 	$(top_srcdir)/src/bo/LocationBO.cc \

@@ -12,7 +12,13 @@ class ProcessBO;
 class ServiceBO;
 class BalanceCostBO;
 
-//FIXME : Si cette classe grossie trop, ajouter des managerBO pour chaque type d'objet gere actuellement par le ContextBO
+/* FIXME : Cette classe est enorme a cause de duplication de code. Ne pas hesiter a refactorer
+ * (mais uniquement a condition d'avoir une bonne solution, et de ne pas deporter ce bourbier de code au niveau des classes clientes)
+ */
+
+/**
+ * Represente une instance, et permet d'acceder a chacune des entites de celle-ci
+ */
 class ContextBO {
     public:
         ContextBO();
