@@ -4,6 +4,7 @@
 #include "bo/MMCBO.hh"
 #include "bo/NeighborhoodBO.hh"
 #include "bo/RessourceBO.hh"
+#include "bo/ServiceBO.hh"
 
 ContextBO::ContextBO() :
     pMMCBO_m(0)
@@ -23,6 +24,10 @@ ContextBO::~ContextBO(){
     }
 
     for ( vector<NeighborhoodBO*>::iterator it_l = neighborhoods_m.begin() ; it_l != neighborhoods_m.end() ; it_l++ ){
+        delete *it_l;
+    }
+
+    for ( vector<ServiceBO*>::iterator it_l = services_m.begin() ; it_l != services_m.end() ; it_l++ ){
         delete *it_l;
     }
 
@@ -86,3 +91,14 @@ MachineBO* ContextBO::getMachine(int idx_p) const{
     return machines_m[idx_p];
 }
 
+void ContextBO::addService(ServiceBO* pService_p){
+    services_m.push_back(pService_p);
+}
+
+int ContextBO::getNbServices() const{
+    return services_m.size();
+}
+
+ServiceBO* ContextBO::getService(int idx_p) const{
+    return services_m[idx_p];
+}

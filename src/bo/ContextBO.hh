@@ -35,6 +35,7 @@ class ContextBO {
         int getNbMachines() const;
         MachineBO* getMachine(int idx_p) const;
 
+        void addService(ServiceBO* pService_p);
         int getNbServices() const;
         ServiceBO* getService(int idx_p) const;
 
@@ -43,6 +44,7 @@ class ContextBO {
         vector<MachineBO*> machines_m;
         vector<LocationBO*> locations_m;
         vector<NeighborhoodBO*> neighborhoods_m;
+        vector<ServiceBO*> services_m;
         MMCBO* pMMCBO_m;
 };
 

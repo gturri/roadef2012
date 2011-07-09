@@ -6,11 +6,11 @@
 using namespace std;
 
 TEST(dtoin, ServiceDtoin){
-    ServiceDtoin serviceReader_l;
+    ServiceDtoin reader_l;
     ifstream ifs_l("../src/gtests/dtoin/serviceDtoinTest.txt");
     ASSERT_TRUE( ifs_l ) << "Impossible d'ouvrir serviceDtoinTest.txt" << endl;
     ContextBO context_l;
-    serviceReader_l.read(ifs_l, &context_l);
+    reader_l.read(ifs_l, &context_l);
 
     ASSERT_EQ(context_l.getNbServices(), 2);
 

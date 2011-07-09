@@ -10,7 +10,7 @@ class NeighborhoodBO;
 
 class ServiceBO {
     public:
-        ServiceBO(int id_p);
+        ServiceBO(int id_p, int spreadMin_p, const unordered_set<int>& dependances_p);
 
         int getId() const;
         int getSpreadMin() const;
@@ -26,16 +26,16 @@ class ServiceBO {
         bool iDependOn(int idx_p) const;
 
     private:
-        int id_m;
+        const int id_m;
         unordered_map<LocationBO*, int> nbProcessPerLocation_m;
         unordered_set<ProcessBO*> process_m;
-        int spreadMin;
+        const int spreadMin_m;
         unordered_set<NeighborhoodBO*> neighborhood_m;
 
         /**
          * Contient les indices des services dont "this" depend
          */
-        unordered_set<int> iDependOnThem_m;
+        const unordered_set<int> iDependOnThem_m;
 
         int serviceMoveCost_m;
 };
