@@ -1,5 +1,6 @@
 #include "gtests/dtoin/TestDtoinHelper.hh"
 #include "dtoin/MachineDtoin.hh"
+#include "dtoin/ProcessDtoin.hh"
 #include "dtoin/RessourceDtoin.hh"
 #include "dtoin/ServiceDtoin.hh"
 #include <sstream>
@@ -20,6 +21,12 @@ void TestDtoinHelper::loadTestDataMachine(ContextBO* pContextBO_p){
 void TestDtoinHelper::loadTestDataService(ContextBO* pContextBO_p){
     ServiceDtoin reader_l;
     istringstream ifs_l(getServiceTestData());
+    reader_l.read(ifs_l, pContextBO_p);
+}
+
+void TestDtoinHelper::loadTestDataProcess(ContextBO* pContextBO_p){
+    ProcessDtoin reader_l;
+    istringstream ifs_l(getProcessTestData());
     reader_l.read(ifs_l, pContextBO_p);
 }
 
@@ -85,3 +92,17 @@ string TestDtoinHelper::getServiceTestData(){
 1");
 }
 
+string TestDtoinHelper::getProcessTestData(){
+    return string("3 \
+0 \
+12 10 \
+1000 \
+\
+0 \
+10 20 \
+100 \
+\
+1 \
+6 200 \
+1");
+}

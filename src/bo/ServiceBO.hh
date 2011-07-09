@@ -23,7 +23,10 @@ class ServiceBO {
         /**
          * Indique si "this" depend du service d'indice donne
          */
-        bool iDependOn(int idx_p) const;
+        bool iDependOn(int idxService_p) const;
+
+        int getNbProcesses() const;
+        bool containsProcess(int idxProcess_p) const;
 
     private:
         const int id_m;

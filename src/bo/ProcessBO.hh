@@ -1,19 +1,47 @@
 #ifndef PROCESSBO_HH
 #define PROCESSBO_HH
-#include <tr1/unordered_map>
-using namespace std::tr1;
+#include <vector>
+using namespace std;
 
 class MachineBO;
 class RessourceBO;
 class ServiceBO;
 
 class ProcessBO {
+    public:
+        ProcessBO(int id_p, ServiceBO* pService_p, const vector<int>& requirements_p,  int pcm_p);
+
+        int getId() const;
+        ServiceBO* getService() const;
+        int getRequirement(int idxRess_p) const;
+        void setMachineInit();
+        MachineBO* getMachineInit() const;
+        int getPMC() const;
+
     private:
-        int id_m;
-        ServiceBO* service_m;
-        unordered_map<Ressource*, int> requirement_m;
-        Machine* machineInit_m;
-        int pmc_m;
+        const int id_m;
+
+        /**
+         * Service auquel appartient le process
+         */
+        ServiceBO* const service_m;
+
+        /**
+         * Ressources necessaires au process
+         * requirements[pRess_l->getId()] => quantite necessaire de ressources du type donne
+         */
+        const vector<int> requirements_m;
+
+        /**
+         * Machine sur laquel le process est place initialement
+         */
+        MachineBO* machineInit_m;
+
+        /**
+         * Process move cost
+         * Cad : cout ajoute a la fonction objectif si le process n'est pas sur sa machine initiale
+         */
+        const int pmc_m;
 };
 
 

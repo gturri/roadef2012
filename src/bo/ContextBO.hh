@@ -8,6 +8,7 @@ class MachineBO;
 class LocationBO;
 class NeighborhoodBO;
 class MMCBO;
+class ProcessBO;
 class ServiceBO;
 
 //FIXME : Si cette classe grossie trop, ajouter des managerBO pour chaque type d'objet gere actuellement par le ContextBO
@@ -38,6 +39,10 @@ class ContextBO {
         void addService(ServiceBO* pService_p);
         int getNbServices() const;
         ServiceBO* getService(int idx_p) const;
+
+        void addProcess(ProcessBO* pProcess_p);
+        int getNbProcesses() const;
+        ProcessBO* getProcess(int idx_p) const;
 
     private:
         vector<RessourceBO*> ressources_m;
