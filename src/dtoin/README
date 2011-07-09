@@ -1,0 +1,6 @@
+Package en charge de la lecure des fichiers en entree.
+
+La plupart des classes presentes ici ne sont pas destinees a etre appellees depuis d'autres package
+(il s'agit de helpers pour les classes principales).
+
+En particulier : pour la lecture du fichier d'instance, seule la classe InstanceReaderDtoin est a utiliser

@@ -1,3 +1,5 @@
+#include "dtoin/InstanceReaderDtoin.hh"
+#include "dtoout/InstanceWriterDtoout.hh"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -62,6 +64,9 @@ int main(int argc, char **argv) {
         << "new sol : ./" << new_solution_filename_l << endl
         << "send our name : " << send_name_l << endl
         << "seed : " << seed_l << endl;
+
+    ContextBO context_l = InstanceReaderDtoin::read(instance_filename_l);
+    InstanceWriterDtoout::write(&context_l, "outfile.txt");
 
     return 0;
 }
