@@ -1,6 +1,29 @@
 #include "gtests/dtoin/TestDtoinHelper.hh"
+#include "dtoin/MachineDtoin.hh"
+#include "dtoin/RessourceDtoin.hh"
+#include "dtoin/ServiceDtoin.hh"
+#include <sstream>
+using namespace std;
 
-string TestDtoinHelper::getMachineData(){
+void TestDtoinHelper::loadTestDataRessource(ContextBO* pContextBO_p){
+    RessourceDtoin reader_l;
+    istringstream ifs_l(getRessourceTestData());
+    reader_l.read(ifs_l, pContextBO_p);
+}
+
+void TestDtoinHelper::loadTestDataMachine(ContextBO* pContextBO_p){
+    MachineDtoin reader_l;
+    istringstream ifs_l(getMachineTestData());
+    reader_l.read(ifs_l, pContextBO_p);
+}
+
+void TestDtoinHelper::loadTestDataService(ContextBO* pContextBO_p){
+    ServiceDtoin reader_l;
+    istringstream ifs_l(getServiceTestData());
+    reader_l.read(ifs_l, pContextBO_p);
+}
+
+string TestDtoinHelper::getMachineTestData(){
     return string("4 \
  \
 0 \
@@ -28,7 +51,7 @@ string TestDtoinHelper::getMachineData(){
 5 4 2 0");
 }
 
-string TestDtoinHelper::getRessourceData(){
+string TestDtoinHelper::getRessourceTestData(){
     return string("2 \
  \
 1 \
@@ -38,7 +61,7 @@ string TestDtoinHelper::getRessourceData(){
 10");
 }
 
-string TestDtoinHelper::getServiceData(){
+string TestDtoinHelper::getServiceTestData(){
     return string("2 \
  \
 2 \

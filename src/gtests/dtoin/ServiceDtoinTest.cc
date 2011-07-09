@@ -1,16 +1,11 @@
-#include "dtoin/ServiceDtoin.hh"
 #include "bo/ContextBO.hh"
 #include "bo/ServiceBO.hh"
 #include "gtests/dtoin/TestDtoinHelper.hh"
-#include <sstream>
 #include <gtest/gtest.h>
-using namespace std;
 
 TEST(dtoin, ServiceDtoin){
-    ServiceDtoin reader_l;
-    istringstream ifs_l(TestDtoinHelper::getServiceData());
     ContextBO context_l;
-    reader_l.read(ifs_l, &context_l);
+    TestDtoinHelper::loadTestDataService(&context_l);
 
     ASSERT_EQ(context_l.getNbServices(), 2);
 

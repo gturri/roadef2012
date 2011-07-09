@@ -1,27 +1,16 @@
-#include "dtoin/MachineDtoin.hh"
-#include "dtoin/RessourceDtoin.hh"
 #include "bo/ContextBO.hh"
 #include "bo/LocationBO.hh"
 #include "bo/MachineBO.hh"
 #include "bo/MMCBO.hh"
 #include "bo/NeighborhoodBO.hh"
 #include "gtests/dtoin/TestDtoinHelper.hh"
-#include <sstream>
 #include <gtest/gtest.h>
-using namespace std;
 
 TEST(dtoin, MachineDtoin){
-    //Mise en place de l'environnement (lecture des fichiers)
-    MachineDtoin machineReader_l;
-    RessourceDtoin ressReader_l;
-    istringstream machineIfs_l(TestDtoinHelper::getMachineData());
-    istringstream ressIfs_l(TestDtoinHelper::getRessourceData());
     ContextBO context_l;
+    TestDtoinHelper::loadTestDataRessource(&context_l);
+    TestDtoinHelper::loadTestDataMachine(&context_l);
 
-    ressReader_l.read(ressIfs_l, &context_l);
-    machineReader_l.read(machineIfs_l, &context_l);
-
-    //Tests proprement dit (verification des valeurs lues)
     ASSERT_EQ(context_l.getNbMachines(), 4);
     ASSERT_EQ(context_l.getNbLocations(), 3);
     ASSERT_EQ(context_l.getNbNeighborhoods(), 2);

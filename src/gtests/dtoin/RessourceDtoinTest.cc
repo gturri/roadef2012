@@ -1,17 +1,12 @@
-#include "dtoin/RessourceDtoin.hh"
 #include "bo/ContextBO.hh"
 #include "bo/RessourceBO.hh"
 #include "gtests/dtoin/TestDtoinHelper.hh"
-#include <sstream>
 #include <gtest/gtest.h>
-using namespace std;
 
 TEST(dtoin, RessourceDtoin){
-    RessourceDtoin reader_l;
-    istringstream ifs_l(TestDtoinHelper::getRessourceData());
     ContextBO context_l;
+    TestDtoinHelper::loadTestDataRessource(&context_l);
 
-    reader_l.read(ifs_l, &context_l);
     ASSERT_EQ(context_l.getNbRessources(), 2);
 
     RessourceBO* ress1_l = context_l.getRessource(0);
