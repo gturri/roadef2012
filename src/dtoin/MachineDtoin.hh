@@ -10,7 +10,11 @@ class NeighborhoodBO;
 class RessourceBO;
 
 /**
- * Classe jetable : on l'instancie, on appelle read une fois, et puis c'est tout.
+ * Classe en charge de la lecture de la partie Machine du fichier d'instance.
+ * Cette classe ne devrait pas etre appellee directement : l'#InstanceReaderDtoin se charge de la manipuler
+ *
+ * A l'attention de ceux qui s'interessent au package dtoin (cad peu de monde : cf remarque ci dessus)
+ * Attention : c'est une classe jetable : on l'instancie, on appelle read une fois, et puis c'est tout.
  * Une instance n'est pas faite pour etre utilisable deux fois (parce que semantiquement ca n'a pas de sens, et parce que c'est plus simple de l'implanter ainsi)
  */
 class MachineDtoin{

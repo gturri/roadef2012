@@ -3,6 +3,10 @@
 #include <iostream>
 using namespace std;
 
+/**
+ * Classe en charge de la lecture de la section des Processes, sur le fichier d'instance.
+ * Cette classe ne devrait pas etre utilisee directement, mais n'etre manipulee qu'a travers l'#InstanceReaderDtoin
+ */
 class ContextBO;
 
 class ProcessDtoin {

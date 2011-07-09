@@ -1,0 +1,12 @@
+Ce package bo contient des structures qui representent le probleme. Il s'agit donc de decrire les donnees en entree.
+
+On a donc des classes qui continnent peu d'intelligence / d'algo, et qui sont pour la plupart, constituees uniquement
+de getteurs et setteurs.
+
+En particulier : ce package n'est pas fait pour representer le probleme en cours d'optim.
+Par exemple : ProcessBO n'est pas fait pour contenir un pointeur sur la machine sur laquelle on veut le placer
+(pour representer ceci, on peut creer par exemple une classe ProcessALG, qui derive de (ou encapsule un) ProcessBO)
+
+
+Note particuliere sur les setteurs des objets BO : sauf exception : ils sont fait pour n'etre utilise que par
+les classes du package dtoin (puisqu'une fois qu'on a fini la lecture, on a pas de raison de modifier notre referentiel)
