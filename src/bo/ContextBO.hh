@@ -10,6 +10,7 @@ class NeighborhoodBO;
 class MMCBO;
 class ProcessBO;
 class ServiceBO;
+class BalanceCostBO;
 
 //FIXME : Si cette classe grossie trop, ajouter des managerBO pour chaque type d'objet gere actuellement par le ContextBO
 class ContextBO {
@@ -43,6 +44,11 @@ class ContextBO {
         void addProcess(ProcessBO* pProcess_p);
         int getNbProcesses() const;
         ProcessBO* getProcess(int idx_p) const;
+        
+        void addBalanceCost(BalanceCostBO* pBalanceCost_p);
+        int getNbBalanceCosts() const;
+        BalanceCostBO* getBalanceCost(int idx_p) const;
+
 
     private:
         vector<RessourceBO*> ressources_m;
@@ -51,6 +57,7 @@ class ContextBO {
         vector<NeighborhoodBO*> neighborhoods_m;
         vector<ServiceBO*> services_m;
         vector<ProcessBO*> processes_m;
+        vector<BalanceCostBO*> balanceCosts_m;
         MMCBO* pMMCBO_m;
 };
 

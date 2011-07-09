@@ -8,17 +8,19 @@ endif
 EXTRA_PROGRAMS = testU 
 
 machineReassignment_FILES = \
-	$(top_srcdir)/src/dtoin/RessourceDtoin.cc \
+	$(top_srcdir)/src/dtoin/BalanceCostDtoin.cc \
 	$(top_srcdir)/src/dtoin/MachineDtoin.cc \
 	$(top_srcdir)/src/dtoin/ProcessDtoin.cc \
+	$(top_srcdir)/src/dtoin/RessourceDtoin.cc \
 	$(top_srcdir)/src/dtoin/ServiceDtoin.cc \
-	$(top_srcdir)/src/bo/RessourceBO.cc \
+	$(top_srcdir)/src/bo/BalanceCostBO.cc \
 	$(top_srcdir)/src/bo/ContextBO.cc \
 	$(top_srcdir)/src/bo/LocationBO.cc \
 	$(top_srcdir)/src/bo/MMCBO.cc \
 	$(top_srcdir)/src/bo/MachineBO.cc \
 	$(top_srcdir)/src/bo/NeighborhoodBO.cc \
 	$(top_srcdir)/src/bo/ProcessBO.cc \
+	$(top_srcdir)/src/bo/RessourceBO.cc \
 	$(top_srcdir)/src/bo/ServiceBO.cc \
 	$(top_srcdir)/src/tools/random/RandomCoreImpl.cc \
 	$(top_srcdir)/src/tools/random/RandomCoreMT.cc \
@@ -39,11 +41,12 @@ generateurInstance_CPPFLAGS = \
 	-I $(top_srcdir)/src
 
 testU_SOURCES = \
-	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
+	$(top_srcdir)/src/gtests/dtoin/BalanceCostDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/MachineDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/ProcessDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/RessourceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \
+	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
 	$(top_srcdir)/src/gtests/tools/random/RandomGenerateurTest.cc \
 	$(machineReassignment_FILES)
 

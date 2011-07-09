@@ -1,3 +1,4 @@
+#include "bo/BalanceCostBO.hh"
 #include "bo/ContextBO.hh"
 #include "bo/LocationBO.hh"
 #include "bo/MachineBO.hh"
@@ -33,6 +34,10 @@ ContextBO::~ContextBO(){
     }
 
     for ( vector<ProcessBO*>::iterator it_l = processes_m.begin() ; it_l != processes_m.end() ; it_l++ ){
+        delete *it_l;
+    }
+
+    for ( vector<BalanceCostBO*>::iterator it_l = balanceCosts_m.begin() ; it_l != balanceCosts_m.end() ; it_l++ ){
         delete *it_l;
     }
 
@@ -118,4 +123,16 @@ int ContextBO::getNbProcesses() const{
 
 ProcessBO* ContextBO::getProcess(int idx_p) const{
     return processes_m[idx_p];
+}
+
+void ContextBO::addBalanceCost(BalanceCostBO* pBalanceCost_p){
+    balanceCosts_m.push_back(pBalanceCost_p);
+}
+
+int ContextBO::getNbBalanceCosts() const{
+    return balanceCosts_m.size();
+}
+
+BalanceCostBO* ContextBO::getBalanceCost(int idx_p) const{
+    return balanceCosts_m[idx_p];
 }
