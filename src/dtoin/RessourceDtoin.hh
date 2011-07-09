@@ -11,7 +11,7 @@ class RessourceDtoin {
          * @param ifs_p Le flux a lire
          * @param pContextBO_p Le context a peupler
          */
-        void read(ifstream& ifs_p, ContextBO* pContextBO_p);
+        void read(istream& ifs_p, ContextBO* pContextBO_p);
 
 };
 

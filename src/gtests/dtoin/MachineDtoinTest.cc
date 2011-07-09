@@ -5,7 +5,8 @@
 #include "bo/MachineBO.hh"
 #include "bo/MMCBO.hh"
 #include "bo/NeighborhoodBO.hh"
-#include <fstream>
+#include "gtests/dtoin/TestDtoinHelper.hh"
+#include <sstream>
 #include <gtest/gtest.h>
 using namespace std;
 
@@ -13,10 +14,8 @@ TEST(dtoin, MachineDtoin){
     //Mise en place de l'environnement (lecture des fichiers)
     MachineDtoin machineReader_l;
     RessourceDtoin ressReader_l;
-    ifstream machineIfs_l("../src/gtests/dtoin/machineDtoinTest.txt");
-    ASSERT_TRUE( machineIfs_l ) << "Impossible d'ouvrir machineDtoinTest.txt" << endl;
-    ifstream ressIfs_l("../src/gtests/dtoin/ressourceDtoinTest.txt");
-    ASSERT_TRUE( ressIfs_l ) << "Impossible d'ouvrir ressourceDtoinTest.txt" << endl;
+    istringstream machineIfs_l(TestDtoinHelper::getMachineData());
+    istringstream ressIfs_l(TestDtoinHelper::getRessourceData());
     ContextBO context_l;
 
     ressReader_l.read(ressIfs_l, &context_l);

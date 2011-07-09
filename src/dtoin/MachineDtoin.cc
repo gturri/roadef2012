@@ -11,7 +11,7 @@ using namespace std::tr1;
 MachineDtoin::MachineDtoin() : alreadyUsed_m (false)
 {}
 
-void MachineDtoin::read(ifstream& ifs_p, ContextBO* pContextBO_p){
+void MachineDtoin::read(istream& ifs_p, ContextBO* pContextBO_p){
     //On s'assure que cette instance n'est pas usagee
     if ( alreadyUsed_m ){
         throw string("Un MachineDtoin est utilise deux fois !");
@@ -43,7 +43,7 @@ void MachineDtoin::read(ifstream& ifs_p, ContextBO* pContextBO_p){
     sendNeighborhoods();
 }
 
-vector<int> MachineDtoin::readQteRess(ifstream& ifs_p){
+vector<int> MachineDtoin::readQteRess(istream& ifs_p){
     int nbRess_l = pContext_m->getNbRessources();
     vector<int> result_l(nbRess_l);
     for ( int idxRess_l=0 ; idxRess_l < nbRess_l ; idxRess_l++ ){
@@ -66,7 +66,7 @@ NeighborhoodBO* MachineDtoin::getNeighborhood(int idx_p){
     return pNeigh_m[idx_p];
 }
 
-void MachineDtoin::readMMCForOneMachine(ifstream& ifs_p, int idxCurMachine_p){
+void MachineDtoin::readMMCForOneMachine(istream& ifs_p, int idxCurMachine_p){
     int nbMachines_l = mmcCosts_m.size();
     for ( int idxMachine_l=0 ; idxMachine_l < nbMachines_l ; idxMachine_l++ ){
         ifs_p >> mmcCosts_m[idxCurMachine_p][idxMachine_l];

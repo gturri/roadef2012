@@ -1,14 +1,14 @@
 #include "dtoin/RessourceDtoin.hh"
 #include "bo/ContextBO.hh"
 #include "bo/RessourceBO.hh"
-#include <fstream>
+#include "gtests/dtoin/TestDtoinHelper.hh"
+#include <sstream>
 #include <gtest/gtest.h>
 using namespace std;
 
 TEST(dtoin, RessourceDtoin){
     RessourceDtoin reader_l;
-    ifstream ifs_l("../src/gtests/dtoin/ressourceDtoinTest.txt");
-    ASSERT_TRUE( ifs_l ) << "Impossible d'ouvrir ressourceDtoinTest.txt dans le test RessourceDtoin_read" << endl;
+    istringstream ifs_l(TestDtoinHelper::getRessourceData());
     ContextBO context_l;
 
     reader_l.read(ifs_l, &context_l);

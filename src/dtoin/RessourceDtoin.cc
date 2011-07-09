@@ -2,7 +2,7 @@
 #include "bo/ContextBO.hh"
 #include "bo/RessourceBO.hh"
 
-void RessourceDtoin::read(ifstream& ifs_p, ContextBO* pContextBO_p){
+void RessourceDtoin::read(istream& ifs_p, ContextBO* pContextBO_p){
     int nbRess_l;
     ifs_p >> nbRess_l;
 

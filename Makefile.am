@@ -37,6 +37,7 @@ generateurInstance_CPPFLAGS = \
 	-I $(top_srcdir)/src
 
 testU_SOURCES = \
+	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
 	$(top_srcdir)/src/gtests/dtoin/MachineDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/RessourceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \

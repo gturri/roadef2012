@@ -4,7 +4,7 @@
 #include <tr1/unordered_set>
 using namespace std;
 
-void ServiceDtoin::read(ifstream& ifs_p, ContextBO* pContextBO_p){
+void ServiceDtoin::read(istream& ifs_p, ContextBO* pContextBO_p){
     int nbServices_l;
     ifs_p >> nbServices_l;
 

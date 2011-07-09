@@ -7,7 +7,7 @@ class ContextBO;
 
 class ServiceDtoin{
     public:
-        void read(ifstream& ifs_p, ContextBO* pContextBO_p);
+        void read(istream& ifs_p, ContextBO* pContextBO_p);
 
 };
 

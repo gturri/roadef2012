@@ -1,14 +1,14 @@
 #include "dtoin/ServiceDtoin.hh"
 #include "bo/ContextBO.hh"
 #include "bo/ServiceBO.hh"
-#include <fstream>
+#include "gtests/dtoin/TestDtoinHelper.hh"
+#include <sstream>
 #include <gtest/gtest.h>
 using namespace std;
 
 TEST(dtoin, ServiceDtoin){
     ServiceDtoin reader_l;
-    ifstream ifs_l("../src/gtests/dtoin/serviceDtoinTest.txt");
-    ASSERT_TRUE( ifs_l ) << "Impossible d'ouvrir serviceDtoinTest.txt" << endl;
+    istringstream ifs_l(TestDtoinHelper::getServiceData());
     ContextBO context_l;
     reader_l.read(ifs_l, &context_l);
 

@@ -1,6 +1,6 @@
 #ifndef MACHINEDTOIN_HH
 #define MACHINEDTOIN_HH
-#include <fstream>
+#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -21,11 +21,11 @@ class MachineDtoin{
          * @param ifs_p Le flux a lire
          * @param pContextBO_p Le context a peupler
          */
-        void read(ifstream& ifs_p, ContextBO* pContextBO_p);
+        void read(istream& ifs_p, ContextBO* pContextBO_p);
 
     private:
-        vector<int> readQteRess(ifstream& ifs_p);
-        void readMMCForOneMachine(ifstream& ifs_p, int idxCurMachine_p);
+        vector<int> readQteRess(istream& ifs_p);
+        void readMMCForOneMachine(istream& ifs_p, int idxCurMachine_p);
 
         void sendMMC() const;
         void sendLocations() const;
