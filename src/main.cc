@@ -1,6 +1,8 @@
 #define TEAM_ID 666 /* TODO : completer quand on sera inscrit et qu'on aura notre identifiant d'equipe */
 #include "dtoin/InstanceReaderDtoin.hh"
+#include "dtoin/SolutionDtoin.hh"
 #include "dtoout/InstanceWriterDtoout.hh"
+#include "dtoout/SolutionDtoout.hh"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -38,6 +40,7 @@ int main(int argc, char **argv) {
                 break;
             case 'o' :
                 new_solution_filename_l = argv[2];
+                SolutionDtoout::setOutFileName(new_solution_filename_l);
                 break;
             case 'n':
                 send_name_l = true;
@@ -73,8 +76,13 @@ int main(int argc, char **argv) {
         }
     }
 
-    ContextBO context_l = InstanceReaderDtoin::read(instance_filename_l);
-    InstanceWriterDtoout::write(&context_l, "outfile.txt");
+    try {
+        ContextBO context_l = InstanceReaderDtoin::read(instance_filename_l);
+        SolutionDtoin::read(original_solution_filename_l, &context_l);
+        InstanceWriterDtoout::write(&context_l, "outfile.txt");
+    } catch (string s_l){
+        cerr << "Levee de l'exception : " << s_l << endl;
+    }
 
     return 0;
 }

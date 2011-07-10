@@ -1,6 +1,7 @@
 #ifndef SOLUTIONDTOIN_HH
 #define SOLUTIONDTOIN_HH
 #include <iostream>
+#include <string>
 using namespace std;
 
 class ContextBO;
@@ -10,7 +11,15 @@ class ContextBO;
  */
 class SolutionDtoin {
     public:
-        void read(istream& is_p, ContextBO* pContextBO_p);
+        /**
+         * Lit le fichier de solution (designe par son nom)
+         */
+        static void read(const string& solFileName_p, ContextBO* pContextBO_p);
+
+        /**
+         * Lit le flux representant le fichier de solution
+         */
+        static void read(istream& is_p, ContextBO* pContextBO_p);
 };
 
 #endif

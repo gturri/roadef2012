@@ -1,6 +1,18 @@
 #include "dtoin/SolutionDtoin.hh"
 #include "bo/ContextBO.hh"
 #include "bo/ProcessBO.hh"
+#include <fstream>
+#include <sstream>
+
+void SolutionDtoin::read(const string& solFileName_p, ContextBO* pContextBO_p){
+    ifstream ifs_l(solFileName_p.c_str());
+    if ( ! ifs_l ){
+        ostringstream oss_l;
+        oss_l << "Impossible d'ouvrir le fichier de solution a lire " << solFileName_p << endl;
+        throw oss_l.str();
+    }
+    read(ifs_l, pContextBO_p);
+}
 
 void SolutionDtoin::read(istream& is_p, ContextBO* pContextBO_p){
     int nbProcesses_l = pContextBO_p->getNbProcesses();
