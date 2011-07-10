@@ -13,31 +13,31 @@ ContextBO::ContextBO() :
 {}
 
 ContextBO::~ContextBO(){
-    for ( vector<RessourceBO*>::iterator it_l=ressources_m.begin() ; it_l != ressources_m.end() ; it_l++ ){
+    for ( vector<RessourceBO*>::iterator it_l=vpRessources_m.begin() ; it_l != vpRessources_m.end() ; it_l++ ){
         delete *it_l;
     }
 
-    for ( vector<MachineBO*>::iterator it_l = machines_m.begin() ; it_l != machines_m.end() ; it_l++ ){
+    for ( vector<MachineBO*>::iterator it_l = vpMachines_m.begin() ; it_l != vpMachines_m.end() ; it_l++ ){
         delete *it_l;
     }
 
-    for ( vector<LocationBO*>::iterator it_l = locations_m.begin() ; it_l != locations_m.end() ; it_l++ ){
+    for ( vector<LocationBO*>::iterator it_l = vpLocations_m.begin() ; it_l != vpLocations_m.end() ; it_l++ ){
         delete *it_l;
     }
 
-    for ( vector<NeighborhoodBO*>::iterator it_l = neighborhoods_m.begin() ; it_l != neighborhoods_m.end() ; it_l++ ){
+    for ( vector<NeighborhoodBO*>::iterator it_l = vpNeighborhoods_m.begin() ; it_l != vpNeighborhoods_m.end() ; it_l++ ){
         delete *it_l;
     }
 
-    for ( vector<ServiceBO*>::iterator it_l = services_m.begin() ; it_l != services_m.end() ; it_l++ ){
+    for ( vector<ServiceBO*>::iterator it_l = vpServices_m.begin() ; it_l != vpServices_m.end() ; it_l++ ){
         delete *it_l;
     }
 
-    for ( vector<ProcessBO*>::iterator it_l = processes_m.begin() ; it_l != processes_m.end() ; it_l++ ){
+    for ( vector<ProcessBO*>::iterator it_l = vpProcesses_m.begin() ; it_l != vpProcesses_m.end() ; it_l++ ){
         delete *it_l;
     }
 
-    for ( vector<BalanceCostBO*>::iterator it_l = balanceCosts_m.begin() ; it_l != balanceCosts_m.end() ; it_l++ ){
+    for ( vector<BalanceCostBO*>::iterator it_l = vpBalanceCosts_m.begin() ; it_l != vpBalanceCosts_m.end() ; it_l++ ){
         delete *it_l;
     }
 
@@ -54,87 +54,87 @@ MMCBO* ContextBO::getMMCBO() const{
 }
 
 void ContextBO::addRessource(RessourceBO* pRess_p){
-    ressources_m.push_back(pRess_p);
+   vpRessources_m.push_back(pRess_p);
 }
 
 int ContextBO::getNbRessources() const{
-    return ressources_m.size();
+    return vpRessources_m.size();
 }
 
 RessourceBO* ContextBO::getRessource(int id_p) const{
-    return ressources_m[id_p];
+    return vpRessources_m[id_p];
 }
 
 void ContextBO::addLocation(LocationBO* pLoc_p){
-    locations_m.push_back(pLoc_p);
+    vpLocations_m.push_back(pLoc_p);
 }
 
 int ContextBO::getNbLocations() const{
-    return locations_m.size();
+    return vpLocations_m.size();
 }
 
 LocationBO* ContextBO::getLocation(int idx_p) const{
-    return locations_m[idx_p];
+    return vpLocations_m[idx_p];
 }
 
 void ContextBO::addNeighborhood(NeighborhoodBO* pNeigh_p){
-    neighborhoods_m.push_back(pNeigh_p);
+    vpNeighborhoods_m.push_back(pNeigh_p);
 }
 
 int ContextBO::getNbNeighborhoods() const{
-    return neighborhoods_m.size();
+    return vpNeighborhoods_m.size();
 }
 
 NeighborhoodBO* ContextBO::getNeihborhood(int idx_p) const{
-    return neighborhoods_m[idx_p];
+    return vpNeighborhoods_m[idx_p];
 }
 
 void ContextBO::addMachine(MachineBO* pMachine_p){
-    machines_m.push_back(pMachine_p);
+    vpMachines_m.push_back(pMachine_p);
 }
 
 int ContextBO::getNbMachines() const{
-    return machines_m.size();
+    return vpMachines_m.size();
 }
 
 MachineBO* ContextBO::getMachine(int idx_p) const{
-    return machines_m[idx_p];
+    return vpMachines_m[idx_p];
 }
 
 void ContextBO::addService(ServiceBO* pService_p){
-    services_m.push_back(pService_p);
+    vpServices_m.push_back(pService_p);
 }
 
 int ContextBO::getNbServices() const{
-    return services_m.size();
+    return vpServices_m.size();
 }
 
 ServiceBO* ContextBO::getService(int idx_p) const{
-    return services_m[idx_p];
+    return vpServices_m[idx_p];
 }
 
 void ContextBO::addProcess(ProcessBO* pProcess_p){
-    processes_m.push_back(pProcess_p);
+    vpProcesses_m.push_back(pProcess_p);
 }
 
 int ContextBO::getNbProcesses() const{
-    return processes_m.size();
+    return vpProcesses_m.size();
 }
 
 ProcessBO* ContextBO::getProcess(int idx_p) const{
-    return processes_m[idx_p];
+    return vpProcesses_m[idx_p];
 }
 
 void ContextBO::addBalanceCost(BalanceCostBO* pBalanceCost_p){
-    balanceCosts_m.push_back(pBalanceCost_p);
+    vpBalanceCosts_m.push_back(pBalanceCost_p);
 }
 
 int ContextBO::getNbBalanceCosts() const{
-    return balanceCosts_m.size();
+    return vpBalanceCosts_m.size();
 }
 
 BalanceCostBO* ContextBO::getBalanceCost(int idx_p) const{
-    return balanceCosts_m[idx_p];
+    return vpBalanceCosts_m[idx_p];
 }
 
 void ContextBO::setPoidsPMC(int poids_p){

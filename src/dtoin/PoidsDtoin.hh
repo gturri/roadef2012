@@ -11,7 +11,7 @@ class ContextBO;
  */
 class PoidsDtoin {
     public:
-        void read(istream& ifs_p, ContextBO* pContextBO_p);
+        void read(istream& is_p, ContextBO* pContextBO_p);
 };
 
 #endif

@@ -10,38 +10,38 @@ using namespace std;
 
 void TestDtoinHelper::loadTestDataRessource(ContextBO* pContextBO_p){
     RessourceDtoin reader_l;
-    istringstream ifs_l(getRessourceTestData());
-    reader_l.read(ifs_l, pContextBO_p);
+    istringstream iss_l(getRessourceTestData());
+    reader_l.read(iss_l, pContextBO_p);
 }
 
 void TestDtoinHelper::loadTestDataMachine(ContextBO* pContextBO_p){
     MachineDtoin reader_l;
-    istringstream ifs_l(getMachineTestData());
-    reader_l.read(ifs_l, pContextBO_p);
+    istringstream iss_l(getMachineTestData());
+    reader_l.read(iss_l, pContextBO_p);
 }
 
 void TestDtoinHelper::loadTestDataService(ContextBO* pContextBO_p){
     ServiceDtoin reader_l;
-    istringstream ifs_l(getServiceTestData());
-    reader_l.read(ifs_l, pContextBO_p);
+    istringstream iss_l(getServiceTestData());
+    reader_l.read(iss_l, pContextBO_p);
 }
 
 void TestDtoinHelper::loadTestDataProcess(ContextBO* pContextBO_p){
     ProcessDtoin reader_l;
-    istringstream ifs_l(getProcessTestData());
-    reader_l.read(ifs_l, pContextBO_p);
+    istringstream iss_l(getProcessTestData());
+    reader_l.read(iss_l, pContextBO_p);
 }
 
 void TestDtoinHelper::loadTestDataBalanceCost(ContextBO* pContextBO_p){
     BalanceCostDtoin reader_l;
-    istringstream ifs_l(getBalanceCostTestData());
-    reader_l.read(ifs_l, pContextBO_p);
+    istringstream iss_l(getBalanceCostTestData());
+    reader_l.read(iss_l, pContextBO_p);
 }
 
 void TestDtoinHelper::loadTestDataPoids(ContextBO* pContextBO_p){
     PoidsDtoin reader_l;
-    istringstream ifs_l(getPoidsTestData());
-    reader_l.read(ifs_l, pContextBO_p);
+    istringstream iss_l(getPoidsTestData());
+    reader_l.read(iss_l, pContextBO_p);
 }
 
 string TestDtoinHelper::getMachineTestData(){

@@ -11,7 +11,7 @@ using namespace std::tr1;
 MachineDtoin::MachineDtoin() : alreadyUsed_m (false)
 {}
 
-void MachineDtoin::read(istream& ifs_p, ContextBO* pContextBO_p){
+void MachineDtoin::read(istream& is_p, ContextBO* pContextBO_p){
     //On s'assure que cette instance n'est pas usagee
     if ( alreadyUsed_m ){
         throw string("Un MachineDtoin est utilise deux fois !");
@@ -21,21 +21,21 @@ void MachineDtoin::read(istream& ifs_p, ContextBO* pContextBO_p){
     //Lecture sequentielle des machines
     pContext_m = pContextBO_p;
     int nbMachines_l;
-    ifs_p >> nbMachines_l;
+    is_p >> nbMachines_l;
     mmcCosts_m = vector<vector<int> >(nbMachines_l, vector<int>(nbMachines_l, 0));
 
     for ( int idxMachine_l=0 ; idxMachine_l < nbMachines_l ; idxMachine_l++ ){
         int idxNeighborhood_l, idxLocation_l;
-        ifs_p >> idxNeighborhood_l >> idxLocation_l;
+        is_p >> idxNeighborhood_l >> idxLocation_l;
 
         NeighborhoodBO* const neigh_l = getNeighborhood(idxNeighborhood_l);
         LocationBO* const loc_l = getLocation(idxLocation_l);
-        const vector<int> capas_l = readQteRess(ifs_p);
-        const vector<int> safetyCapas_l = readQteRess(ifs_p);
+        const vector<int> capas_l = readQteRess(is_p);
+        const vector<int> safetyCapas_l = readQteRess(is_p);
 
         //Creation de la machine et insertion dans le contexte
         pContext_m->addMachine(new MachineBO(idxMachine_l, loc_l, neigh_l, capas_l, safetyCapas_l));
-        readMMCForOneMachine(ifs_p, idxMachine_l);
+        readMMCForOneMachine(is_p, idxMachine_l);
     }
 
     sendMMC();
@@ -43,11 +43,11 @@ void MachineDtoin::read(istream& ifs_p, ContextBO* pContextBO_p){
     sendNeighborhoods();
 }
 
-vector<int> MachineDtoin::readQteRess(istream& ifs_p){
+vector<int> MachineDtoin::readQteRess(istream& is_p){
     int nbRess_l = pContext_m->getNbRessources();
     vector<int> result_l(nbRess_l);
     for ( int idxRess_l=0 ; idxRess_l < nbRess_l ; idxRess_l++ ){
-        ifs_p >> result_l[idxRess_l];
+        is_p >> result_l[idxRess_l];
     }
     return result_l;
 }
@@ -66,10 +66,10 @@ NeighborhoodBO* MachineDtoin::getNeighborhood(int idx_p){
     return pNeigh_m[idx_p];
 }
 
-void MachineDtoin::readMMCForOneMachine(istream& ifs_p, int idxCurMachine_p){
+void MachineDtoin::readMMCForOneMachine(istream& is_p, int idxCurMachine_p){
     int nbMachines_l = mmcCosts_m.size();
     for ( int idxMachine_l=0 ; idxMachine_l < nbMachines_l ; idxMachine_l++ ){
-        ifs_p >> mmcCosts_m[idxCurMachine_p][idxMachine_l];
+        is_p >> mmcCosts_m[idxCurMachine_p][idxMachine_l];
     }
 }
 

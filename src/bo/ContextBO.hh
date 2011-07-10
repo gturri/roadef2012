@@ -65,13 +65,13 @@ class ContextBO {
         int getPoidsMMC() const;
 
     private:
-        vector<RessourceBO*> ressources_m;
-        vector<MachineBO*> machines_m;
-        vector<LocationBO*> locations_m;
-        vector<NeighborhoodBO*> neighborhoods_m;
-        vector<ServiceBO*> services_m;
-        vector<ProcessBO*> processes_m;
-        vector<BalanceCostBO*> balanceCosts_m;
+        vector<RessourceBO*> vpRessources_m;
+        vector<MachineBO*> vpMachines_m;
+        vector<LocationBO*> vpLocations_m;
+        vector<NeighborhoodBO*> vpNeighborhoods_m;
+        vector<ServiceBO*> vpServices_m;
+        vector<ProcessBO*> vpProcesses_m;
+        vector<BalanceCostBO*> vpBalanceCosts_m;
         MMCBO* pMMCBO_m;
 
         /**

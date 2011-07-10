@@ -22,14 +22,14 @@ class MachineDtoin{
         MachineDtoin();
 
         /**
-         * @param ifs_p Le flux a lire
+         * @param is_p Le flux a lire
          * @param pContextBO_p Le context a peupler
          */
-        void read(istream& ifs_p, ContextBO* pContextBO_p);
+        void read(istream& is_p, ContextBO* pContextBO_p);
 
     private:
-        vector<int> readQteRess(istream& ifs_p);
-        void readMMCForOneMachine(istream& ifs_p, int idxCurMachine_p);
+        vector<int> readQteRess(istream& is_p);
+        void readMMCForOneMachine(istream& is_p, int idxCurMachine_p);
 
         void sendMMC() const;
         void sendLocations() const;
