@@ -14,6 +14,7 @@ class TestDtoinHelper {
         static void loadTestDataProcess(ContextBO* pContextBO_p);
         static void loadTestDataBalanceCost(ContextBO* pContextBO_p);
         static void loadTestDataPoids(ContextBO* pContextBO_p);
+        static void loadTestDataSolInit(ContextBO* pContextBO_p);
 
     private:
         static string getMachineTestData();
@@ -22,6 +23,7 @@ class TestDtoinHelper {
         static string getProcessTestData();
         static string getBalanceCostTestData();
         static string getPoidsTestData();
+        static string getSolInitTestData();
 };
 
 #endif

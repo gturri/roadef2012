@@ -15,7 +15,9 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/dtoin/PoidsDtoin.cc \
 	$(top_srcdir)/src/dtoin/RessourceDtoin.cc \
 	$(top_srcdir)/src/dtoin/ServiceDtoin.cc \
+	$(top_srcdir)/src/dtoin/SolutionDtoin.cc \
 	$(top_srcdir)/src/dtoout/InstanceWriterDtoout.cc \
+	$(top_srcdir)/src/dtoout/SolutionDtoout.cc \
 	$(top_srcdir)/src/bo/BalanceCostBO.cc \
 	$(top_srcdir)/src/bo/ContextBO.cc \
 	$(top_srcdir)/src/bo/LocationBO.cc \
@@ -47,6 +49,7 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/dtoin/PoidsDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/RessourceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \
+	$(top_srcdir)/src/gtests/dtoin/SolutionDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
 	$(machineReassignment_FILES)
 

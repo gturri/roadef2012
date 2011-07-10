@@ -5,6 +5,7 @@
 #include "dtoin/ProcessDtoin.hh"
 #include "dtoin/RessourceDtoin.hh"
 #include "dtoin/ServiceDtoin.hh"
+#include "dtoin/SolutionDtoin.hh"
 #include <sstream>
 using namespace std;
 
@@ -41,6 +42,12 @@ void TestDtoinHelper::loadTestDataBalanceCost(ContextBO* pContextBO_p){
 void TestDtoinHelper::loadTestDataPoids(ContextBO* pContextBO_p){
     PoidsDtoin reader_l;
     istringstream iss_l(getPoidsTestData());
+    reader_l.read(iss_l, pContextBO_p);
+}
+
+void TestDtoinHelper::loadTestDataSolInit(ContextBO* pContextBO_p){
+    SolutionDtoin reader_l;
+    istringstream iss_l(getSolInitTestData());
     reader_l.read(iss_l, pContextBO_p);
 }
 
@@ -131,4 +138,8 @@ string TestDtoinHelper::getPoidsTestData(){
     return string("1 \
 10 \
 100");
+}
+
+string TestDtoinHelper::getSolInitTestData(){
+    return string("0 3 0");
 }
