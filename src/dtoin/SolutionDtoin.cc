@@ -1,6 +1,7 @@
 #include "dtoin/SolutionDtoin.hh"
 #include "bo/ContextBO.hh"
 #include "bo/ProcessBO.hh"
+#include "tools/Log.hh"
 #include <fstream>
 #include <sstream>
 
@@ -22,4 +23,5 @@ void SolutionDtoin::read(istream& is_p, ContextBO* pContextBO_p){
         MachineBO* pMachine_l = pContextBO_p->getMachine(idxMachine_l);
         pContextBO_p->getProcess(idxP_l)->setMachineInit(pMachine_l);
     }
+    LOG(INFO) << "Fin de la lecture du fichier de solution initiale" << endl;
 }

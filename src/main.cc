@@ -3,6 +3,7 @@
 #include "dtoin/SolutionDtoin.hh"
 #include "dtoout/InstanceWriterDtoout.hh"
 #include "dtoout/SolutionDtoout.hh"
+#include "tools/Log.hh"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -62,7 +63,11 @@ int main(int argc, char **argv) {
         ++(++argv);
     }
 
-    cout << "temps limite : " << time_limit_second_l << " s" << endl
+//#ifdef MIN_LOG_LVL
+//#undef MIN_LOG_LVL
+//#endif
+//#define MIN_LOG_LVL USELESS
+    LOG(INFO) << "temps limite : " << time_limit_second_l << " s" << endl
         << "instance file  : ./" << instance_filename_l << endl
         << "original sol : ./" << original_solution_filename_l << endl
         << "new sol : ./" << new_solution_filename_l << endl
@@ -81,7 +86,7 @@ int main(int argc, char **argv) {
         SolutionDtoin::read(original_solution_filename_l, &context_l);
         InstanceWriterDtoout::write(&context_l, "outfile.txt");
     } catch (string s_l){
-        cerr << "Levee de l'exception : " << s_l << endl;
+        LOG(ERREUR) << "Levee de l'exception : " << s_l << endl;
     }
 
     return 0;

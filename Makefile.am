@@ -26,7 +26,8 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/NeighborhoodBO.cc \
 	$(top_srcdir)/src/bo/ProcessBO.cc \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
-	$(top_srcdir)/src/bo/ServiceBO.cc
+	$(top_srcdir)/src/bo/ServiceBO.cc \
+	$(top_srcdir)/src/tools/Log.cc
 
 machineReassignment_SOURCES = \
 	$(top_srcdir)/src/main.cc \

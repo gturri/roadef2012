@@ -5,6 +5,7 @@
 #include "dtoin/ProcessDtoin.hh"
 #include "dtoin/RessourceDtoin.hh"
 #include "dtoin/ServiceDtoin.hh"
+#include "tools/Log.hh"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -33,6 +34,6 @@ ContextBO InstanceReaderDtoin::read(const string& instance_filename_p){
     PoidsDtoin poidsDtoin_l;
     poidsDtoin_l.read(ifs_l, &result_l);
 
+    LOG(INFO) << "Fin de la lecture du fichier d'instance" << endl;
     return result_l;
-
 }
