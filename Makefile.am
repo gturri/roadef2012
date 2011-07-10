@@ -17,6 +17,7 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/dtoin/ServiceDtoin.cc \
 	$(top_srcdir)/src/dtoin/SolutionDtoin.cc \
 	$(top_srcdir)/src/dtoout/InstanceWriterDtoout.cc \
+	$(top_srcdir)/src/dtoout/SolutionDtoout.cc \
 	$(top_srcdir)/src/bo/BalanceCostBO.cc \
 	$(top_srcdir)/src/bo/ContextBO.cc \
 	$(top_srcdir)/src/bo/LocationBO.cc \
