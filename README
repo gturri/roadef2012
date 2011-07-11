@@ -3,12 +3,22 @@
 > ./autogen.sh 
 > mkdir build
 > cd build/
-> ../configure CPPFLAGS="-g"
+> ../configure CXXFLAGS="-g"
 > make -j
 
 Puis, pour lancer le binaire faire, depuis le dossier build : ./machineReassignment
 
-(Pour supprimer les fichiers de compil, depuis le dossier de compil : make clea)
+(Pour supprimer les fichiers de compil, depuis le dossier de compil : make clean)
+
+On peut bien sur jouer de maniere classique avec le script configure.
+Par ailleurs, certaines options propres a ce projet sont parametrable a configure-time.
+Ex qui mixe un peu tout :
+> ../configure \
+> --with-libgmock-dir=/path/to/gmock \
+> --with-log-level=warning \
+> CXXFLAGS="-g -Wall" \
+> CXX="ccache g++"
+
 
 ====== Ajouter un fichier de sources ======
   * Si c'est un fichier d'entete, rien à faire.

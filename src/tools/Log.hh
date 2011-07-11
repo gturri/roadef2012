@@ -21,9 +21,10 @@ using namespace std;
 
 class LogHelper {
     public:
+        static vector<string> buildLogLvl();
         static vector<string> vLogStrLvl_g;
-        static void init();
 };
+
 
 #ifndef MIN_LOG_LVL
 /* Il est possible de definir le level de log par defaut :
@@ -35,7 +36,7 @@ class LogHelper {
 #define MIN_LOG_LVL WARNING
 #endif
 
-#define LOG(log_lvl) LogHelper::init(); if ( MIN_LOG_LVL > (log_lvl) ); else clog << "[" << LogHelper::vLogStrLvl_g[(log_lvl)] << "] "
+#define LOG(log_lvl) if ( MIN_LOG_LVL > (log_lvl) ); else clog << "[" << LogHelper::vLogStrLvl_g[(log_lvl)] << "] "
 
 
 
