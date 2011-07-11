@@ -38,7 +38,8 @@ machineReassignment_CPPFLAGS = \
 
 generateurInstance_SOURCES = \
 	$(machineReassignment_FILES) \
-    $(top_srcdir)/src/generateur/generateur_main.cc
+	$(top_srcdir)/src/generateur/ParseCmdLine.cc \
+	$(top_srcdir)/src/generateur/generateur_main.cc
 
 generateurInstance_CPPFLAGS = \
 	-I $(top_srcdir)/src
