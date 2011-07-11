@@ -2,7 +2,9 @@
 #define LOG_HH
 #include <string>
 #include <vector>
+#include <boost/static_assert.hpp>
 using namespace std;
+using namespace boost;
 
 #define USELESS 0 /*LOG(USELESS) << "C'est toto qui va a la plage, et..." */
 #define DEBUG 1   /*LOG(DEBUG)   << "Je viens d'initialiser ma structure interne" */
@@ -36,7 +38,10 @@ class LogHelper {
 #define MIN_LOG_LVL WARNING
 #endif
 
-#define LOG(log_lvl) if ( MIN_LOG_LVL > (log_lvl) ); else clog << "[" << LogHelper::vLogStrLvl_g[(log_lvl)] << "] "
+#define LOG(log_lvl) \
+    BOOST_STATIC_ASSERT(0 <= log_lvl && log_lvl <= WTF); \
+if ( MIN_LOG_LVL > (log_lvl) ); \
+else clog << "[" << LogHelper::vLogStrLvl_g[(log_lvl)] << "] "
 
 
 
