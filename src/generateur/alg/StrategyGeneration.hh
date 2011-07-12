@@ -20,7 +20,7 @@ class StrategyGeneration {
          * Il suffit ensuite de fournir ces ContextBO a un writer pour generer les fichiers souhaites
          * (Les perfs n'etant pas cruciales sur ce binaire, on en se prive pas d'utiliser des smart pointers)
          */
-        virtual list<shared_ptr<ContextBO*> > generate(const variables_map& arg_p) = 0;
+        virtual list<shared_ptr<ContextBO> > generate(const variables_map& arg_p) = 0;
 };
 
 #endif

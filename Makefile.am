@@ -17,6 +17,7 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/dtoin/ServiceDtoin.cc \
 	$(top_srcdir)/src/dtoin/SolutionDtoin.cc \
 	$(top_srcdir)/src/dtoout/InstanceWriterDtoout.cc \
+	$(top_srcdir)/src/dtoout/InstanceWriterInterface.cc \
 	$(top_srcdir)/src/dtoout/SolutionDtoout.cc \
 	$(top_srcdir)/src/bo/BalanceCostBO.cc \
 	$(top_srcdir)/src/bo/ContextBO.cc \
@@ -38,7 +39,11 @@ machineReassignment_CPPFLAGS = \
 
 generateurInstance_SOURCES = \
 	$(machineReassignment_FILES) \
+	$(top_srcdir)/src/generateur/alg/DummyStrategyGeneration.cc \
+	$(top_srcdir)/src/generateur/alg/StrategyGeneration.cc \
 	$(top_srcdir)/src/generateur/ParseCmdLine.cc \
+	$(top_srcdir)/src/generateur/StrategyGenerationSelecter.cc \
+	$(top_srcdir)/src/generateur/WriterSelecter.cc \
 	$(top_srcdir)/src/generateur/generateur_main.cc
 
 generateurInstance_CPPFLAGS = \

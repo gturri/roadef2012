@@ -1,5 +1,6 @@
 #ifndef INSTANCEWRITERDTOOUT_HH
 #define INSTANCEWRITERDTOOUT_HH
+#include "dtoout/InstanceWriterInterface.hh"
 #include <string>
 using namespace std;
 
@@ -18,12 +19,12 @@ class ServiceBO;
  * est clairement privilegiee par rapport au perf (ce qui explique les multiples 
  * conversions string <-> ostringstream dans les deux sens)
  */
-class InstanceWriterDtoout {
+class InstanceWriterDtoout : public InstanceWriterInterface {
     public:
         /**
          * Ecrit dans un fichier
          */
-        static void write(ContextBO* pContextBO_p, const string& out_filename_p);
+        virtual void write(ContextBO* pContextBO_p, const string& out_filename_p);
 
         /**
          * Ecrit sur un flux de sortie

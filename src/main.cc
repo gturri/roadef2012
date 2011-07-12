@@ -84,7 +84,8 @@ int main(int argc, char **argv) {
     try {
         ContextBO context_l = InstanceReaderDtoin::read(instance_filename_l);
         SolutionDtoin::read(original_solution_filename_l, &context_l);
-        InstanceWriterDtoout::write(&context_l, "outfile.txt");
+        InstanceWriterDtoout writer_l;
+        writer_l.write(&context_l, "outfile.txt");
     } catch (string s_l){
         LOG(ERREUR) << "Levee de l'exception : " << s_l << endl;
     }
