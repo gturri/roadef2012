@@ -175,6 +175,9 @@ string InstanceWriterDtoout::writeBalanceCost(ContextBO* pContextBO_p){
     ostringstream oss_l;
     int nbBC_l = pContextBO_p->getNbBalanceCosts();
     oss_l << nbBC_l;
+    if ( nbBC_l == 0 ){
+        oss_l << endl;
+    }
 
     for ( int idxBC_l=0 ; idxBC_l < nbBC_l ; idxBC_l++ ){
         BalanceCostBO* pBC_l = pContextBO_p->getBalanceCost(idxBC_l);
