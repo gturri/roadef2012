@@ -11,7 +11,14 @@ using namespace std;
 
 void usage()
 {
-    cerr << "parametres incorrectes" << endl;
+    cout << "Options possibles :" << endl
+        << "\t-t temps max du run (en secondes)" << endl
+        << "\t-p instance_filename" << endl
+        << "\t-i original_solution_filename" << endl
+        << "\t-o new_solution_filename" << endl
+        << "\t-n : option sans argument demandant l'affichage de l'id de l'equipe" << endl
+        << "\t-s random_seed" << endl
+        << "\t-h afficher cette aide" << endl;
 }
 
 int main(int argc, char **argv) {
@@ -21,6 +28,7 @@ int main(int argc, char **argv) {
     string new_solution_filename_l;
     bool send_name_l(false);
     int seed_l(0);
+    bool helpWanted_l(false);
 
 
     while ((argc > 1) && (argv[1][0] == '-'))
@@ -53,7 +61,12 @@ int main(int argc, char **argv) {
                     istringstream iss_l(argv[2]);
                     iss_l >> seed_l;
                 }
-                cout << "lecture de la graine : " << seed_l << endl;
+                break;
+            case 'h':
+            case '-':
+                helpWanted_l = true;
+                argc++;
+                argv--;
                 break;
             default : 
                 usage();
@@ -63,10 +76,6 @@ int main(int argc, char **argv) {
         ++(++argv);
     }
 
-//#ifdef MIN_LOG_LVL
-//#undef MIN_LOG_LVL
-//#endif
-//#define MIN_LOG_LVL USELESS
     LOG(INFO) << "temps limite : " << time_limit_second_l << " s" << endl
         << "instance file  : ./" << instance_filename_l << endl
         << "original sol : ./" << original_solution_filename_l << endl
@@ -76,9 +85,12 @@ int main(int argc, char **argv) {
 
     if ( send_name_l ){
         cout << TEAM_ID << endl;
-        if ( instance_filename_l == "" ){
-            return 0;
-        }
+    }
+    if ( helpWanted_l ){
+        usage();
+    }
+    if ( instance_filename_l == "" ){
+        return 0;
     }
 
     try {
