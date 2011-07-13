@@ -4,6 +4,8 @@
 #include <string>
 using namespace std;
 
+class ContextBO;
+
 /**
  * Classe en charge de l'ecriture de la meilleure solution
  */
@@ -13,6 +15,12 @@ class SolutionDtoout {
          * Permet de setter le nom du fichier sur lequel ecrire
          */
         static void setOutFileName(const string& outFileName_p);
+
+        /**
+         * Ecrit la solution initiale sur le fichier specifie
+         * (Cette methode n'utilise pas le fichier par defaut, celui-ci etant "reserve" a la meilleure solution de l'optim)
+         */
+        static void writeSolInit(ContextBO* pContextBO_p, const string& outFileName_p);
 
         //TODO : ajouter les methodes d'ecriture, une fois que des formats de solution seront determines
 

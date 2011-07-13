@@ -3,6 +3,7 @@
 #include "generateur/StrategyGenerationSelecter.hh"
 #include "generateur/WriterSelecter.hh"
 #include "dtoout/InstanceWriterInterface.hh"
+#include "dtoout/SolutionDtoout.hh"
 #include <iostream>
 #include <memory>
 #include <boost/foreach.hpp>
@@ -18,6 +19,14 @@ int main(int argc, char** argv){
     shared_ptr<InstanceWriterInterface> writer_l = WriterSelecter::getWriter(args_l["writer"].as<string>());
 
     BOOST_FOREACH(shared_ptr<ContextBO> instance_l, instances_l){
-        writer_l->write(instance_l.get(), "dummyInstance.txt");
+        static int compteur_l(0);
+        compteur_l++;
+        ostringstream out_instance_filename_l;
+        out_instance_filename_l << args_l["out"].as<string>() << "_inst_" << compteur_l << ".txt";
+        writer_l->write(instance_l.get(), out_instance_filename_l.str());
+
+        ostringstream out_sol_filename_l;
+        out_sol_filename_l << args_l["out"].as<string>() << "_sol_" << compteur_l << ".txt";
+        SolutionDtoout::writeSolInit(instance_l.get(), out_sol_filename_l.str());
     }
 }

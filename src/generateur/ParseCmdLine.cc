@@ -8,7 +8,8 @@ variables_map ParseCmdLine::parse(int argc_p, char** argv_p){
     desc_l.add_options()
         ("help,h", "genere ce message")
         ("strategy,s", value<string>()->default_value("default"), "Specifie la strategy de generation a adopter")
-        ("writer,w", value<string>()->default_value("default"), "Specifie le format de la sortie");
+        ("writer,w", value<string>()->default_value("default"), "Specifie le format de la sortie")
+        ("out,o", value<string>()->default_value(""), "Prefixe des fichiers a ecrire (peut eventuellement contenir un path)");
 
     try {
         store(parse_command_line(argc_p, argv_p, desc_l), result_l);
