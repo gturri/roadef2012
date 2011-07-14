@@ -22,6 +22,7 @@ class BalanceCostBO;
 class ContextBO {
     public:
         ContextBO();
+        ContextBO(const ContextBO& contextBO_p);
         ~ContextBO();
 
         void setMMCBO(MMCBO* pMMC_p);

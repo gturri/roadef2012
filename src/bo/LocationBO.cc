@@ -7,7 +7,7 @@ LocationBO::LocationBO(int id_p) :
 {}
 
 void LocationBO::addMachine(MachineBO* machine_p){
-    machines_m.insert(machine_p);
+    machines_m.insert(machine_p->getId());
 }
 
 int LocationBO::getId() const{

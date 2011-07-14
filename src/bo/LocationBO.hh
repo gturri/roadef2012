@@ -16,9 +16,9 @@ class LocationBO {
         int id_m;
 
         /**
-         * Ensemble des machines de la Location
+         * Ensemble des id des machines de la Location
          */
-        unordered_set<MachineBO*> machines_m;
+        unordered_set<int> machines_m;
 };
 
 #endif

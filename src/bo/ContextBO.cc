@@ -7,10 +7,46 @@
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
 #include "bo/ServiceBO.hh"
+#include <boost/foreach.hpp>
 
 ContextBO::ContextBO() :
     pMMCBO_m(0)
 {}
+
+ContextBO::ContextBO(const ContextBO& contextBO_p){
+    BOOST_FOREACH(RessourceBO* pRess_l, contextBO_p.vpRessources_m){
+        vpRessources_m.push_back(new RessourceBO(*pRess_l));
+    }
+    BOOST_FOREACH(LocationBO* pLoc_l, contextBO_p.vpLocations_m){
+        vpLocations_m.push_back(new LocationBO(*pLoc_l));
+    }
+    BOOST_FOREACH(NeighborhoodBO* pNeigh_l, contextBO_p.vpNeighborhoods_m){
+        vpNeighborhoods_m.push_back(new NeighborhoodBO(*pNeigh_l));
+    }
+    BOOST_FOREACH(MachineBO* pMachine_l, contextBO_p.vpMachines_m){
+        LocationBO* pLoc_l = vpLocations_m[pMachine_l->getLocation()->getId()];
+        NeighborhoodBO* pNeigh_l = vpNeighborhoods_m[pMachine_l->getNeighborhood()->getId()];
+        vpMachines_m.push_back(new MachineBO(pMachine_l->getId(), pLoc_l, pNeigh_l, pMachine_l->getCapas(), pMachine_l->getSafetyCapas()));
+    }
+    BOOST_FOREACH(ServiceBO* pService_l, contextBO_p.vpServices_m){
+        vpServices_m.push_back(new ServiceBO(*pService_l));
+    }
+    BOOST_FOREACH(ProcessBO* pProcess_l, contextBO_p.vpProcesses_m){
+        ServiceBO* pService_l = vpServices_m[pProcess_l->getService()->getId()];
+        vpProcesses_m.push_back(new ProcessBO(pProcess_l->getId(), pService_l, pProcess_l->getRequirements(), pProcess_l->getPMC()));
+        vpProcesses_m.back()->setMachineInit(vpMachines_m[pProcess_l->getMachineInit()->getId()]);
+    }
+    BOOST_FOREACH(BalanceCostBO* pBC_l, contextBO_p.vpBalanceCosts_m){
+        RessourceBO* pRess1_l = vpRessources_m[pBC_l->getRessource1()->getId()];
+        RessourceBO* pRess2_l = vpRessources_m[pBC_l->getRessource2()->getId()];
+        vpBalanceCosts_m.push_back(new BalanceCostBO(pRess1_l, pRess2_l, pBC_l->getTarget(), pBC_l->getPoids()));
+    }
+    pMMCBO_m = new MMCBO(*(contextBO_p.pMMCBO_m));
+
+    poidsPMC_m = contextBO_p.poidsPMC_m;
+    poidsSMC_m = contextBO_p.poidsSMC_m;
+    poidsMMC_m = contextBO_p.poidsMMC_m;
+}
 
 ContextBO::~ContextBO(){
     for ( vector<RessourceBO*>::iterator it_l=vpRessources_m.begin() ; it_l != vpRessources_m.end() ; it_l++ ){

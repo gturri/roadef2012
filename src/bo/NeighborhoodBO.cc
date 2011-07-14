@@ -7,7 +7,7 @@ NeighborhoodBO::NeighborhoodBO(int id_p) :
 {}
 
 void NeighborhoodBO::addMachine(MachineBO* machine_p){
-    machines_m.insert(machine_p);
+    machines_m.insert(machine_p->getId());
 }
 
 int NeighborhoodBO::getId() const{
