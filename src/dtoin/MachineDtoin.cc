@@ -4,7 +4,9 @@
 #include "bo/MachineBO.hh"
 #include "bo/NeighborhoodBO.hh"
 #include "bo/MMCBO.hh"
+#include "tools/Log.hh"
 #include <tr1/unordered_map>
+#include <cassert>
 #include <string>
 using namespace std::tr1;
 
@@ -22,11 +24,16 @@ void MachineDtoin::read(istream& is_p, ContextBO* pContextBO_p){
     pContext_m = pContextBO_p;
     int nbMachines_l;
     is_p >> nbMachines_l;
+    LOG(DEBUG) << nbMachines_l << " machines" << endl;
+    assert(nbMachines_l > 0);
     mmcCosts_m = vector<vector<int> >(nbMachines_l, vector<int>(nbMachines_l, 0));
 
     for ( int idxMachine_l=0 ; idxMachine_l < nbMachines_l ; idxMachine_l++ ){
         int idxNeighborhood_l, idxLocation_l;
         is_p >> idxNeighborhood_l >> idxLocation_l;
+        LOG(DEBUG) << "\tNeigh.=" << idxNeighborhood_l << ", Loc.=" << idxLocation_l << endl;
+        assert(idxNeighborhood_l >= 0);
+        assert(idxLocation_l >= 0);
 
         NeighborhoodBO* const neigh_l = getNeighborhood(idxNeighborhood_l);
         LocationBO* const loc_l = getLocation(idxLocation_l);
