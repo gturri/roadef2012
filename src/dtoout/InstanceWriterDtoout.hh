@@ -21,22 +21,9 @@ class ServiceBO;
  */
 class InstanceWriterDtoout : public InstanceWriterInterface {
     public:
-        /**
-         * Ecrit dans un fichier
-         */
-        virtual void write(ContextBO* pContextBO_p, const string& out_filename_p);
-
-        /**
-         * Ecrit sur un flux de sortie
-         */
-        static void write(ContextBO* pContextBO_p, ostream& os_p);
-
-        /**
-         * Ecrit sur une string
-         */
-        static string write(ContextBO* pContextBO_p);
 
     protected:
+        virtual string writeOnString(ContextBO* pContextBO_p);
         static string writeRessources(ContextBO* pContextBO_p);
         static string writeMachines(ContextBO* pContextBO_p);
         static string writeServices(ContextBO* pContextBO_p);
