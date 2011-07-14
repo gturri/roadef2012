@@ -31,6 +31,14 @@ int MachineBO::getCapa(int idxRess_p) const{
     return capa_m[idxRess_p];
 }
 
+vector<int> MachineBO::getCapas() const{
+    return capa_m;
+}
+
 int MachineBO::getSafetyCapa(int idxRess_p) const{
     return safetyCapa_m[idxRess_p];
+}
+
+vector<int> MachineBO::getSafetyCapas() const{
+    return safetyCapa_m;
 }

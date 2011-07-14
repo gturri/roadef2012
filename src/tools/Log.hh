@@ -1,5 +1,6 @@
 #ifndef LOG_HH
 #define LOG_HH
+#include <iostream>
 #include <string>
 #include <vector>
 #include <boost/static_assert.hpp>

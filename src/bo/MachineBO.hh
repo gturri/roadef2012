@@ -15,7 +15,9 @@ class MachineBO {
         LocationBO* getLocation() const;
         NeighborhoodBO* getNeighborhood() const;
         int getCapa(int idxRess_p) const;
+        vector<int> getCapas() const;
         int getSafetyCapa(int idxRess_p) const;
+        vector<int> getSafetyCapas() const;
 
     private:
         int id_m;

@@ -25,6 +25,10 @@ int ProcessBO::getRequirement(int idxRess_p) const{
     return vRequirements_m[idxRess_p];
 }
 
+vector<int> ProcessBO::getRequirements() const{
+    return vRequirements_m;
+}
+
 void ProcessBO::setMachineInit(MachineBO* pMachine_p){
     pMachineInit_m = pMachine_p;
 }
