@@ -4,6 +4,7 @@ ACLOCAL_AMFLAGS = -I m4
 bin_PROGRAMS = machineReassignment generateurInstance
 if WANT_GTEST
 bin_PROGRAMS += testU
+TESTS = testU
 endif
 EXTRA_PROGRAMS = testU 
 
