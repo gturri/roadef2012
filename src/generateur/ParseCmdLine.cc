@@ -10,7 +10,9 @@ variables_map ParseCmdLine::parse(int argc_p, char** argv_p){
         ("help,h", "genere ce message et arrete l'execution")
         ("strategy,s", value<string>()->default_value("default"), "Specifie la strategy de generation a adopter")
         ("writer,w", value<string>()->default_value("default"), "Specifie le format de la sortie")
-        ("out,o", value<string>()->default_value(""), "Prefixe des fichiers a ecrire (peut eventuellement contenir un path)");
+        ("out,o", value<string>()->default_value(""), "Prefixe des fichiers a ecrire (peut eventuellement contenir un path)")
+        ("fromExistingInst", value<string>(), "Dans le cas d'une generation depuis une instance existante, specifie le fichier decrivant cette instance initiale")
+        ("fromExistingSol", value<string>(), "Dans le cas d'une generation depuis une intance existante, specifie le fichier decrivant la solution initiale");
 
     try {
         store(parse_command_line(argc_p, argv_p, desc_l), result_l);

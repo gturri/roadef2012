@@ -42,6 +42,7 @@ machineReassignment_CPPFLAGS = \
 generateurInstance_SOURCES = \
 	$(machineReassignment_FILES) \
 	$(top_srcdir)/src/generateur/alg/DummyStrategyGeneration.cc \
+	$(top_srcdir)/src/generateur/alg/GenerateFromExisting.cc \
 	$(top_srcdir)/src/generateur/alg/StrategyGeneration.cc \
 	$(top_srcdir)/src/generateur/ParseCmdLine.cc \
 	$(top_srcdir)/src/generateur/StrategyGenerationSelecter.cc \
