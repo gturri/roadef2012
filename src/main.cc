@@ -94,7 +94,8 @@ int main(int argc, char **argv) {
     }
 
     try {
-        ContextBO context_l = InstanceReaderDtoin::read(instance_filename_l);
+        InstanceReaderDtoin reader_l;
+        ContextBO context_l = reader_l.read(instance_filename_l);
         SolutionDtoin::read(original_solution_filename_l, &context_l);
         InstanceWriterDtoout writer_l;
         writer_l.write(&context_l, "outfile.txt");
