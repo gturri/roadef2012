@@ -32,6 +32,10 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/ServiceBO.cc \
 	$(top_srcdir)/src/tools/Log.cc
 
+fichiersCommunsTestsEtGenerateur = \
+	$(top_srcdir)/src/generateur/alg/DummyStrategyGeneration.cc \
+	$(top_srcdir)/src/generateur/alg/StrategyGeneration.cc
+
 machineReassignment_SOURCES = \
 	$(top_srcdir)/src/main.cc \
 	$(machineReassignment_FILES)
@@ -41,9 +45,8 @@ machineReassignment_CPPFLAGS = \
 
 generateurInstance_SOURCES = \
 	$(machineReassignment_FILES) \
-	$(top_srcdir)/src/generateur/alg/DummyStrategyGeneration.cc \
+    $(fichiersCommunsTestsEtGenerateur) \
 	$(top_srcdir)/src/generateur/alg/GenerateFromExisting.cc \
-	$(top_srcdir)/src/generateur/alg/StrategyGeneration.cc \
 	$(top_srcdir)/src/generateur/ParseCmdLine.cc \
 	$(top_srcdir)/src/generateur/StrategyGenerationSelecter.cc \
 	$(top_srcdir)/src/generateur/WriterSelecter.cc \
@@ -53,6 +56,8 @@ generateurInstance_CPPFLAGS = \
 	-I $(top_srcdir)/src
 
 testU_SOURCES = \
+	$(top_srcdir)/src/gtests/bo/ContextBOTest.cc \
+	$(top_srcdir)/src/gtests/bo/operatorEgaliteTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/BalanceCostDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/MachineDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/ProcessDtoinTest.cc \
@@ -61,6 +66,7 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/SolutionDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
+    $(fichiersCommunsTestsEtGenerateur) \
 	$(machineReassignment_FILES)
 
 testU_CPPFLAGS = \

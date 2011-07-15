@@ -19,6 +19,9 @@ class ProcessBO {
         MachineBO* getMachineInit() const;
         int getPMC() const;
 
+        bool operator==(const ProcessBO& process_p) const;
+        bool operator!=(const ProcessBO& process_p) const;
+
     private:
         const int id_m;
 

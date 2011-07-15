@@ -13,6 +13,9 @@ class MMCBO {
 
         vector<int> getCosts(MachineBO* from_p) const;
 
+        bool operator==(const MMCBO& mmc_p) const;
+        bool operator!=(const MMCBO& mmc_p) const;
+
     private:
         vector<vector<int> > costs_m; // tq cost_m[from][to]
 };

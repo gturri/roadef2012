@@ -24,6 +24,7 @@ class ContextBO {
         ContextBO();
         ContextBO(const ContextBO& contextBO_p);
         ~ContextBO();
+        bool operator==(const ContextBO& contextBO_p) const;
 
         void setMMCBO(MMCBO* pMMC_p);
         MMCBO* getMMCBO() const;

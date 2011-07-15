@@ -8,6 +8,9 @@ class RessourceBO {
         bool isTransient() const;
         int getWeightLoadCost() const;
 
+        bool operator==(const RessourceBO& ress_l) const;
+        bool operator!=(const RessourceBO& ress_l) const;
+
     private:
         /**
          *id 0-based qui correspond a l'ordre dans lequel la ressource est lue

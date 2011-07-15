@@ -10,6 +10,8 @@ class RessourceBO;
 class MachineBO {
     public:
         MachineBO(int id_p, LocationBO* location_p, NeighborhoodBO* neighborhood_p, const vector<int>& capa_p, const vector<int> safetyCapa_p);
+        bool operator==(MachineBO& machine_p) const;
+        bool operator!=(MachineBO& machine_p) const;
 
         int getId() const;
         LocationBO* getLocation() const;

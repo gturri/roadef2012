@@ -16,3 +16,11 @@ int MMCBO::getCost(int idxMachineFrom_p, int idxMachineTo_p) const{
 vector<int> MMCBO::getCosts(MachineBO* from_p) const{
     return costs_m[from_p->getId()];
 }
+
+bool MMCBO::operator==(const MMCBO& mmc_p) const{
+    return costs_m == mmc_p.costs_m;
+}
+
+bool MMCBO::operator!=(const MMCBO& mmc_p) const{
+    return !this->operator==(mmc_p);
+}

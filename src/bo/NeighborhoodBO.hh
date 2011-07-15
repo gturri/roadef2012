@@ -10,7 +10,11 @@ class NeighborhoodBO {
     public:
         NeighborhoodBO(int id_p);
         void addMachine(MachineBO* machine_p);
+        void addMachine(int idxMachine_p);
         int getId() const;
+
+        bool operator==(const NeighborhoodBO& neigh_p) const;
+        bool operator!=(const NeighborhoodBO& neigh_p) const;
 
     private:
         int id_m;

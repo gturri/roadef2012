@@ -30,6 +30,9 @@ class ServiceBO {
         int getNbProcesses() const;
         bool containsProcess(int idxProcess_p) const;
 
+        bool operator==(const ServiceBO& service_p) const;
+        bool operator!=(const ServiceBO& service_p) const;
+
 
     private:
         const int id_m;

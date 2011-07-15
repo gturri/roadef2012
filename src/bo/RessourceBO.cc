@@ -18,3 +18,13 @@ bool RessourceBO::isTransient() const{
 int RessourceBO::getWeightLoadCost() const{
     return weightLoadCost_m;
 }
+
+bool RessourceBO::operator==(const RessourceBO& ress_l) const {
+    return id_m == ress_l.id_m
+        && isTransient_m == ress_l.isTransient_m
+        && weightLoadCost_m == ress_l.weightLoadCost_m;
+}
+
+bool RessourceBO::operator!=(const RessourceBO& ress_l) const{
+    return ! (this->operator==(ress_l));
+}

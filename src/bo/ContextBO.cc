@@ -197,3 +197,85 @@ int ContextBO::getPoidsMMC() const{
     return poidsMMC_m;
 }
 
+/* FIXME : la duplication de code se fait pleinement sentir ici.
+ * (plutot que de trouver une rustine pour ne corriger que cette methode,
+ * il est p.e. plus pertinent de refactorer totalement la classe...)
+ */
+bool ContextBO::operator==(const ContextBO& context_p) const{
+    //Ressources
+    if ( vpRessources_m.size() != context_p.vpRessources_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpRessources_m.size() ; idx_l++ ){
+        if ( *(vpRessources_m[idx_l]) != *(context_p.vpRessources_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Machines
+    if ( vpMachines_m.size() != context_p.vpMachines_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpMachines_m.size() ; idx_l++ ){
+        if ( *(vpMachines_m[idx_l]) != *(context_p.vpMachines_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Locations
+    if ( vpLocations_m.size() != context_p.vpLocations_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpLocations_m.size() ; idx_l++ ){
+        if ( *(vpLocations_m[idx_l]) != *(context_p.vpLocations_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Neighborhoods
+    if ( vpNeighborhoods_m.size() != context_p.vpNeighborhoods_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpNeighborhoods_m.size() ; idx_l++ ){
+        if ( *(vpNeighborhoods_m[idx_l]) != *(context_p.vpNeighborhoods_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Services
+    if ( vpServices_m.size() != context_p.vpServices_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpServices_m.size() ; idx_l++ ){
+        if ( *(vpServices_m[idx_l]) != *(context_p.vpServices_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Process
+    if ( vpProcesses_m.size() != context_p.vpProcesses_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpProcesses_m.size() ; idx_l++ ){
+        if ( *(vpProcesses_m[idx_l]) != *(context_p.vpProcesses_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Balances Costs
+    if ( vpBalanceCosts_m.size() != context_p.vpBalanceCosts_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpBalanceCosts_m.size() ; idx_l++ ){
+        if ( *(vpBalanceCosts_m[idx_l]) != *(context_p.vpBalanceCosts_m[idx_l]) ){
+            return false;
+        }
+    }
+
+
+    //Autres attributs
+    return *pMMCBO_m == *(context_p.pMMCBO_m)
+        && poidsPMC_m == context_p.poidsPMC_m
+        && poidsSMC_m == context_p.poidsSMC_m
+        && poidsMMC_m == context_p.poidsMMC_m;
+}

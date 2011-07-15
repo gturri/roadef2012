@@ -20,6 +20,9 @@ class BalanceCostBO{
         int getTarget() const;
         int getPoids() const;
 
+        bool operator==(const BalanceCostBO& bc_p) const;
+        bool operator!=(const BalanceCostBO& bc_p) const;
+
 
     private:
         RessourceBO* const pRess1_m;
