@@ -4,7 +4,7 @@
 
 InstanceWriterInterface::~InstanceWriterInterface(){}
 
-void InstanceWriterInterface::write(ContextBO* pContextBO_p, const string& out_filename_p){
+void InstanceWriterInterface::write(ContextBO const * pContextBO_p, const string& out_filename_p){
     ofstream ofs_p(out_filename_p.c_str());
     if ( ! ofs_p ){
         ostringstream oss_l;
@@ -15,10 +15,10 @@ void InstanceWriterInterface::write(ContextBO* pContextBO_p, const string& out_f
     write(pContextBO_p, ofs_p);
 }
 
-void InstanceWriterInterface::write(ContextBO* pContextBO_p, ostream& os_p){
+void InstanceWriterInterface::write(ContextBO const * pContextBO_p, ostream& os_p){
     os_p << write(pContextBO_p);
 }
 
-string InstanceWriterInterface::write(ContextBO* pContextBO_p){
+string InstanceWriterInterface::write(ContextBO const * pContextBO_p){
     return writeOnString(pContextBO_p);
 }

@@ -16,15 +16,15 @@ class ServiceBO;
  */
 class InstanceWriterHumanReadable : public InstanceWriterInterface {
     protected:
-        virtual string writeOnString(ContextBO* pContextBO_p);
+        virtual string writeOnString(ContextBO const * pContextBO_p);
 
     private:
-        static string writeRessources(ContextBO* pContextBO_p);
-        static string writeMachines(ContextBO* pContextBO_p);
-        static string writeServices(ContextBO* pContextBO_p);
-        static string writeProcesses(ContextBO* pContextBO_p);
-        static string writeBalanceCost(ContextBO* pContextBO_p);
-        static string writePoids(ContextBO* pContextBO_p);
+        static string writeRessources(ContextBO const * pContextBO_p);
+        static string writeMachines(ContextBO const * pContextBO_p);
+        static string writeServices(ContextBO const * pContextBO_p);
+        static string writeProcesses(ContextBO const * pContextBO_p);
+        static string writeBalanceCost(ContextBO const * pContextBO_p);
+        static string writePoids(ContextBO const * pContextBO_p);
 
         static string writeMajorTitle(const string& title_p);
         static string writeSectionTitle(const string& title_p);

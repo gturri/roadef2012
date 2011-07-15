@@ -23,20 +23,20 @@ class InstanceWriterDtoout : public InstanceWriterInterface {
     public:
 
     protected:
-        virtual string writeOnString(ContextBO* pContextBO_p);
-        static string writeRessources(ContextBO* pContextBO_p);
-        static string writeMachines(ContextBO* pContextBO_p);
-        static string writeServices(ContextBO* pContextBO_p);
-        static string writeProcesses(ContextBO* pContextBO_p);
-        static string writeBalanceCost(ContextBO* pContextBO_p);
-        static string writePoids(ContextBO* pContextBO_p);
+        virtual string writeOnString(ContextBO const * pContextBO_p);
+        static string writeRessources(ContextBO const * pContextBO_p);
+        static string writeMachines(ContextBO const * pContextBO_p);
+        static string writeServices(ContextBO const * pContextBO_p);
+        static string writeProcesses(ContextBO const * pContextBO_p);
+        static string writeBalanceCost(ContextBO const * pContextBO_p);
+        static string writePoids(ContextBO const * pContextBO_p);
 
-        static string writeMachineCapa(ContextBO* pContextBO_p, MachineBO* pMachine_p, bool useSafetyCapa_p);
+        static string writeMachineCapa(ContextBO const * pContextBO_p, MachineBO* pMachine_p, bool useSafetyCapa_p);
         static string writeMachineSafetyCapa(MachineBO* pMachine_p);
-        static string writeMachineMMC(ContextBO* pContextBO_p, MachineBO* pMachine_p);
+        static string writeMachineMMC(ContextBO const * pContextBO_p, MachineBO* pMachine_p);
 
-        static string writeServiceDependances(ContextBO* pContextBO_p, ServiceBO* pService_p);
-        static string writeProcessRequirements(ContextBO* pContextBO_p, ProcessBO* pProcess_p);
+        static string writeServiceDependances(ContextBO const * pContextBO_p, ServiceBO* pService_p);
+        static string writeProcessRequirements(ContextBO const * pContextBO_p, ProcessBO* pProcess_p);
 };
 
 #endif

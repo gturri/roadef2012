@@ -12,7 +12,7 @@
 #include <sstream>
 using namespace std;
 
-string InstanceWriterHumanReadable::writeOnString(ContextBO* pContextBO_p){
+string InstanceWriterHumanReadable::writeOnString(ContextBO const * pContextBO_p){
     ostringstream oss_l;
 
     oss_l << writeMajorTitle("Instance") << endl
@@ -25,7 +25,7 @@ string InstanceWriterHumanReadable::writeOnString(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterHumanReadable::writeRessources(ContextBO* pContextBO_p){
+string InstanceWriterHumanReadable::writeRessources(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     oss_l << writeSectionTitle("Ressources") << endl;
     int nbRess_l = pContextBO_p->getNbRessources();
@@ -42,7 +42,7 @@ string InstanceWriterHumanReadable::writeRessources(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterHumanReadable::writeMachines(ContextBO* pContextBO_p){
+string InstanceWriterHumanReadable::writeMachines(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     oss_l << writeSectionTitle("Machines") << endl;
     int nbMachines_l = pContextBO_p->getNbMachines();
@@ -62,7 +62,7 @@ string InstanceWriterHumanReadable::writeMachines(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterHumanReadable::writeServices(ContextBO* pContextBO_p){
+string InstanceWriterHumanReadable::writeServices(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     oss_l << writeSectionTitle("Services") << endl;
     int nbServices_l = pContextBO_p->getNbServices();
@@ -79,7 +79,7 @@ string InstanceWriterHumanReadable::writeServices(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterHumanReadable::writeProcesses(ContextBO* pContextBO_p){
+string InstanceWriterHumanReadable::writeProcesses(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     oss_l << writeSectionTitle("Processes") << endl;
     int nbProcesses_l = pContextBO_p->getNbProcesses();
@@ -97,7 +97,7 @@ string InstanceWriterHumanReadable::writeProcesses(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterHumanReadable::writeBalanceCost(ContextBO* pContextBO_p){
+string InstanceWriterHumanReadable::writeBalanceCost(ContextBO const * pContextBO_p){
     ostringstream  oss_l;
     oss_l << writeSectionTitle("BalanceCost") << endl;
     int nbBC_l = pContextBO_p->getNbBalanceCosts();
@@ -116,7 +116,7 @@ string InstanceWriterHumanReadable::writeBalanceCost(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterHumanReadable::writePoids(ContextBO* pContextBO_p){
+string InstanceWriterHumanReadable::writePoids(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     oss_l << writeSectionTitle("Poids") << endl
         << writeCarac("PMC", pContextBO_p->getPoidsPMC()) << endl

@@ -7,7 +7,10 @@
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
 #include "bo/ServiceBO.hh"
+#include "dtoout/InstanceWriterHumanReadable.hh"
 #include <boost/foreach.hpp>
+#include <algorithm>
+using namespace std;
 
 ContextBO::ContextBO() :
     pMMCBO_m(0)
@@ -278,4 +281,26 @@ bool ContextBO::operator==(const ContextBO& context_p) const{
         && poidsPMC_m == context_p.poidsPMC_m
         && poidsSMC_m == context_p.poidsSMC_m
         && poidsMMC_m == context_p.poidsMMC_m;
+}
+
+ContextBO& ContextBO::operator=(const ContextBO& context_p){
+    ContextBO context_l(context_p);
+    swap(vpRessources_m, context_l.vpRessources_m);
+    swap(vpMachines_m, context_l.vpMachines_m);
+    swap(vpLocations_m, context_l.vpLocations_m);
+    swap(vpNeighborhoods_m, context_l.vpNeighborhoods_m);
+    swap(vpServices_m, context_l.vpServices_m);
+    swap(vpProcesses_m, context_l.vpProcesses_m);
+    swap(vpBalanceCosts_m, context_l.vpBalanceCosts_m);
+    swap(pMMCBO_m, context_l.pMMCBO_m);
+    poidsPMC_m = context_l.poidsPMC_m;
+    poidsSMC_m = context_l.poidsSMC_m;
+    poidsMMC_m = context_l.poidsMMC_m;
+    return *this;
+}
+
+ostream& operator<<(ostream& os_p, const ContextBO& context_p){
+    InstanceWriterHumanReadable writer_l;
+    writer_l.write(&context_p, os_p);
+    return os_p;
 }

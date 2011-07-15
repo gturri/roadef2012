@@ -1,5 +1,6 @@
 #ifndef CONTEXTBO_HH
 #define CONTEXTBO_HH
+#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -25,6 +26,7 @@ class ContextBO {
         ContextBO(const ContextBO& contextBO_p);
         ~ContextBO();
         bool operator==(const ContextBO& contextBO_p) const;
+        ContextBO& operator=(const ContextBO& contextBO_p);
 
         void setMMCBO(MMCBO* pMMC_p);
         MMCBO* getMMCBO() const;
@@ -92,5 +94,7 @@ class ContextBO {
         int poidsMMC_m;
 
 };
+
+ostream& operator<<(ostream& os_p, const ContextBO& context_p);
 
 #endif
