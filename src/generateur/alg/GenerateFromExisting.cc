@@ -1,7 +1,9 @@
 #include "generateur/alg/GenerateFromExisting.hh"
 #include "dtoin/InstanceReaderInterface.hh"
 #include "dtoin/InstanceReaderDtoin.hh"
+#include "dtoin/InstanceReaderHumanReadable.hh"
 #include "dtoin/SolutionDtoin.hh"
+#include "tools/Log.hh"
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -15,7 +17,7 @@ list<shared_ptr<ContextBO> > GenerateFromExisting::generate(const variables_map&
 
     if ( ! args_p.count("fromExistingSol") ){
         ostringstream oss_l;
-        oss_l << "Strategie de generation demandee : \"From existing\", mais pas desolution initiale fourni. Utiliser l'option --fromExistingSol nomFichier" << endl;
+        oss_l << "Strategie de generation demandee : \"From existing\", mais pas de solution initiale fourni. Utiliser l'option --fromExistingSol nomFichier" << endl;
         throw oss_l.str();
     }
 
@@ -40,7 +42,17 @@ shared_ptr<InstanceReaderInterface> GenerateFromExisting::getReader(const variab
         throw oss_l.str();
     }
 
-    //TODO : lorsqu'il y aura d'autres type de readers, ajouter des tests pour caracteriser le flux d'entree
-    shared_ptr<InstanceReaderInterface> result_l(new InstanceReaderDtoin);
+    shared_ptr<InstanceReaderInterface> result_l;
+
+    char firstChar_l;
+    ifs_l >> firstChar_l;
+    if ( firstChar_l == '=' ){
+        //LOG(DEBUG) << "Reader choisi : human readable" << endl;
+        result_l = shared_ptr<InstanceReaderInterface>(new InstanceReaderHumanReadable);
+    } else {
+        //LOG(DEBUG) << "Reader choisi : par defaut" << endl;
+        result_l = shared_ptr<InstanceReaderInterface>(new InstanceReaderDtoin);
+    }
+
     return result_l;
 }

@@ -29,6 +29,7 @@ string InstanceWriterHumanReadable::writeRessources(ContextBO const * pContextBO
     ostringstream oss_l;
     oss_l << writeSectionTitle("Ressources") << endl;
     int nbRess_l = pContextBO_p->getNbRessources();
+    oss_l << writeQuantite(nbRess_l) << endl;
     
     for ( int idxRess_l=0 ; idxRess_l < nbRess_l ; idxRess_l++ ){
         RessourceBO* pRess_l = pContextBO_p->getRessource(idxRess_l);
@@ -46,6 +47,7 @@ string InstanceWriterHumanReadable::writeMachines(ContextBO const * pContextBO_p
     ostringstream oss_l;
     oss_l << writeSectionTitle("Machines") << endl;
     int nbMachines_l = pContextBO_p->getNbMachines();
+    oss_l << writeQuantite(nbMachines_l) << endl;
     
     for ( int idxMachine_l=0 ; idxMachine_l < nbMachines_l ; idxMachine_l++ ){
         MachineBO* pMachine_l = pContextBO_p->getMachine(idxMachine_l);
@@ -66,6 +68,7 @@ string InstanceWriterHumanReadable::writeServices(ContextBO const * pContextBO_p
     ostringstream oss_l;
     oss_l << writeSectionTitle("Services") << endl;
     int nbServices_l = pContextBO_p->getNbServices();
+    oss_l << writeQuantite(nbServices_l) << endl;
 
     for ( int idxService_l=0 ; idxService_l < nbServices_l ; idxService_l++ ){
         ServiceBO* pService_l = pContextBO_p->getService(idxService_l);
@@ -83,6 +86,7 @@ string InstanceWriterHumanReadable::writeProcesses(ContextBO const * pContextBO_
     ostringstream oss_l;
     oss_l << writeSectionTitle("Processes") << endl;
     int nbProcesses_l = pContextBO_p->getNbProcesses();
+    oss_l << writeQuantite(nbProcesses_l) << endl;
 
     for ( int idxP_l=0 ; idxP_l < nbProcesses_l ; idxP_l++ ){
         ProcessBO* pProcess_l = pContextBO_p->getProcess(idxP_l);
@@ -99,8 +103,9 @@ string InstanceWriterHumanReadable::writeProcesses(ContextBO const * pContextBO_
 
 string InstanceWriterHumanReadable::writeBalanceCost(ContextBO const * pContextBO_p){
     ostringstream  oss_l;
-    oss_l << writeSectionTitle("BalanceCost") << endl;
+    oss_l << writeSectionTitle("BalanceCosts") << endl;
     int nbBC_l = pContextBO_p->getNbBalanceCosts();
+    oss_l << writeQuantite(nbBC_l) << endl;
 
     for ( int idxBC_l=0 ; idxBC_l < nbBC_l ; idxBC_l++ ){
         BalanceCostBO* pBC_l = pContextBO_p->getBalanceCost(idxBC_l);
@@ -173,4 +178,10 @@ string InstanceWriterHumanReadable::writeMajorTitle(const string& title_p){
 
 string InstanceWriterHumanReadable::writeSectionTitle(const string& title_p){
     return writeTitle(title_p, 5);
+}
+
+string InstanceWriterHumanReadable::writeQuantite(int quantite_p){
+    ostringstream oss_l;
+    oss_l << "quantite : " << quantite_p;
+    return oss_l.str();
 }

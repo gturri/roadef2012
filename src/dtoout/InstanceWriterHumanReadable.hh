@@ -33,6 +33,7 @@ class InstanceWriterHumanReadable : public InstanceWriterInterface {
         static string writeCarac(const string& caracName_p, int carac_p);
         static string writeListOfCaracs(const string& caracsName_p, const vector<int>& caracs_p);
         static string writeListOfCaracs(const string& caracsName_p, const unordered_set<int>& caracs_p);
+        static string writeQuantite(int quantite_p);
 
 };
 
