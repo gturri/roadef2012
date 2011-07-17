@@ -5,7 +5,6 @@
 #include <vector>
 #include <boost/static_assert.hpp>
 using namespace std;
-using namespace boost;
 
 #define USELESS 0 /*LOG(USELESS) << "C'est toto qui va a la plage, et..." */
 #define DEBUG 1   /*LOG(DEBUG)   << "Je viens d'initialiser ma structure interne" */
