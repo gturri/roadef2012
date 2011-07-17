@@ -8,27 +8,11 @@
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
 #include "bo/ServiceBO.hh"
-#include <fstream>
 #include <iostream>
 #include <sstream>
 using namespace std;
 
-void InstanceWriterDtoout::write(ContextBO* pContextBO_p, const string& out_filename_p){
-    ofstream ofs_p(out_filename_p.c_str());
-    if ( ! ofs_p ){
-        ostringstream oss_l;
-        oss_l << "Impossible de dumpter l'instance dans le fichier " << out_filename_p << endl;
-        throw oss_l.str();
-    }
-
-    write(pContextBO_p, ofs_p);
-}
-
-void InstanceWriterDtoout::write(ContextBO* pContextBO_p, ostream& os_p){
-    os_p << write(pContextBO_p);
-}
-
-string InstanceWriterDtoout::write(ContextBO* pContextBO_p){
+string InstanceWriterDtoout::writeOnString(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     oss_l << writeRessources(pContextBO_p)
         << writeMachines(pContextBO_p)
@@ -39,7 +23,7 @@ string InstanceWriterDtoout::write(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterDtoout::writeRessources(ContextBO* pContextBO_p){
+string InstanceWriterDtoout::writeRessources(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     int nbRess_l = pContextBO_p->getNbRessources();
     oss_l << nbRess_l << endl;
@@ -53,7 +37,7 @@ string InstanceWriterDtoout::writeRessources(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterDtoout::writeMachines(ContextBO* pContextBO_p){
+string InstanceWriterDtoout::writeMachines(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     int nbMachines_l = pContextBO_p->getNbMachines();
     oss_l << nbMachines_l << endl;
@@ -71,7 +55,7 @@ string InstanceWriterDtoout::writeMachines(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterDtoout::writeMachineCapa(ContextBO* pContextBO_p, MachineBO* pMachine_p, bool useSafetyCapa_p){
+string InstanceWriterDtoout::writeMachineCapa(ContextBO const * pContextBO_p, MachineBO* pMachine_p, bool useSafetyCapa_p){
     ostringstream oss_l;
     int nbRess_l = pContextBO_p->getNbRessources();
 
@@ -90,7 +74,7 @@ string InstanceWriterDtoout::writeMachineCapa(ContextBO* pContextBO_p, MachineBO
     return oss_l.str();
 }
 
-string InstanceWriterDtoout::writeMachineMMC(ContextBO* pContextBO_p, MachineBO* pMachine_p){
+string InstanceWriterDtoout::writeMachineMMC(ContextBO const * pContextBO_p, MachineBO* pMachine_p){
     ostringstream oss_l;
     MMCBO* pMMC_l = pContextBO_p->getMMCBO();
     int nbMachines_l = pContextBO_p->getNbMachines();
@@ -104,7 +88,7 @@ string InstanceWriterDtoout::writeMachineMMC(ContextBO* pContextBO_p, MachineBO*
     return oss_l.str();
 }
 
-string InstanceWriterDtoout::writeServices(ContextBO* pContextBO_p){
+string InstanceWriterDtoout::writeServices(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     int nbServices_l = pContextBO_p->getNbServices();
     oss_l << nbServices_l << endl;
@@ -119,7 +103,7 @@ string InstanceWriterDtoout::writeServices(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterDtoout::writeServiceDependances(ContextBO* pContextBO_p, ServiceBO* pService_p){
+string InstanceWriterDtoout::writeServiceDependances(ContextBO const * pContextBO_p, ServiceBO* pService_p){
     int nbServices_l = pContextBO_p->getNbServices();
     ostringstream oss_l;
     oss_l << pService_p->getNbServicesIDependOn();
@@ -143,7 +127,7 @@ string InstanceWriterDtoout::writeServiceDependances(ContextBO* pContextBO_p, Se
     return oss_l.str();
 }
 
-string InstanceWriterDtoout::writeProcesses(ContextBO* pContextBO_p){
+string InstanceWriterDtoout::writeProcesses(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     int nbProcesses_l = pContextBO_p->getNbProcesses();
     oss_l << nbProcesses_l;
@@ -159,7 +143,7 @@ string InstanceWriterDtoout::writeProcesses(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterDtoout::writeProcessRequirements(ContextBO* pContextBO_p, ProcessBO* pProcess_p){
+string InstanceWriterDtoout::writeProcessRequirements(ContextBO const * pContextBO_p, ProcessBO* pProcess_p){
     ostringstream oss_l;
     int nbRess_l = pContextBO_p->getNbRessources();
     for ( int idxRess_l=0 ; idxRess_l < nbRess_l ; idxRess_l++ ){
@@ -171,7 +155,7 @@ string InstanceWriterDtoout::writeProcessRequirements(ContextBO* pContextBO_p, P
     return oss_l.str();
 }
 
-string InstanceWriterDtoout::writeBalanceCost(ContextBO* pContextBO_p){
+string InstanceWriterDtoout::writeBalanceCost(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     int nbBC_l = pContextBO_p->getNbBalanceCosts();
     oss_l << nbBC_l;
@@ -191,7 +175,7 @@ string InstanceWriterDtoout::writeBalanceCost(ContextBO* pContextBO_p){
     return oss_l.str();
 }
 
-string InstanceWriterDtoout::writePoids(ContextBO* pContextBO_p){
+string InstanceWriterDtoout::writePoids(ContextBO const * pContextBO_p){
     ostringstream oss_l;
     oss_l << pContextBO_p->getPoidsPMC() << endl
         << pContextBO_p->getPoidsSMC() << endl

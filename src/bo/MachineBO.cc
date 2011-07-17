@@ -31,6 +31,26 @@ int MachineBO::getCapa(int idxRess_p) const{
     return capa_m[idxRess_p];
 }
 
+vector<int> MachineBO::getCapas() const{
+    return capa_m;
+}
+
 int MachineBO::getSafetyCapa(int idxRess_p) const{
     return safetyCapa_m[idxRess_p];
+}
+
+vector<int> MachineBO::getSafetyCapas() const{
+    return safetyCapa_m;
+}
+
+bool MachineBO::operator==(MachineBO& machine_p) const {
+    return id_m == machine_p.id_m
+        && location_m->getId() == machine_p.location_m->getId()
+        && neighborhood_m->getId() == machine_p.neighborhood_m->getId()
+        && capa_m == machine_p.capa_m
+        && safetyCapa_m == machine_p.safetyCapa_m;
+}
+
+bool MachineBO::operator!=(MachineBO& machine_p) const{
+    return ! (this->operator==(machine_p));
 }

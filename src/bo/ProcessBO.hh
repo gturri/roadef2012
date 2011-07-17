@@ -14,9 +14,13 @@ class ProcessBO {
         int getId() const;
         ServiceBO* getService() const;
         int getRequirement(int idxRess_p) const;
+        vector<int> getRequirements() const;
         void setMachineInit(MachineBO* pMachine_p);
         MachineBO* getMachineInit() const;
         int getPMC() const;
+
+        bool operator==(const ProcessBO& process_p) const;
+        bool operator!=(const ProcessBO& process_p) const;
 
     private:
         const int id_m;

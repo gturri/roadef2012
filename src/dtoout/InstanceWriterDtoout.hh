@@ -1,5 +1,6 @@
 #ifndef INSTANCEWRITERDTOOUT_HH
 #define INSTANCEWRITERDTOOUT_HH
+#include "dtoout/InstanceWriterInterface.hh"
 #include <string>
 using namespace std;
 
@@ -18,37 +19,24 @@ class ServiceBO;
  * est clairement privilegiee par rapport au perf (ce qui explique les multiples 
  * conversions string <-> ostringstream dans les deux sens)
  */
-class InstanceWriterDtoout {
+class InstanceWriterDtoout : public InstanceWriterInterface {
     public:
-        /**
-         * Ecrit dans un fichier
-         */
-        static void write(ContextBO* pContextBO_p, const string& out_filename_p);
-
-        /**
-         * Ecrit sur un flux de sortie
-         */
-        static void write(ContextBO* pContextBO_p, ostream& os_p);
-
-        /**
-         * Ecrit sur une string
-         */
-        static string write(ContextBO* pContextBO_p);
 
     protected:
-        static string writeRessources(ContextBO* pContextBO_p);
-        static string writeMachines(ContextBO* pContextBO_p);
-        static string writeServices(ContextBO* pContextBO_p);
-        static string writeProcesses(ContextBO* pContextBO_p);
-        static string writeBalanceCost(ContextBO* pContextBO_p);
-        static string writePoids(ContextBO* pContextBO_p);
+        virtual string writeOnString(ContextBO const * pContextBO_p);
+        static string writeRessources(ContextBO const * pContextBO_p);
+        static string writeMachines(ContextBO const * pContextBO_p);
+        static string writeServices(ContextBO const * pContextBO_p);
+        static string writeProcesses(ContextBO const * pContextBO_p);
+        static string writeBalanceCost(ContextBO const * pContextBO_p);
+        static string writePoids(ContextBO const * pContextBO_p);
 
-        static string writeMachineCapa(ContextBO* pContextBO_p, MachineBO* pMachine_p, bool useSafetyCapa_p);
+        static string writeMachineCapa(ContextBO const * pContextBO_p, MachineBO* pMachine_p, bool useSafetyCapa_p);
         static string writeMachineSafetyCapa(MachineBO* pMachine_p);
-        static string writeMachineMMC(ContextBO* pContextBO_p, MachineBO* pMachine_p);
+        static string writeMachineMMC(ContextBO const * pContextBO_p, MachineBO* pMachine_p);
 
-        static string writeServiceDependances(ContextBO* pContextBO_p, ServiceBO* pService_p);
-        static string writeProcessRequirements(ContextBO* pContextBO_p, ProcessBO* pProcess_p);
+        static string writeServiceDependances(ContextBO const * pContextBO_p, ServiceBO* pService_p);
+        static string writeProcessRequirements(ContextBO const * pContextBO_p, ProcessBO* pProcess_p);
 };
 
 #endif

@@ -7,10 +7,49 @@
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
 #include "bo/ServiceBO.hh"
+#include "dtoout/InstanceWriterHumanReadable.hh"
+#include <boost/foreach.hpp>
+#include <algorithm>
+using namespace std;
 
 ContextBO::ContextBO() :
     pMMCBO_m(0)
 {}
+
+ContextBO::ContextBO(const ContextBO& contextBO_p){
+    BOOST_FOREACH(RessourceBO* pRess_l, contextBO_p.vpRessources_m){
+        vpRessources_m.push_back(new RessourceBO(*pRess_l));
+    }
+    BOOST_FOREACH(LocationBO* pLoc_l, contextBO_p.vpLocations_m){
+        vpLocations_m.push_back(new LocationBO(*pLoc_l));
+    }
+    BOOST_FOREACH(NeighborhoodBO* pNeigh_l, contextBO_p.vpNeighborhoods_m){
+        vpNeighborhoods_m.push_back(new NeighborhoodBO(*pNeigh_l));
+    }
+    BOOST_FOREACH(MachineBO* pMachine_l, contextBO_p.vpMachines_m){
+        LocationBO* pLoc_l = vpLocations_m[pMachine_l->getLocation()->getId()];
+        NeighborhoodBO* pNeigh_l = vpNeighborhoods_m[pMachine_l->getNeighborhood()->getId()];
+        vpMachines_m.push_back(new MachineBO(pMachine_l->getId(), pLoc_l, pNeigh_l, pMachine_l->getCapas(), pMachine_l->getSafetyCapas()));
+    }
+    BOOST_FOREACH(ServiceBO* pService_l, contextBO_p.vpServices_m){
+        vpServices_m.push_back(new ServiceBO(*pService_l));
+    }
+    BOOST_FOREACH(ProcessBO* pProcess_l, contextBO_p.vpProcesses_m){
+        ServiceBO* pService_l = vpServices_m[pProcess_l->getService()->getId()];
+        vpProcesses_m.push_back(new ProcessBO(pProcess_l->getId(), pService_l, pProcess_l->getRequirements(), pProcess_l->getPMC()));
+        vpProcesses_m.back()->setMachineInit(vpMachines_m[pProcess_l->getMachineInit()->getId()]);
+    }
+    BOOST_FOREACH(BalanceCostBO* pBC_l, contextBO_p.vpBalanceCosts_m){
+        RessourceBO* pRess1_l = vpRessources_m[pBC_l->getRessource1()->getId()];
+        RessourceBO* pRess2_l = vpRessources_m[pBC_l->getRessource2()->getId()];
+        vpBalanceCosts_m.push_back(new BalanceCostBO(pRess1_l, pRess2_l, pBC_l->getTarget(), pBC_l->getPoids()));
+    }
+    pMMCBO_m = new MMCBO(*(contextBO_p.pMMCBO_m));
+
+    poidsPMC_m = contextBO_p.poidsPMC_m;
+    poidsSMC_m = contextBO_p.poidsSMC_m;
+    poidsMMC_m = contextBO_p.poidsMMC_m;
+}
 
 ContextBO::~ContextBO(){
     for ( vector<RessourceBO*>::iterator it_l=vpRessources_m.begin() ; it_l != vpRessources_m.end() ; it_l++ ){
@@ -161,3 +200,107 @@ int ContextBO::getPoidsMMC() const{
     return poidsMMC_m;
 }
 
+/* FIXME : la duplication de code se fait pleinement sentir ici.
+ * (plutot que de trouver une rustine pour ne corriger que cette methode,
+ * il est p.e. plus pertinent de refactorer totalement la classe...)
+ */
+bool ContextBO::operator==(const ContextBO& context_p) const{
+    //Ressources
+    if ( vpRessources_m.size() != context_p.vpRessources_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpRessources_m.size() ; idx_l++ ){
+        if ( *(vpRessources_m[idx_l]) != *(context_p.vpRessources_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Machines
+    if ( vpMachines_m.size() != context_p.vpMachines_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpMachines_m.size() ; idx_l++ ){
+        if ( *(vpMachines_m[idx_l]) != *(context_p.vpMachines_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Locations
+    if ( vpLocations_m.size() != context_p.vpLocations_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpLocations_m.size() ; idx_l++ ){
+        if ( *(vpLocations_m[idx_l]) != *(context_p.vpLocations_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Neighborhoods
+    if ( vpNeighborhoods_m.size() != context_p.vpNeighborhoods_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpNeighborhoods_m.size() ; idx_l++ ){
+        if ( *(vpNeighborhoods_m[idx_l]) != *(context_p.vpNeighborhoods_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Services
+    if ( vpServices_m.size() != context_p.vpServices_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpServices_m.size() ; idx_l++ ){
+        if ( *(vpServices_m[idx_l]) != *(context_p.vpServices_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Process
+    if ( vpProcesses_m.size() != context_p.vpProcesses_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpProcesses_m.size() ; idx_l++ ){
+        if ( *(vpProcesses_m[idx_l]) != *(context_p.vpProcesses_m[idx_l]) ){
+            return false;
+        }
+    }
+
+    //Balances Costs
+    if ( vpBalanceCosts_m.size() != context_p.vpBalanceCosts_m.size() ){
+        return false;
+    }
+    for ( size_t idx_l=0 ; idx_l < vpBalanceCosts_m.size() ; idx_l++ ){
+        if ( *(vpBalanceCosts_m[idx_l]) != *(context_p.vpBalanceCosts_m[idx_l]) ){
+            return false;
+        }
+    }
+
+
+    //Autres attributs
+    return *pMMCBO_m == *(context_p.pMMCBO_m)
+        && poidsPMC_m == context_p.poidsPMC_m
+        && poidsSMC_m == context_p.poidsSMC_m
+        && poidsMMC_m == context_p.poidsMMC_m;
+}
+
+ContextBO& ContextBO::operator=(const ContextBO& context_p){
+    ContextBO context_l(context_p);
+    swap(vpRessources_m, context_l.vpRessources_m);
+    swap(vpMachines_m, context_l.vpMachines_m);
+    swap(vpLocations_m, context_l.vpLocations_m);
+    swap(vpNeighborhoods_m, context_l.vpNeighborhoods_m);
+    swap(vpServices_m, context_l.vpServices_m);
+    swap(vpProcesses_m, context_l.vpProcesses_m);
+    swap(vpBalanceCosts_m, context_l.vpBalanceCosts_m);
+    swap(pMMCBO_m, context_l.pMMCBO_m);
+    poidsPMC_m = context_l.poidsPMC_m;
+    poidsSMC_m = context_l.poidsSMC_m;
+    poidsMMC_m = context_l.poidsMMC_m;
+    return *this;
+}
+
+ostream& operator<<(ostream& os_p, const ContextBO& context_p){
+    InstanceWriterHumanReadable writer_l;
+    writer_l.write(&context_p, os_p);
+    return os_p;
+}

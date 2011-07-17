@@ -10,15 +10,19 @@ class NeighborhoodBO {
     public:
         NeighborhoodBO(int id_p);
         void addMachine(MachineBO* machine_p);
+        void addMachine(int idxMachine_p);
         int getId() const;
+
+        bool operator==(const NeighborhoodBO& neigh_p) const;
+        bool operator!=(const NeighborhoodBO& neigh_p) const;
 
     private:
         int id_m;
 
         /**
-         * Ensemble des machines du neighborhood
+         * Ensemble des id des machines du neighborhood
          */
-        unordered_set<MachineBO*> machines_m;
+        unordered_set<int> machines_m;
 };
 
 #endif

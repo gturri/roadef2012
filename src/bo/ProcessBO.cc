@@ -25,6 +25,10 @@ int ProcessBO::getRequirement(int idxRess_p) const{
     return vRequirements_m[idxRess_p];
 }
 
+vector<int> ProcessBO::getRequirements() const{
+    return vRequirements_m;
+}
+
 void ProcessBO::setMachineInit(MachineBO* pMachine_p){
     pMachineInit_m = pMachine_p;
 }
@@ -37,3 +41,14 @@ int ProcessBO::getPMC() const{
     return pmc_m;
 }
 
+bool ProcessBO::operator==(const ProcessBO& process_p) const {
+    return id_m == process_p.id_m
+        && pService_m->getId() == process_p.pService_m->getId()
+        && vRequirements_m == process_p.vRequirements_m
+        && pMachineInit_m->getId() == process_p.pMachineInit_m->getId()
+        && pmc_m == process_p.pmc_m;
+}
+
+bool ProcessBO::operator!=(const ProcessBO& process_p) const{
+    return ! this->operator==(process_p);
+}

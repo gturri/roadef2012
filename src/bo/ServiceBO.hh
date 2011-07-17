@@ -7,13 +7,9 @@ using namespace std::tr1;
 class ProcessBO;
 class NeighborhoodBO;
 
-/* FIXME : c'est une guerre de recuperer les services qui dependent de celui-ci
- * (et de recuperer ceux dont celui-ci dependent)
- * Ne pas hesiter a refactorer (je pense que des getteurs qui calculent brutalement ces donnees puis qui les cachent, ca le fait.)
- */
 class ServiceBO {
     public:
-        ServiceBO(int id_p, int spreadMin_p, const unordered_set<int>& dependances_p);
+        ServiceBO(int id_p, int spreadMin_p, const unordered_set<int>& sDependances_p);
 
         int getId() const;
         int getSpreadMin() const;
@@ -28,9 +24,15 @@ class ServiceBO {
          */
         bool iDependOn(int idxService_p) const;
 
+        unordered_set<int> getServicesIDependOn() const;
+
         void addProcess(ProcessBO* pProcess_p);
         int getNbProcesses() const;
         bool containsProcess(int idxProcess_p) const;
+
+        bool operator==(const ServiceBO& service_p) const;
+        bool operator!=(const ServiceBO& service_p) const;
+
 
     private:
         const int id_m;
@@ -49,7 +51,7 @@ class ServiceBO {
         /**
          * Contient les indices des services dont "this" depend
          */
-        const unordered_set<int> iDependOnThem_m;
+        const unordered_set<int> sIDependOnThem_m;
 };
 
 
