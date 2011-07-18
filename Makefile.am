@@ -1,12 +1,19 @@
 SUBDIRS=
 ACLOCAL_AMFLAGS = -I m4
 
-bin_PROGRAMS = machineReassignment generateurInstance
+bin_PROGRAMS = machineReassignment
+
 if WANT_GTEST
 bin_PROGRAMS += testU
 TESTS = testU
 endif
-EXTRA_PROGRAMS = testU 
+
+if WANT_GENERATEUR
+bin_PROGRAMS += generateurInstance
+endif
+
+
+EXTRA_PROGRAMS = testU generateurInstance
 
 machineReassignment_FILES = \
 	$(top_srcdir)/src/dtoin/BalanceCostDtoin.cc \
