@@ -16,6 +16,9 @@ endif
 EXTRA_PROGRAMS = testU generateurInstance
 
 machineReassignment_FILES = \
+	$(top_srcdir)/src/alg/ContextALG.cc \
+	$(top_srcdir)/src/alg/SequenceStrategyOptim.cc \
+	$(top_srcdir)/src/alg/StrategyOptim.cc \
 	$(top_srcdir)/src/dtoin/BalanceCostDtoin.cc \
 	$(top_srcdir)/src/dtoin/InstanceReaderDtoin.cc \
 	$(top_srcdir)/src/dtoin/InstanceReaderInterface.cc \
@@ -40,6 +43,7 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
 	$(top_srcdir)/src/bo/ServiceBO.cc \
 	$(top_srcdir)/src/tools/Log.cc
+
 
 fichiersCommunsTestsEtGenerateur = \
 	$(top_srcdir)/src/generateur/alg/DummyStrategyGeneration.cc \
