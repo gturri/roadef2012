@@ -35,7 +35,7 @@ shared_ptr<InstanceReaderInterface> GenerateFromExisting::getReader(const variab
     }
 
     string filename_l = args_p["fromExistingInst"].as<string>();
-    ifstream ifs_l(filename_l);
+    ifstream ifs_l(filename_l.c_str());
     if ( ! ifs_l ){
         ostringstream oss_l;
         oss_l << "Impossible d'ouvir le fichier d'instance " << filename_l <<endl;
