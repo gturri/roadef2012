@@ -1,9 +1,10 @@
 #ifndef STRATEGYGENERATION_HH
 #define STRATEGYGENERATION_HH
 #include <list>
-#include <memory>
 #include <boost/program_options.hpp>
+#include <boost/shared_ptr.hpp>
 using namespace std;
+using namespace boost;
 using namespace boost::program_options;
 
 class ContextBO;

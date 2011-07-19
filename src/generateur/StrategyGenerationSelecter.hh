@@ -1,8 +1,9 @@
 #ifndef STRATEGYGENERATIONSELECTER_HH
 #define STRATEGYGENERATIONSELECTER_HH
 #include <string>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 using namespace std;
+using namespace boost;
 
 class StrategyGeneration;
 

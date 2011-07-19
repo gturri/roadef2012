@@ -6,9 +6,10 @@
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
 #include "bo/ServiceBO.hh"
-#include <memory>
 #include <boost/foreach.hpp>
+#include <boost/shared_ptr.hpp>
 #include <gtest/gtest.h>
+using namespace boost;
 
 /* Les operator== ne sont en fait pas trivial (en particulier parce que les
  * unordered_set ne presentent pas eux meme cet operator). D'ou ces tests.

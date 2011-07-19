@@ -5,10 +5,11 @@
 #include "dtoout/InstanceWriterInterface.hh"
 #include "dtoout/SolutionDtoout.hh"
 #include <iostream>
-#include <memory>
 #include <string>
 #include <boost/foreach.hpp>
 #include <boost/program_options.hpp>
+#include <boost/shared_ptr.hpp>
+using namespace boost;
 using namespace boost::program_options;
 using namespace std;
 

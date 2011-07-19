@@ -1,7 +1,8 @@
 #ifndef WRITERSELECTER_HH
 #define WRITERSELECTER_HH
 #include "dtoout/InstanceWriterInterface.hh"
-#include <memory>
+#include <boost/shared_ptr.hpp>
+using namespace boost;
 using namespace std;
 
 

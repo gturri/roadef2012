@@ -15,6 +15,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/foreach.hpp>
 #include <boost/regex.hpp>
+#include <boost/tuple/tuple.hpp>
 using namespace std;
 using namespace boost;
 #define INST_READER_HR_BUF_SIZE 4092
@@ -189,7 +190,7 @@ void InstanceReaderHumanReadable::readMachines(istream& is_p, ContextBO* pContex
     LOG(DEBUG) << "Debut de la lecture de " << nbMachines_l << " machines" << endl;
 
     //1ere passe pour recuperer la totalite des data
-    vector<tuple<int, int, int, vector<int>, vector<int>> > vDatas_l;
+    vector<tuple<int, int, int, vector<int>, vector<int> > > vDatas_l;
     int nbNeigh_l(0), nbLoc_l(0);
     vector<vector<int> > vMmcData_l;
     for ( int idxMachine_l=0 ; idxMachine_l < nbMachines_l ; idxMachine_l++ ){
@@ -294,7 +295,7 @@ void InstanceReaderHumanReadable::readPoids(istream& is_p, ContextBO* pContextBO
 }
 
 ContextBO InstanceReaderHumanReadable::read(const string& instance_filename_p){
-    ifstream ifs_l(instance_filename_p);
+    ifstream ifs_l(instance_filename_p.c_str());
     if ( ! ifs_l ){
         ostringstream oss_l;
         oss_l << "Impossible d'ouvrir le fichier d'instance " << instance_filename_p;
