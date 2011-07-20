@@ -20,9 +20,6 @@ using namespace std;
  */
 class InstanceReaderHumanReadable : public InstanceReaderInterface {
     public:
-        InstanceReaderHumanReadable();
-        ~InstanceReaderHumanReadable();
-
         virtual ContextBO read(const string& instance_filename_p);
 
     protected:
@@ -90,14 +87,6 @@ class InstanceReaderHumanReadable : public InstanceReaderInterface {
          * FALSE si elle different independamment de la casse
          */
         bool areEqualCaseInsensitive(const string& s1_p, const string& s2_p);
-
-        /**
-         * Buffer, mis ici afin de :
-         * - gagner du temps en evitant de frequents new/delete
-         * - pourvoir deleter dans le dtor afin de garantir 0 fuites de memoire, meme en cas de levee d'exception
-         */
-        char* pBuf_m;
-
 };
 
 #endif

@@ -18,22 +18,12 @@
 #include <boost/tuple/tuple.hpp>
 using namespace std;
 using namespace boost;
-#define INST_READER_HR_BUF_SIZE 4092
-
-InstanceReaderHumanReadable::InstanceReaderHumanReadable(){
-    pBuf_m = new char[INST_READER_HR_BUF_SIZE];
-}
-
-InstanceReaderHumanReadable::~InstanceReaderHumanReadable(){
-    delete[] pBuf_m;
-}
 
 string InstanceReaderHumanReadable::getNextLine(istream& is_p){
     string result_l;
     string copieTrimned_l;
     while ( copieTrimned_l == "" && is_p ){
-        is_p.getline(pBuf_m, INST_READER_HR_BUF_SIZE);
-        result_l = string(pBuf_m);
+        getline(is_p, result_l);
         copieTrimned_l = string(result_l);
         trim(copieTrimned_l);
     }
