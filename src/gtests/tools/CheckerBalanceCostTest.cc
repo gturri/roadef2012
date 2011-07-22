@@ -11,7 +11,6 @@ using namespace std;
 using namespace std::tr1;
 
 TEST(Checker, checkBalanceCost){
-    Checker checker_l;
     ContextBO contextBO_l;
     contextBO_l.addRessource(new RessourceBO(0, false, 0));
     contextBO_l.addRessource(new RessourceBO(1, false, 0));
@@ -26,11 +25,12 @@ TEST(Checker, checkBalanceCost){
     vector<int> reqP1_l; reqP1_l.push_back(1); reqP1_l.push_back(1);
     ContextBOBuilder::buildProcess(0, pService_l, reqP0_l, 0, 0, &contextBO_l);
     ContextBOBuilder::buildProcess(1, pService_l, reqP1_l, 0, 1, &contextBO_l);
+    ContextBOBuilder::buildDefaultMMC(&contextBO_l);
 
     ContextBOBuilder::buildBalanceCost(0, 1, 2, 7, &contextBO_l);
 
     ContextALG contextALG_l(&contextBO_l);
-    checker_l.setContextALG(&contextALG_l);
+    Checker checker_l(&contextALG_l);
     EXPECT_EQ(checker_l.computeBalanceCost(0), 14);
     EXPECT_EQ(checker_l.computeBalanceCost(1), 0);
     EXPECT_EQ(checker_l.computeBalanceCost(), 14);

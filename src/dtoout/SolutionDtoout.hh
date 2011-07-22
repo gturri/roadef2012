@@ -25,10 +25,6 @@ class SolutionDtoout {
         static void writeSolInit(ContextBO* pContextBO_p, const string& outFileName_p);
 
         static void writeSol(const vector<int>& vSol_p);
-        static void writeSol(const ContextALG& contextALG_p);
-
-        //TODO : ajouter les methodes d'ecriture, une fois que des formats de solution seront determines
-
 
     private:
         /**

@@ -15,14 +15,23 @@
 using namespace std;
 
 Checker::Checker(ContextALG const * pContextALG_p) :
-    pContextALG_m(pContextALG_p)
+    pContextALG_m(pContextALG_p),
+    contextToDelete_m(false)
 {}
 
-Checker::Checker()
+Checker::Checker(ContextBO const * pContextBO_p, const vector<int>& sol_p) :
+    pContextALG_m(buildMyContextALG(pContextBO_p, sol_p)),
+    contextToDelete_m(true)
 {}
 
-void Checker::setContextALG(ContextALG const * pContextALG_p){
-    pContextALG_m = pContextALG_p;
+Checker::Checker(const Checker& checker_p){
+    throw (string("Interdiction d'utiliser le cpy ctr du Checker"));
+}
+
+Checker::~Checker(){
+    if ( contextToDelete_m ){
+        delete pContextALG_m;
+    }
 }
 
 bool Checker::isValid(){
@@ -291,4 +300,10 @@ bool check(ContextALG const * pContextALG_p){
 bool check(ContextBO const * pContextBO_p){
     ContextALG contextALG_l(pContextBO_p);
     return check(&contextALG_l);
+}
+
+ContextALG const * Checker::buildMyContextALG(ContextBO const * pContextBO, const vector<int> sol_p){
+    ContextALG* pResult_l = new ContextALG(pContextBO, false, false);
+    pResult_l->setCurrentSol(sol_p);
+    return pResult_l;
 }

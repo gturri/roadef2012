@@ -6,7 +6,6 @@
 
 TEST(Checker, CheckerDependances){
     ContextBO contextBO_l;
-    Checker checker_l;
 
     ContextBOBuilder::buildMachine(0, 0, 0, vector<int>(), vector<int>(), &contextBO_l);
     ContextBOBuilder::buildMachine(1, 0, 0, vector<int>(), vector<int>(), &contextBO_l);
@@ -21,9 +20,10 @@ TEST(Checker, CheckerDependances){
     ContextBOBuilder::buildProcess(1, pService0_l, vector<int>(), 0, 2, &contextBO_l);
     ContextBOBuilder::buildProcess(2, pService1_l, vector<int>(), 0, 1, &contextBO_l);
     ContextBOBuilder::buildProcess(3, pService1_l, vector<int>(), 0, 2, &contextBO_l);
+    ContextBOBuilder::buildDefaultMMC(&contextBO_l);
 
     ContextALG contextALG_l(&contextBO_l);
-    checker_l.setContextALG(&contextALG_l);
+    Checker checker_l(&contextALG_l);
     EXPECT_TRUE(checker_l.checkDependances());
 
     vector<int> curSol_l = contextALG_l.getCurrentSol();

@@ -11,7 +11,6 @@ using namespace std;
 using namespace std::tr1;
 
 TEST(Checker, checkSMC){
-    Checker checker_l;
     ContextBO contextBO_l;
 
     ContextBOBuilder::buildMachine(0, 0, 0, vector<int>(), vector<int>(), &contextBO_l);
@@ -25,6 +24,7 @@ TEST(Checker, checkSMC){
     ContextBOBuilder::buildProcess(2, pService1_l, vector<int>(), 0, 1, &contextBO_l);
     ContextBOBuilder::buildProcess(3, pService1_l, vector<int>(), 0, 1, &contextBO_l);
     ContextBOBuilder::buildProcess(4, pService1_l, vector<int>(), 0, 1, &contextBO_l);
+    ContextBOBuilder::buildDefaultMMC(&contextBO_l);
 
     ContextALG contextALG_l(&contextBO_l);
     vector<int> solCur_l;
@@ -34,6 +34,6 @@ TEST(Checker, checkSMC){
     solCur_l.push_back(1);
     solCur_l.push_back(1);
     contextALG_l.setCurrentSol(solCur_l);
-    checker_l.setContextALG(&contextALG_l);
+    Checker checker_l(&contextALG_l);
     EXPECT_EQ(checker_l.computeSMC(), 1);
 }

@@ -13,7 +13,6 @@ using namespace std::tr1;
 
 TEST(Checker, checkConflit){  
     ContextBO contextBO_l;
-    Checker checker_l;
     contextBO_l.addRessource(new RessourceBO(0, false, 0));
 
     ContextBOBuilder::buildMachine(0, 0, 0, vector<int>(1, 15), vector<int>(1, 10), &contextBO_l);
@@ -24,9 +23,10 @@ TEST(Checker, checkConflit){
     ContextBOBuilder::buildProcess(0, pService0_l, vector<int>(1, 0), 0, 0, &contextBO_l);
     ContextBOBuilder::buildProcess(1, pService0_l, vector<int>(1, 0), 0, 1, &contextBO_l);
     ContextBOBuilder::buildProcess(2, pService1_l, vector<int>(1, 0), 0, 0, &contextBO_l);
+    ContextBOBuilder::buildDefaultMMC(&contextBO_l);
 
     ContextALG contextALG_l(&contextBO_l);
-    checker_l.setContextALG(&contextALG_l);
+    Checker checker_l(&contextALG_l);
     vector<int> curSol_l(3, 0);
 
     curSol_l[0] = 0; curSol_l[1] = 1; curSol_l[2] = 0;

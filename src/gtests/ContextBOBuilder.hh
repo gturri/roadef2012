@@ -26,6 +26,11 @@ class ContextBOBuilder {
 
         static BalanceCostBO* buildBalanceCost(int idxRess1_p, int idxRess2_p, int target_p, int poids_p, ContextBO* pContextBO_p);
 
+        /**
+         * Ajoute un MMCBO ayant la taille adequate, et des couts tous nuls
+         */
+        static void buildDefaultMMC(ContextBO* pContextBO_p);
+
 
 };
 

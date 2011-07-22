@@ -11,7 +11,6 @@ using namespace std;
 using namespace std::tr1;
 
 TEST(Checker, checkLoadCost){
-    Checker checker_l;
     ContextBO contextBO_l;
     contextBO_l.addRessource(new RessourceBO(0, true, 7));
     contextBO_l.addRessource(new RessourceBO(1, false, 11));
@@ -26,10 +25,11 @@ TEST(Checker, checkLoadCost){
     ServiceBO* pService_l = ContextBOBuilder::buildService(0, 0, unordered_set<int>(), &contextBO_l);
     vector<int> reqP0_l; reqP0_l.push_back(3); reqP0_l.push_back(1);
     ContextBOBuilder::buildProcess(0, pService_l, reqP0_l, 0, 0, &contextBO_l);
+    ContextBOBuilder::buildDefaultMMC(&contextBO_l);
 
     ContextALG contextALG_l(&contextBO_l);
     contextALG_l.setCurrentSol(vector<int>(1, 1));
-    checker_l.setContextALG(&contextALG_l);
+    Checker checker_l(&contextALG_l);
     EXPECT_EQ(checker_l.computeLoadCost(0), 14);
     EXPECT_EQ(checker_l.computeLoadCost(1), 0);
     EXPECT_EQ(checker_l.computeLoadCost(), 14);

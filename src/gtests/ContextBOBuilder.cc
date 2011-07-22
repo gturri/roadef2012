@@ -3,6 +3,7 @@
 #include "bo/ContextBO.hh"
 #include "bo/LocationBO.hh"
 #include "bo/MachineBO.hh"
+#include "bo/MMCBO.hh"
 #include "bo/NeighborhoodBO.hh"
 #include "bo/ProcessBO.hh"
 #include "bo/ServiceBO.hh"
@@ -56,4 +57,9 @@ BalanceCostBO* ContextBOBuilder::buildBalanceCost(int idxRess1_p, int idxRess2_p
     BalanceCostBO* pBC_l = new BalanceCostBO(pRess1_l, pRess2_l, target_p, poids_p);
     pContextBO_p->addBalanceCost(pBC_l);
     return pBC_l;
+}
+
+void ContextBOBuilder::buildDefaultMMC(ContextBO* pContextBO_p){
+    const int nbMachine_l = pContextBO_p->getNbMachines();
+    pContextBO_p->setMMCBO(new MMCBO(vector<vector<int> >(nbMachine_l, vector<int>(nbMachine_l, 0))));
 }
