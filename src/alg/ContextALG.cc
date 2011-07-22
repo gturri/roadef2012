@@ -6,15 +6,9 @@
 using namespace std;
 
 ContextALG::ContextALG(ContextBO const * pContextBO_p) :
-    pContextBO_m(pContextBO_p)
-{
-    const int nbProcesses_l = pContextBO_m->getNbProcesses();
-    currentSol_m.reserve(nbProcesses_l);
-
-    for ( int idxP_l=0 ; idxP_l < nbProcesses_l ; idxP_l++ ){
-        currentSol_m.push_back(pContextBO_m->getProcess(idxP_l)->getMachineInit()->getId());
-    }
-}
+    pContextBO_m(pContextBO_p),
+    currentSol_m(pContextBO_m->getSolInit())
+{}
 
 ContextBO const * ContextALG::getContextBO() const {
     return pContextBO_m;

@@ -13,7 +13,8 @@
 using namespace std;
 
 ContextBO::ContextBO() :
-    pMMCBO_m(0)
+    pMMCBO_m(0),
+    pSolInit_m(new vector<int>())
 {}
 
 ContextBO::ContextBO(const ContextBO& contextBO_p){
@@ -49,6 +50,8 @@ ContextBO::ContextBO(const ContextBO& contextBO_p){
     poidsPMC_m = contextBO_p.poidsPMC_m;
     poidsSMC_m = contextBO_p.poidsSMC_m;
     poidsMMC_m = contextBO_p.poidsMMC_m;
+
+    pSolInit_m = new vector<int>(*(contextBO_p.pSolInit_m));
 }
 
 ContextBO::~ContextBO(){
@@ -81,6 +84,7 @@ ContextBO::~ContextBO(){
     }
 
     delete pMMCBO_m;
+    delete pSolInit_m;
 }
 
 void ContextBO::setMMCBO(MMCBO* pMMC_p){
@@ -296,6 +300,7 @@ ContextBO& ContextBO::operator=(const ContextBO& context_p){
     poidsPMC_m = context_l.poidsPMC_m;
     poidsSMC_m = context_l.poidsSMC_m;
     poidsMMC_m = context_l.poidsMMC_m;
+    swap(pSolInit_m, context_l.pSolInit_m);
     return *this;
 }
 
@@ -303,4 +308,15 @@ ostream& operator<<(ostream& os_p, const ContextBO& context_p){
     InstanceWriterHumanReadable writer_l;
     writer_l.write(&context_p, os_p);
     return os_p;
+}
+
+vector<int> ContextBO::getSolInit() const{
+    if ( pSolInit_m->empty() ){
+        int nbProcesses_l = vpProcesses_m.size();
+        pSolInit_m->reserve(nbProcesses_l);
+        for ( int idxP_l=0 ; idxP_l < nbProcesses_l ; idxP_l++ ){
+            pSolInit_m->push_back(vpProcesses_m[idxP_l]->getMachineInit()->getId());
+        }
+    }
+    return *pSolInit_m;
 }
