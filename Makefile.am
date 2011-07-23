@@ -39,6 +39,13 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/ProcessBO.cc \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
 	$(top_srcdir)/src/bo/ServiceBO.cc \
+	$(top_srcdir)/src/alg/ContextALG.cc \
+	$(top_srcdir)/src/alg/SpaceALG.cc \
+	$(top_srcdir)/src/alg/DecisionALG.cc \
+	$(top_srcdir)/src/alg/RestrictionALG.cc \
+	$(top_srcdir)/src/alg/TreeALG.cc \
+	$(top_srcdir)/src/alg/MonteCarloTreeSearchALG.cc \
+	$(top_srcdir)/src/alg/SolutionALG.cc \
 	$(top_srcdir)/src/tools/Log.cc
 
 fichiersCommunsTestsEtGenerateur = \
