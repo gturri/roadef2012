@@ -11,6 +11,7 @@ class ContextALG {
         ContextBO const * getContextBO() const;
 
         vector<int> getCurrentSol() const;
+        void setCurrentSol(const vector<int>& curSol_p);
 
     private:
         /**

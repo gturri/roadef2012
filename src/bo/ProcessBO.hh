@@ -14,6 +14,7 @@ class ProcessBO {
         int getId() const;
         ServiceBO* getService() const;
         int getRequirement(int idxRess_p) const;
+        int getRequirement(RessourceBO const * pRess_p) const;
         vector<int> getRequirements() const;
         void setMachineInit(MachineBO* pMachine_p);
         MachineBO* getMachineInit() const;

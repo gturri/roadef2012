@@ -31,6 +31,10 @@ int MachineBO::getCapa(int idxRess_p) const{
     return capa_m[idxRess_p];
 }
 
+int MachineBO::getCapa(RessourceBO const * pRess_p) const{
+    return capa_m[pRess_p->getId()];
+}
+
 vector<int> MachineBO::getCapas() const{
     return capa_m;
 }

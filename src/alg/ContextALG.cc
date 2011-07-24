@@ -17,3 +17,7 @@ ContextBO const * ContextALG::getContextBO() const {
 vector<int> ContextALG::getCurrentSol() const {
     return currentSol_m;
 }
+
+void ContextALG::setCurrentSol(const vector<int>& curSol_p){
+    currentSol_m = curSol_p;
+}

@@ -42,7 +42,8 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/ProcessBO.cc \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
 	$(top_srcdir)/src/bo/ServiceBO.cc \
-	$(top_srcdir)/src/tools/Log.cc
+    $(top_srcdir)/src/tools/Checker.cc \
+	$(top_srcdir)/src/tools/Log.cc 
 
 
 fichiersCommunsTestsEtGenerateur = \
@@ -80,6 +81,7 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/SolutionDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerTest.cc \
     $(fichiersCommunsTestsEtGenerateur) \
 	$(machineReassignment_FILES)
 
