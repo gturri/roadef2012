@@ -41,7 +41,7 @@ class ContextBO {
 
         void addNeighborhood(NeighborhoodBO* pNeigh_p);
         int getNbNeighborhoods() const;
-        NeighborhoodBO* getNeihborhood(int idx_p) const;
+        NeighborhoodBO* getNeighborhood(int idx_p) const;
 
         void addMachine(MachineBO* pMachine_p);
         int getNbMachines() const;

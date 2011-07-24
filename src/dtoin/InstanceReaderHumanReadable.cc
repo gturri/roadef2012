@@ -215,7 +215,7 @@ void InstanceReaderHumanReadable::readMachines(istream& is_p, ContextBO* pContex
         pContextBO_p->addLocation(new LocationBO(idxLoc_l));
     }
     for ( vector<tuple<int, int, int, vector<int>, vector<int> > >::iterator it_l=vDatas_l.begin() ; it_l != vDatas_l.end() ; it_l++){
-        NeighborhoodBO* pNeigh_l = pContextBO_p->getNeihborhood(get<1>(*it_l));
+        NeighborhoodBO* pNeigh_l = pContextBO_p->getNeighborhood(get<1>(*it_l));
         LocationBO* pLoc_l = pContextBO_p->getLocation(get<2>(*it_l));
         pContextBO_p->addMachine(new MachineBO(get<0>(*it_l), pLoc_l, pNeigh_l, get<3>(*it_l), get<4>(*it_l)));
     }

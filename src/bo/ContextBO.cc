@@ -128,7 +128,7 @@ int ContextBO::getNbNeighborhoods() const{
     return vpNeighborhoods_m.size();
 }
 
-NeighborhoodBO* ContextBO::getNeihborhood(int idx_p) const{
+NeighborhoodBO* ContextBO::getNeighborhood(int idx_p) const{
     return vpNeighborhoods_m[idx_p];
 }
 
