@@ -2,6 +2,7 @@
 #include "tools/Log.hh"
 #include "alg/ContextALG.hh"
 #include "bo/ContextBO.hh"
+#include "bo/LocationBO.hh"
 #include "bo/MachineBO.hh"
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
@@ -92,7 +93,8 @@ bool Checker::checkConflict(){
         const int idxService_l = pContextBO_l->getProcess(idxP_l)->getService()->getId();
         pair<int, int> assoceMachineService_l(idxCurMachine_l, idxService_l);
         if ( assocesMachineService_l.find(assoceMachineService_l) != assocesMachineService_l.end() ){
-            LOG(DEBUG) << "La solution viole la contrainte de conflit : plusieurs processes du service " << idxService_l << " sur la machine " << idxCurMachine_l << endl;
+            LOG(DEBUG) << "La solution viole la contrainte de conflit : plusieurs processes du service "
+                << idxService_l << " sur la machine " << idxCurMachine_l << endl;
             return false;
         }
         assocesMachineService_l.insert(assoceMachineService_l);
@@ -102,6 +104,26 @@ bool Checker::checkConflict(){
 }
 
 bool Checker::checkSpread(){
+    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
+    vector<set<int> > memory_l(pContextBO_l->getNbServices());; //memory_l[idxService] => liste des locations utilisees
+
+    for ( int idxP_l=0 ; idxP_l < pContextBO_l->getNbProcesses() ; idxP_l++ ){
+        const int idxService_l = pContextBO_l->getProcess(idxP_l)->getService()->getId();
+        const int idxLocation_l = pContextBO_l->getMachine(curSol_l[idxP_l])->getLocation()->getId();
+        memory_l[idxService_l].insert(idxLocation_l);
+    }
+
+    for ( int idxS_l=0 ; idxS_l < pContextBO_l->getNbServices() ; idxS_l++ ){
+        const int spreadMin_l = pContextBO_l->getService(idxS_l)->getSpreadMin();
+        if ( spreadMin_l > (int) memory_l[idxS_l].size() ){
+            LOG(DEBUG) << "La solution viole la contrainte de spread : le service "
+                << idxS_l << " s'etend sur " << memory_l[idxS_l].size() 
+                << " locations mais a un spread min de " << spreadMin_l << endl;
+            return false;
+        }
+    }
+
     return true;
 }
 

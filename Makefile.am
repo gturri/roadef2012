@@ -84,6 +84,7 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/tools/CheckerCapaTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerFixture.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerConflictTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerSpreadTest.cc \
     $(fichiersCommunsTestsEtGenerateur) \
 	$(machineReassignment_FILES)
 

@@ -13,7 +13,6 @@
 using namespace std;
 using namespace std::tr1;
 
-//FIXME : refactorer afin de supprimer les duplications de code.
 TEST_F(CheckerFixture, checkCapaNotTransient){
     ContextBO contextBO_l;
     contextBO_l.addRessource(new RessourceBO(0, false, 0));
