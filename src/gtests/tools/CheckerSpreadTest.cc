@@ -13,10 +13,10 @@ TEST_F(CheckerFixture, checkSpread){
 
     ServiceBO* pService0_l = buildService(0, 2, unordered_set<int>(), &contextBO_l);
     ServiceBO* pService1_l = buildService(1, 1, unordered_set<int>(), &contextBO_l);
-    buildProcess(0, pService0_l, vector<int>(1), 0, 0, &contextBO_l);
-    buildProcess(1, pService0_l, vector<int>(1), 0, 1, &contextBO_l);
-    buildProcess(2, pService0_l, vector<int>(1), 0, 2, &contextBO_l);
-    buildProcess(3, pService1_l, vector<int>(1), 0, 0, &contextBO_l);
+    buildProcess(0, pService0_l, vector<int>(), 0, 0, &contextBO_l);
+    buildProcess(1, pService0_l, vector<int>(), 0, 1, &contextBO_l);
+    buildProcess(2, pService0_l, vector<int>(), 0, 2, &contextBO_l);
+    buildProcess(3, pService1_l, vector<int>(), 0, 0, &contextBO_l);
 
     ContextALG contextALG_l(&contextBO_l);
     setContextALG(&contextALG_l);

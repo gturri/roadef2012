@@ -1,8 +1,5 @@
 #include "alg/ContextALG.hh"
 #include "bo/ContextBO.hh"
-#include "bo/LocationBO.hh"
-#include "bo/MachineBO.hh"
-#include "bo/NeighborhoodBO.hh"
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
 #include "bo/ServiceBO.hh"

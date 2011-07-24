@@ -7,6 +7,7 @@
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
 #include "bo/ServiceBO.hh"
+#include <boost/foreach.hpp>
 #include <set>
 #include <vector>
 using namespace std;
@@ -128,6 +129,33 @@ bool Checker::checkSpread(){
 }
 
 bool Checker::checkDependances(){
+    ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
+    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    const int nbServices_l = pContextBO_l->getNbServices();
+
+    for ( int idxS1_l=0 ; idxS1_l < nbServices_l ; idxS1_l++ ){
+        ServiceBO const * pS1_l = pContextBO_l->getService(idxS1_l);
+        if ( pS1_l->getServicesIDependOn().empty() ){
+            continue;
+        }
+
+        unordered_set<int> neighsUsedBy1_l = pContextALG_m->getNeighsUsedByService(pS1_l);
+
+        BOOST_FOREACH(int idxS2_l, pS1_l->getServicesIDependOn()){
+            unordered_set<int> neighsUsedBy2_l = pContextALG_m->getNeighsUsedByService(idxS2_l);
+
+            BOOST_FOREACH(int idxN_l, neighsUsedBy1_l){
+                if ( neighsUsedBy2_l.find(idxN_l) == neighsUsedBy2_l.end() ){
+                    LOG(DEBUG) << "La solution viole la contrainte de dependances : "
+                        << "le service " << idxS1_l << " utilise le neighborhood "
+                        << idxN_l << " mais depend du service " << idxS2_l
+                        << " qui n'y est pas present" << endl;
+                    return false;
+                }
+            }
+        }
+    }
+
     return true;
 }
 
