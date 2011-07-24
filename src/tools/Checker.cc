@@ -179,3 +179,12 @@ int Checker::computeMMC(){
     return 0;
 }
 
+bool check(ContextALG const * pContextALG_p){
+    Checker checker_l(pContextALG_p);
+    return checker_l.isValid();
+}
+
+bool check(ContextBO const * pContextBO_p){
+    ContextALG contextALG_l(pContextBO_p);
+    return check(&contextALG_l);
+}

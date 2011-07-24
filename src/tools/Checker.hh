@@ -2,8 +2,15 @@
 #define CHECKER_HH
 
 class ContextALG;
+class ContextBO;
 class MachineBO;
 class RessourceBO;
+
+/**
+ * Fonctions s'appuyant sur la classe #Checker, permettant de s'evitant la creation d'instances temporaires
+ */
+bool check(ContextALG const * pContextALG_p);
+bool check(ContextBO const * pContextBO_p);
 
 class Checker {
     public:
