@@ -5,6 +5,8 @@
 #include "bo/MachineBO.hh"
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
+#include "bo/ServiceBO.hh"
+#include <set>
 #include <vector>
 using namespace std;
 
@@ -68,8 +70,11 @@ bool Checker::checkCapaIncludingTransient(RessourceBO const * pRess_p){
 
     const int nbMachines_l = pContextBO_l->getNbMachines();
     for ( int idxMachine_l=0 ; idxMachine_l < nbMachines_l ; idxMachine_l++ ){
-        if ( vUsedRess_l[idxMachine_l] > pContextBO_l->getMachine(idxMachine_l)->getCapa(pRess_p) ){
-            LOG(DEBUG) << "La solution viole la contrainte de capa pour la ressource " << pRess_p->getId() << " sur la machine " << idxMachine_l << endl;
+        const int capa_l = pContextBO_l->getMachine(idxMachine_l)->getCapa(pRess_p);
+        if ( vUsedRess_l[idxMachine_l] > capa_l ){
+            LOG(DEBUG) << "La solution viole la contrainte de capa pour la ressource " 
+                << pRess_p->getId() << " sur la machine " << idxMachine_l 
+                << " (requirement : " << vUsedRess_l[idxMachine_l] << ", capa : " << capa_l << ")" << endl;
             return false;
         }
     }
@@ -78,6 +83,21 @@ bool Checker::checkCapaIncludingTransient(RessourceBO const * pRess_p){
 }
 
 bool Checker::checkConflict(){
+    set<pair<int, int> > assocesMachineService_l;
+    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
+
+    for ( int idxP_l=0 ; idxP_l < pContextBO_l->getNbProcesses() ; idxP_l++ ){
+        const int idxCurMachine_l = curSol_l[idxP_l];
+        const int idxService_l = pContextBO_l->getProcess(idxP_l)->getService()->getId();
+        pair<int, int> assoceMachineService_l(idxCurMachine_l, idxService_l);
+        if ( assocesMachineService_l.find(assoceMachineService_l) != assocesMachineService_l.end() ){
+            LOG(DEBUG) << "La solution viole la contrainte de conflit : plusieurs processes du service " << idxService_l << " sur la machine " << idxCurMachine_l << endl;
+            return false;
+        }
+        assocesMachineService_l.insert(assoceMachineService_l);
+    }
+
     return true;
 }
 

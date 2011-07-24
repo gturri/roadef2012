@@ -26,4 +26,19 @@ TEST_F(CheckerFixture, checkConflit){
     buildProcess(1, pService0_l, vector<int>(1, 0), 0, 1, &contextBO_l);
     buildProcess(2, pService1_l, vector<int>(1, 0), 0, 0, &contextBO_l);
 
+    ContextALG contextALG_l(&contextBO_l);
+    setContextALG(&contextALG_l);
+    vector<int> curSol_l(3, 0);
+
+    curSol_l[0] = 0; curSol_l[1] = 1; curSol_l[2] = 0;
+    contextALG_l.setCurrentSol(curSol_l);
+    EXPECT_TRUE(checkConflict());
+
+    curSol_l[0] = 0 ; curSol_l[1] = 0 ; curSol_l[2] = 1;
+    contextALG_l.setCurrentSol(curSol_l);
+    EXPECT_FALSE(checkConflict());
+
+    curSol_l[0] = 1 ; curSol_l[1] = 0 ; curSol_l[2] = 1;
+    contextALG_l.setCurrentSol(curSol_l);
+    EXPECT_TRUE(checkConflict());
 }

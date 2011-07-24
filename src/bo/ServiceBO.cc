@@ -37,6 +37,10 @@ bool ServiceBO::containsProcess(int idxProcess_p) const{
     return sProcess_m.find(idxProcess_p) != sProcess_m.end();
 }
 
+unordered_set<int> ServiceBO::getProcesses() const{
+    return sProcess_m;
+}
+
 unordered_set<int> ServiceBO::getServicesIDependOn() const{
     return sIDependOnThem_m;
 }

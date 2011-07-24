@@ -29,6 +29,7 @@ class ServiceBO {
         void addProcess(ProcessBO* pProcess_p);
         int getNbProcesses() const;
         bool containsProcess(int idxProcess_p) const;
+        unordered_set<int> getProcesses() const;
 
         bool operator==(const ServiceBO& service_p) const;
         bool operator!=(const ServiceBO& service_p) const;
