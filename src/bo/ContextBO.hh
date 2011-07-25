@@ -68,6 +68,8 @@ class ContextBO {
         void setPoidsMMC(int poids_p);
         int getPoidsMMC() const;
 
+        vector<int> getSolInit() const;
+
     private:
         vector<RessourceBO*> vpRessources_m;
         vector<MachineBO*> vpMachines_m;
@@ -92,6 +94,11 @@ class ContextBO {
          * Poids du critere Machine Move Cost
          */
         int poidsMMC_m;
+
+        /**
+         * Utilisation d'un vecteur afin de pouvoir maj ce cache dans une mth const
+         */
+        vector<int>* pSolInit_m;
 
 };
 

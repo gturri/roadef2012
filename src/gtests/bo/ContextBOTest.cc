@@ -27,6 +27,11 @@ TEST(ContextBO, cpyCtr){
     ContextBO contextCopie_l(*(lpContexts_l.front()));
 
     testEgaliteContextsBO(contextCopie_l, *(lpContexts_l.front()));
+
+    /* L'egalite des sols init n'est pas verifiee par == car il s'agit de donnees redondantes
+     * On le teste tout de meme afin de voir qu'on n'a pas fait n'importe quoi avec la manipulation de pointeurs
+     */
+    EXPECT_EQ(contextCopie_l.getSolInit(), lpContexts_l.front()->getSolInit());
 }
 
 //FIXME : eventuellement utiliser une fixture pour factoriser le code de mise en place de l'environnement de test
@@ -38,4 +43,14 @@ TEST(ContextBO, operatorEgal){
     ContextBO contextCopie_l;
     contextCopie_l = *(lpContexts_l.front());
     testEgaliteContextsBO(contextCopie_l, *(lpContexts_l.front()));
+}
+
+TEST(ContextBO, getSolInit){
+    DummyStrategyGeneration generateur_l;
+    variables_map args_p;
+    list<shared_ptr<ContextBO> > lpContexts_l = generateur_l.generate(args_p);
+
+    vector<int> vSolExpected_l(1, 0);
+
+    EXPECT_EQ(vSolExpected_l, lpContexts_l.front()->getSolInit());
 }

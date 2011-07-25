@@ -2,9 +2,11 @@
 #define SOLUTIONDTOOUT_HH
 #include <fstream>
 #include <string>
+#include <vector>
 using namespace std;
 
 class ContextBO;
+class ContextALG;
 
 /**
  * Classe en charge de l'ecriture de la meilleure solution
@@ -21,6 +23,9 @@ class SolutionDtoout {
          * (Cette methode n'utilise pas le fichier par defaut, celui-ci etant "reserve" a la meilleure solution de l'optim)
          */
         static void writeSolInit(ContextBO* pContextBO_p, const string& outFileName_p);
+
+        static void writeSol(const vector<int>& vSol_p);
+        static void writeSol(const ContextALG& contextALG_p);
 
         //TODO : ajouter les methodes d'ecriture, une fois que des formats de solution seront determines
 
