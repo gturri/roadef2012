@@ -4,9 +4,9 @@
 class RestrictionALG
 {
     public:
-    	RestrictionALG() {}
-    	~RestrictionALG() {}
-    	
+        RestrictionALG() {}
+        ~RestrictionALG() {}
+
 };
 
 #endif

@@ -1,3 +1,4 @@
+#include "ContextALG.hh"
 #include "bo/ContextBO.hh"
 #include "bo/MachineBO.hh"
 #include "bo/ProcessBO.hh"

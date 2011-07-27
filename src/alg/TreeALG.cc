@@ -26,7 +26,7 @@ TreeALG::ChildrenInfoPool TreeALG::getChildrenOfCurrentNode()
 NodeContentALG * TreeALG::setCurrentNodeToChild(int)
 {
     return 0;
-}  	
+}
 
 NodeContentALG * TreeALG::getCurrentNodeInformation()
 {

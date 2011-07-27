@@ -16,20 +16,20 @@ class TreeALG;
 class MonteCarloTreeSearchALG
 {
     public:
-    	MonteCarloTreeSearchALG();
-    	~MonteCarloTreeSearchALG();
+       MonteCarloTreeSearchALG();
+       ~MonteCarloTreeSearchALG();
 
-    	SolutionALG * search();
+       SolutionALG * search();
 
-    	void setpTree(TreeALG *);
-    	TreeALG * getpTree() const;
+       void setpTree(TreeALG *);
+       TreeALG * getpTree() const;
 
     private:
-    	SpaceALG * initNewSpace();
-    	SpaceALG * performDescent();
-    	
-    	
-    	TreeALG * pTree_m;
+       SpaceALG * initNewSpace();
+       SpaceALG * performDescent();
+       
+       
+       TreeALG * pTree_m;
 };
 
 #endif

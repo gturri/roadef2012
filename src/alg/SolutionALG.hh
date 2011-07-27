@@ -6,22 +6,22 @@
 class SolutionALG
 {
     public:
-    	SolutionALG();
-    	~SolutionALG();
+        SolutionALG();
+        ~SolutionALG();
 
-    	typedef int MachineId;
-    	typedef int ProcessId;
+        typedef int MachineId;
+        typedef int ProcessId;
 
-    	void unassign(ProcessId);
-    	void assign(ProcessId, MachineId);
+        void unassign(ProcessId);
+        void assign(ProcessId, MachineId);
 
-    	double evaluate();
+        double evaluate();
 
     private:
-    	typedef std::vector<int> ExplicitRepresentation;
-    	ExplicitRepresentation assignment_m;
+        typedef std::vector<int> ExplicitRepresentation;
+        ExplicitRepresentation assignment_m;
 
-    	double incrementalValue_m;
+        double incrementalValue_m;
 };
 
 #endif

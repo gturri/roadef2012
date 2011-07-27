@@ -4,8 +4,8 @@
 class DecisionALG
 {
     public:
-    	DecisionALG();
-    	~DecisionALG();
+        DecisionALG();
+        ~DecisionALG();
 };
 
 #endif

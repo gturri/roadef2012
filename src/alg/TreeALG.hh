@@ -27,26 +27,26 @@ struct NodeContentALG
 class TreeALG
 {
     public:
-    	TreeALG();
-    	~TreeALG();
+        TreeALG();
+        ~TreeALG();
 
-   	typedef std::vector<NodeContentALG *> ChildrenInfoPool;
-    	
-    	void setCurrentNodeToRoot();
-    	ChildrenInfoPool getChildrenOfCurrentNode();
-    	NodeContentALG * setCurrentNodeToChild(int);    	
+        typedef std::vector<NodeContentALG *> ChildrenInfoPool;
 
-    	bool hasCurrentNodeChildren();
-    	NodeContentALG * getCurrentNodeInformation();
-    	void addChildrenToCurrentNode(DecisionALG *);
-    	
+        void setCurrentNodeToRoot();
+        ChildrenInfoPool getChildrenOfCurrentNode();
+        NodeContentALG * setCurrentNodeToChild(int);
+
+        bool hasCurrentNodeChildren();
+        NodeContentALG * getCurrentNodeInformation();
+        void addChildrenToCurrentNode(DecisionALG *);
+
     private:
-    	typedef std::list<int> ChildrenList;
-    	typedef std::pair<NodeContentALG,ChildrenList> Node;
-    	typedef std::vector<Node> Nodes;
+        typedef std::list<int> ChildrenList;
+        typedef std::pair<NodeContentALG,ChildrenList> Node;
+        typedef std::vector<Node> Nodes;
 
-    	Nodes nodes_m;
-    	int currentNode_m;    	
+        Nodes nodes_m;
+        int currentNode_m;
 };
 
 #endif

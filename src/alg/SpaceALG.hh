@@ -15,23 +15,23 @@ class SolutionALG;
 class SpaceALG
 {
     public:
-    	SpaceALG();
-    	~SpaceALG();
+        SpaceALG();
+        ~SpaceALG();
 
-    	typedef double BoundValue;
-    	typedef std::vector<DecisionALG *> DecisionsPool;
-    	
-    	void addDecision(DecisionALG *);
-    	DecisionsPool generateDecisions();
-    	BoundValue bound();
-    	SolutionALG * buildSolution();
-    	SpaceALG * clone();
-    
-    	void setpContext(ContextALG *);
-    	ContextALG * getpContext() const;
+        typedef double BoundValue;
+        typedef std::vector<DecisionALG *> DecisionsPool;
+
+        void addDecision(DecisionALG *);
+        DecisionsPool generateDecisions();
+        BoundValue bound();
+        SolutionALG * buildSolution();
+        SpaceALG * clone();
+
+        void setpContext(ContextALG *);
+        ContextALG * getpContext() const;
 
     private:
-    	ContextALG * pContext_m;
+        ContextALG * pContext_m;
 };
 
 #endif

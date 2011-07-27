@@ -61,18 +61,18 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
     //On descent jusqu'une feuille
     while (hasCurrentNodeChildren)
     {
-    	// on recupere les fils du noeud courant
-    	ChildrenPool children_l = pTree_m->getChildrenOfCurrentNode();
-    	// on choisi le noeud suivant grace a la formule magique
-    	int nextChild_l = chooseNextChildren(children_l);
-    	// On avance au noeud suivant
-    	NodeContentALG * pContent_l = pTree_m->setCurrentNodeToChild(nextChild_l);
-    	// On retient le noeud par lequel on est passe
-    	pathToLeaf_l.push_back(pContent_l);
-    	// On restreint l'espace de solution
-    	pSpace_l->addDecision(pContent_l->pDecision_m);
-    	// on regarde si l'on est arrive sur une feuille
-    	hasCurrentNodeChildren = pTree_m->hasCurrentNodeChildren();
+        // on recupere les fils du noeud courant
+        ChildrenPool children_l = pTree_m->getChildrenOfCurrentNode();
+        // on choisi le noeud suivant grace a la formule magique
+        int nextChild_l = chooseNextChildren(children_l);
+        // On avance au noeud suivant
+        NodeContentALG * pContent_l = pTree_m->setCurrentNodeToChild(nextChild_l);
+        // On retient le noeud par lequel on est passe
+        pathToLeaf_l.push_back(pContent_l);
+        // On restreint l'espace de solution
+        pSpace_l->addDecision(pContent_l->pDecision_m);
+        // on regarde si l'on est arrive sur une feuille
+        hasCurrentNodeChildren = pTree_m->hasCurrentNodeChildren();
     }
 
     // Maintenant qu'on est sur une feuille on va brancher selon l'espace des solutions
@@ -84,13 +84,13 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
     // Pour chaque decision de branchement, on fait une simulation et une recherche locale
     for(DecisionsPool::iterator decisionIt_l = decisions_l.begin(); decisionIt_l != decisions_l.end(); ++decisionIt_l )
     {
-    	// on ajoute le noeud a l'arbre
-    	pTree_m->addChildrenToCurrentNode(*decisionIt_l);
-    	SpaceALG * pChildSpace_l = pSpace_l->clone();
-    	pChildSpace_l->addDecision(*decisionIt_l);
-    	SolutionALG * pSolution_l = pChildSpace_l->buildSolution();
-    	results_l.push_back(pSolution_l);
-    	delete pChildSpace_l;
+        // on ajoute le noeud a l'arbre
+        pTree_m->addChildrenToCurrentNode(*decisionIt_l);
+        SpaceALG * pChildSpace_l = pSpace_l->clone();
+        pChildSpace_l->addDecision(*decisionIt_l);
+        SolutionALG * pSolution_l = pChildSpace_l->buildSolution();
+        results_l.push_back(pSolution_l);
+        delete pChildSpace_l;
     }
 
     // On remonte l'information
