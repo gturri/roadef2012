@@ -70,6 +70,7 @@ generateurInstance_CPPFLAGS = \
 	-I $(top_srcdir)/src
 
 testU_SOURCES = \
+    $(top_srcdir)/src/gtests/ContextBOBuilder.cc \
 	$(top_srcdir)/src/gtests/bo/ContextBOTest.cc \
 	$(top_srcdir)/src/gtests/bo/operatorEgaliteTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/BalanceCostDtoinTest.cc \
@@ -83,7 +84,6 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerDependancesTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerCapaTest.cc \
-	$(top_srcdir)/src/gtests/tools/CheckerFixture.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerConflictTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerSpreadTest.cc \
     $(fichiersCommunsTestsEtGenerateur) \

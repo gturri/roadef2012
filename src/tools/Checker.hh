@@ -32,13 +32,17 @@ class Checker {
          */
         int computeScore();
 
-    protected:
-
+        /**
+         * Methodes permettant de ne checker que quelques contraintes
+         */
         bool checkCapaIncludingTransient();
         bool checkConflict();
         bool checkSpread();
         bool checkDependances();
         
+        /**
+         * Methodes permettant de ne calculer que certains couts
+         */
         int computeLoadCost();
         int computeBalanceCost();
         int computePMC();
