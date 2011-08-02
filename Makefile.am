@@ -42,7 +42,8 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/ProcessBO.cc \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
 	$(top_srcdir)/src/bo/ServiceBO.cc \
-	$(top_srcdir)/src/tools/Log.cc
+    $(top_srcdir)/src/tools/Checker.cc \
+	$(top_srcdir)/src/tools/Log.cc 
 
 
 fichiersCommunsTestsEtGenerateur = \
@@ -69,6 +70,7 @@ generateurInstance_CPPFLAGS = \
 	-I $(top_srcdir)/src
 
 testU_SOURCES = \
+    $(top_srcdir)/src/gtests/ContextBOBuilder.cc \
 	$(top_srcdir)/src/gtests/bo/ContextBOTest.cc \
 	$(top_srcdir)/src/gtests/bo/operatorEgaliteTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/BalanceCostDtoinTest.cc \
@@ -80,6 +82,15 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/SolutionDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerBalanceCostTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerCapaTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerConflictTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerDependancesTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerLoadCostTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerMMCTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerPMCTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerSMCTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerSpreadTest.cc \
     $(fichiersCommunsTestsEtGenerateur) \
 	$(machineReassignment_FILES)
 

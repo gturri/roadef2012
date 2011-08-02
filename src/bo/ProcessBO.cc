@@ -25,6 +25,10 @@ int ProcessBO::getRequirement(int idxRess_p) const{
     return vRequirements_m[idxRess_p];
 }
 
+int ProcessBO::getRequirement(RessourceBO const * pRess_p) const{
+    return vRequirements_m[pRess_p->getId()];
+}
+
 vector<int> ProcessBO::getRequirements() const{
     return vRequirements_m;
 }
