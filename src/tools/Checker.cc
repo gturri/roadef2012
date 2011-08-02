@@ -5,6 +5,7 @@
 #include "bo/ContextBO.hh"
 #include "bo/LocationBO.hh"
 #include "bo/MachineBO.hh"
+#include "bo/MMCBO.hh"
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
 #include "bo/ServiceBO.hh"
@@ -270,7 +271,16 @@ int Checker::computeSMC(){
 }
 
 int Checker::computeMMC(){
-    return 0;
+    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    const int nbP_l = curSol_l.size();
+    MMCBO* pMMCBO_l = pContextALG_m->getContextBO()->getMMCBO();
+    int result_l(0);
+
+    for ( int idxP_l=0 ; idxP_l < nbP_l ; idxP_l++ ){
+        result_l += pMMCBO_l->getCost(pContextALG_m->getContextBO()->getProcess(idxP_l)->getMachineInit()->getId() , curSol_l[idxP_l]);
+    }
+
+    return result_l;
 }
 
 bool check(ContextALG const * pContextALG_p){
