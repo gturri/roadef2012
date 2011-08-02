@@ -19,6 +19,15 @@ class ContextALG {
         unordered_set<int> getNeighsUsedByService(int idxService_p) const;
         unordered_set<int> getNeighsUsedByService(ServiceBO const * pService_p) const;
 
+        /* TODO : tester cette methode */
+        /* TODO : ameliorer les perfs de cette methode par exemple en calculant
+         * tous les resultats, et en gerant un cache...
+         */
+        /**
+         * Retourne la quantite de ressource consomme par les process d'une machine donnee
+         */
+        int getRessUsedOnMachine(int idxRess_p, int idxMachine_p) const;
+
         vector<int> getCurrentSol() const;
         void setCurrentSol(const vector<int>& curSol_p);
 

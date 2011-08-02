@@ -1,6 +1,7 @@
 #include "tools/Checker.hh"
 #include "tools/Log.hh"
 #include "alg/ContextALG.hh"
+#include "bo/BalanceCostBO.hh"
 #include "bo/ContextBO.hh"
 #include "bo/LocationBO.hh"
 #include "bo/MachineBO.hh"
@@ -31,6 +32,7 @@ bool Checker::isValid(){
 }
 
 int Checker::computeScore(){
+    //TODO : manque les coefficients
     return computeLoadCost()
         + computeBalanceCost()
         + computePMC()
@@ -160,11 +162,76 @@ bool Checker::checkDependances(){
 }
 
 int Checker::computeLoadCost(){
-    return 0;
+    int result_l(0);
+    ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
+    const int nbRess_l = pContextBO_l->getNbRessources();
+    for ( int idxRess_l=0 ; idxRess_l < nbRess_l ; idxRess_l++ ){
+        int loadCostRess_l = computeLoadCost(idxRess_l);
+        result_l += loadCostRess_l;
+    }
+    LOG(DEBUG) << "Load cost : " << result_l << endl;
+    return result_l;
+}
+
+int Checker::computeLoadCost(int idxRess_p){
+    int result_l(0);
+    const int nbMachine_l = pContextALG_m->getContextBO()->getNbMachines();
+    for ( int idxMachine_l=0 ; idxMachine_l < nbMachine_l ; idxMachine_l++ ){
+        result_l += computeLoadCost(idxRess_p, idxMachine_l);
+    }
+    result_l *= pContextALG_m->getContextBO()->getRessource(idxRess_p)->getWeightLoadCost();
+    LOG(USELESS) << "\tload cost pour la ress " << idxRess_p << " : " << result_l << endl;
+    return result_l;
+}
+
+int Checker::computeLoadCost(int idxRess_p, int idxMachine_p){
+    MachineBO* pMachine_l = pContextALG_m->getContextBO()->getMachine(idxMachine_p);
+
+    int safetyCapa_l = pMachine_l->getSafetyCapa(idxRess_p);
+    int result_l = max(0, pContextALG_m->getRessUsedOnMachine(idxRess_p, idxMachine_p) - safetyCapa_l);
+    LOG(USELESS) << "\t\tload cost pour la ress " << idxRess_p << " sur la machine "
+        << idxMachine_p << " : " << result_l << endl;
+    return result_l;
 }
 
 int Checker::computeBalanceCost(){
-    return 0;
+    const int nbMachines_l = pContextALG_m->getContextBO()->getNbMachines();
+    int result_l(0);
+    for ( int idxMachine_l=0 ; idxMachine_l < nbMachines_l ; idxMachine_l++ ){
+        result_l += computeBalanceCost(idxMachine_l);
+    }
+
+    return result_l;
+}
+
+int Checker::computeBalanceCost(int idxMachine_p){
+    const int nbBalanceCost_l = pContextALG_m->getContextBO()->getNbBalanceCosts();
+    int result_l(0);
+
+    for ( int idxBC_l=0 ; idxBC_l < nbBalanceCost_l ; idxBC_l++ ){
+        result_l += computeBalanceCost(idxMachine_p, idxBC_l);
+    }
+
+    return result_l;
+}
+
+int Checker::computeBalanceCost(int idxMachine_p, int idxBC_l ){
+    BalanceCostBO const * pBC_l = pContextALG_m->getContextBO()->getBalanceCost(idxBC_l);
+    RessourceBO* pRess1_l = pBC_l->getRessource1();
+    RessourceBO* pRess2_l = pBC_l->getRessource2();
+    const int qteRess1Used_l = pContextALG_m->getRessUsedOnMachine(pRess1_l->getId(), idxMachine_p);
+    const int qteRess2Used_l = pContextALG_m->getRessUsedOnMachine(pRess2_l->getId(), idxMachine_p);
+    const int capaRess1_l = pContextALG_m->getContextBO()->getMachine(idxMachine_p)->getCapa(pRess1_l);
+    const int capaRess2_l = pContextALG_m->getContextBO()->getMachine(idxMachine_p)->getCapa(pRess2_l);
+
+    const int a1_l = capaRess1_l - qteRess1Used_l;
+    const int a2_l = capaRess2_l - qteRess2Used_l;
+
+    /* FIXME : si on boucle d'abord sur les bc, *puis* sur les machine, on n'aura
+     * a effectuer qu'une multiplication par bc et non une par couple (bc, machine)
+     * (ceci dit, il peut etre interessant de conserver la possibilite d'estimer les bc sur une machine donnee...)
+     */
+    return pBC_l->getPoids() * max(0, pBC_l->getTarget()*a1_l - a2_l);
 }
 
 int Checker::computePMC(){

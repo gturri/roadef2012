@@ -3,6 +3,7 @@
 using namespace std;
 using namespace std::tr1;
 
+class BalanceCostBO;
 class ContextBO;
 class LocationBO;
 class ProcessBO;
@@ -22,6 +23,8 @@ class ContextBOBuilder {
         static LocationBO* buildLocation(int idLoc_p, ContextBO* pContextBO_p);
         static NeighborhoodBO* buildNeigh(int idNeigh_p, ContextBO* pContextBO_p);
         static MachineBO* buildMachine(int idMachine_p, int idLoc_p, int idNeigh_p, const vector<int>& capa_p, const vector<int>& safetyCapa_p, ContextBO* pContextBO_p);
+
+        static BalanceCostBO* buildBalanceCost(int idxRess1_p, int idxRess2_p, int target_p, int poids_p, ContextBO* pContextBO_p);
 
 
 };

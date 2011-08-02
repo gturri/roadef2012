@@ -44,7 +44,13 @@ class Checker {
          * Methodes permettant de ne calculer que certains couts
          */
         int computeLoadCost();
+        int computeLoadCost(int idxRess_p);
+        int computeLoadCost(int idxRess_p, int idxMachine_p);
+
         int computeBalanceCost();
+        int computeBalanceCost(int idxMachine_p);
+        int computeBalanceCost(int idxMachine_p, int idxBalanceCost_p);
+
         int computePMC();
         int computeSMC();
         int computeMMC();

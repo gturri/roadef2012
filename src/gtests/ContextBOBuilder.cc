@@ -1,4 +1,5 @@
 #include "gtests/ContextBOBuilder.hh"
+#include "bo/BalanceCostBO.hh"
 #include "bo/ContextBO.hh"
 #include "bo/LocationBO.hh"
 #include "bo/MachineBO.hh"
@@ -47,4 +48,12 @@ MachineBO* ContextBOBuilder::buildMachine(int idMachine_p, int idLoc_p, int idNe
             safetyCapa_p);
     pContextBO_p->addMachine(pMachine_l);
     return pMachine_l;
+}
+
+BalanceCostBO* ContextBOBuilder::buildBalanceCost(int idxRess1_p, int idxRess2_p, int target_p, int poids_p, ContextBO* pContextBO_p){
+    RessourceBO* pRess1_l = pContextBO_p->getRessource(idxRess1_p);
+    RessourceBO* pRess2_l = pContextBO_p->getRessource(idxRess2_p);
+    BalanceCostBO* pBC_l = new BalanceCostBO(pRess1_l, pRess2_l, target_p, poids_p);
+    pContextBO_p->addBalanceCost(pBC_l);
+    return pBC_l;
 }

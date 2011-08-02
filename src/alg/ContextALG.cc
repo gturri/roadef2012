@@ -41,3 +41,14 @@ unordered_set<int> ContextALG::getNeighsUsedByService(ServiceBO const * pService
 
     return result_l;
 }
+
+int ContextALG::getRessUsedOnMachine(int idxRess_p, int idxMachine_p) const {
+    int result_l(0);
+    for ( int idxP_l=0 ; idxP_l < (int) currentSol_m.size() ; idxP_l++ ){
+        if ( currentSol_m[idxP_l] == idxMachine_p ){
+            result_l += pContextBO_m->getProcess(idxP_l)->getRequirement(idxRess_p);
+        }
+    }
+
+    return result_l;
+}

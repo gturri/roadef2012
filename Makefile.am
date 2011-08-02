@@ -82,9 +82,11 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/SolutionDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
-	$(top_srcdir)/src/gtests/tools/CheckerDependancesTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerBalanceCostTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerCapaTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerConflictTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerDependancesTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerLoadCostTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerSpreadTest.cc \
     $(fichiersCommunsTestsEtGenerateur) \
 	$(machineReassignment_FILES)
