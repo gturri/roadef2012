@@ -33,12 +33,12 @@ bool Checker::isValid(){
 }
 
 int Checker::computeScore(){
-    //TODO : manque les coefficients
+    ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
     return computeLoadCost()
         + computeBalanceCost()
-        + computePMC()
-        + computeSMC()
-        + computeMMC();
+        + pContextBO_l->getPoidsPMC() * computePMC()
+        + pContextBO_l->getPoidsSMC() * computeSMC()
+        + pContextBO_l->getPoidsMMC() * computeMMC();
 }
 
 bool Checker::checkCapaIncludingTransient(){
