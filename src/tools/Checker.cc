@@ -249,7 +249,24 @@ int Checker::computePMC(){
 }
 
 int Checker::computeSMC(){
-    return 0;
+    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    const int nbProcess_l = curSol_l.size();
+    const int nbServices_l = pContextALG_m->getContextBO()->getNbServices();
+    vector<int> nbProcessMovedByService_l(nbServices_l, 0);
+
+    for ( int idxP_l=0 ; idxP_l < (int) nbProcess_l ; idxP_l++ ){
+        ProcessBO const * pProcess_l = pContextALG_m->getContextBO()->getProcess(idxP_l);
+        if ( curSol_l[idxP_l] != pProcess_l->getMachineInit()->getId() ){
+            nbProcessMovedByService_l[pProcess_l->getService()->getId()]++;
+        }
+    }
+
+    int max_l = 0;
+    BOOST_FOREACH(int nbPMoved_l, nbProcessMovedByService_l){
+        max_l = max(max_l, nbPMoved_l);
+    }
+
+    return max_l;
 }
 
 int Checker::computeMMC(){

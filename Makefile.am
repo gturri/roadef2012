@@ -88,6 +88,7 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/tools/CheckerDependancesTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerLoadCostTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerPMCTest.cc \
+	$(top_srcdir)/src/gtests/tools/CheckerSMCTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerSpreadTest.cc \
     $(fichiersCommunsTestsEtGenerateur) \
 	$(machineReassignment_FILES)
