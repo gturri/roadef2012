@@ -235,7 +235,17 @@ int Checker::computeBalanceCost(int idxMachine_p, int idxBC_l ){
 }
 
 int Checker::computePMC(){
-    return 0;
+    int result_l = 0;
+
+    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    for ( int idx_l=0 ; idx_l < (int) curSol_l.size() ; idx_l++ ){
+        ProcessBO const * pProcess_l = pContextALG_m->getContextBO()->getProcess(idx_l);
+        if ( curSol_l[idx_l] != pProcess_l->getMachineInit()->getId() ){
+            result_l += pProcess_l->getPMC();
+        }
+    }
+
+    return result_l;
 }
 
 int Checker::computeSMC(){
