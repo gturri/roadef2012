@@ -22,6 +22,10 @@ void usage()
 }
 
 int main(int argc, char **argv) {
+    /* Debut de la (longue) partie qui lit et qui traite les arguments de la cmd line
+     * (il peut etre malin de deporter cette partie dans une methode idoine,
+     * voir, d'utiliser boost::program_option)
+     */
     int time_limit_second_l(300);
     string instance_filename_l;
     string original_solution_filename_l;
@@ -92,6 +96,8 @@ int main(int argc, char **argv) {
     if ( instance_filename_l == "" ){
         return 0;
     }
+    /* Fin de la lecture et du traitement des args de la cmd line
+     */
 
     try {
         InstanceReaderDtoin reader_l;
