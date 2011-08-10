@@ -1,9 +1,12 @@
 #define TEAM_ID 666 /* TODO : completer quand on sera inscrit et qu'on aura notre identifiant d'equipe */
+#include "alg/ContextALG.hh"
+#include "alg/dummyStrategyOptim/DummyStrategyOptim.hh"
 #include "dtoin/InstanceReaderDtoin.hh"
 #include "dtoin/SolutionDtoin.hh"
 #include "dtoout/InstanceWriterDtoout.hh"
 #include "dtoout/SolutionDtoout.hh"
 #include "tools/Log.hh"
+#include <ctime>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -100,11 +103,26 @@ int main(int argc, char **argv) {
      */
 
     try {
+        /* Lecture du fichier d'instance et de solution initiale
+         */
         InstanceReaderDtoin reader_l;
-        ContextBO context_l = reader_l.read(instance_filename_l);
-        SolutionDtoin::read(original_solution_filename_l, &context_l);
-        InstanceWriterDtoout writer_l;
-        writer_l.write(&context_l, "outfile.txt");
+        ContextBO contextBO_l = reader_l.read(instance_filename_l);
+        SolutionDtoin::read(original_solution_filename_l, &contextBO_l);
+
+        /* Lancement de la sequence d'optim.
+         *
+         * FIXME : Il serait pertinent de virer cette logique du main.
+         * Plus precisement, il serait malin de creer une classe qui mange un ContextBO plus les donnees interessantes de la ligne de commande,
+         * qui construit une sequence de StrategyOptim et qui l'execute
+         *
+         * En attendant, je me contente d'executer une unique StrategyOptim bidon
+         * afin d'avoir une chaine complete
+         */
+        ContextALG contextALG_l(&contextBO_l);
+        StrategyOptim* pStrategy_l = new DummyStrategyOptim();
+        pStrategy_l->run(contextALG_l, time(0) + time_limit_second_l);
+        delete pStrategy_l;
+
     } catch (string s_l){
         LOG(ERREUR) << "Levee de l'exception : " << s_l << endl;
     }

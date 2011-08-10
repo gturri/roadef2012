@@ -8,12 +8,6 @@
  * Interface dont derive toutes les methodes d'optims,
  * afin de simplifier la manipulation de celles-ci
  */
-
-/* TODO : Reflechir a une maniere intelligente de prendre en compte la duree accordee a l'optim
- * Ex 1 : Mettre sur le ContextAlg l'heure de fin (mais gestion de plusieurs duree en cas de sequence => ?)
- * Ex 2 : Fournir une duree a la ctr de Strategies (eventuellement mutualiser ce traitement dans cette classe mere)
- * Ex 3 : Fournir une duree a la methode "run" (mais p.e. lourd a gerer)
- */
 class StrategyOptim {
     public:
         virtual ~StrategyOptim();
