@@ -1,22 +1,25 @@
 #include "MonteCarloTreeSearchALG.hh"
-#include "TreeALG.hh"
+#include "TreeALGDefs.hh"
+#include "TreeSimpleImplALGDefs.hh"
 #include "SpaceALG.hh"
 
 #include <list>
 
-typedef TreeALG::ChildrenInfoPool ChildrenPool;
+typedef MonteCarloTreeSearchALG::Tree::ChildrenPool ChildrenPool;
+typedef MonteCarloTreeSearchALG::Tree::iterator iterator; 
 
 /** Externalisation du choix dans le cc pour rendre le code lisible
     Si il y a besoin d'element de la classe, on peut toujours la faire
     remonter en prive, mais ca sera le bordel au niveau inclusion
     ( possibilite d'argument aussi)
   */
-int chooseNextChildren(ChildrenPool const & children)
+iterator chooseNextChildren(ChildrenPool const & children)
 {
-    return 0;
+    return children.front();
 }
 
-void updatePath(std::list<NodeContentALG *> & path_l, std::list<SolutionALG *> const & solutions_l)
+void updatePath(std::list<iterator> & path_l, 
+                std::list<SolutionALG *> const & solutions_l)
 {
     
 }
@@ -35,11 +38,11 @@ SolutionALG * MonteCarloTreeSearchALG::search()
     return 0;
 }
 
-void MonteCarloTreeSearchALG::setpTree(TreeALG *)
+void MonteCarloTreeSearchALG::setpTree(Tree *)
 {
 }
 
-TreeALG * MonteCarloTreeSearchALG::getpTree() const
+MonteCarloTreeSearchALG::Tree * MonteCarloTreeSearchALG::getpTree() const
 {
     return 0;
 }
@@ -52,27 +55,27 @@ SpaceALG * MonteCarloTreeSearchALG::initNewSpace()
 SpaceALG * MonteCarloTreeSearchALG::performDescent()
 {
     SpaceALG * pSpace_l = initNewSpace();
+    
+    iterator current_l = pTree_m->getRootNode();
 
-    pTree_m->setCurrentNodeToRoot();
-
-    bool hasCurrentNodeChildren = pTree_m->hasCurrentNodeChildren();
-    std::list<NodeContentALG *> pathToLeaf_l;
+    bool hasCurrentNodeChildren = pTree_m->hasChildren(current_l);
+    std::list<iterator> pathToLeaf_l;
     
     //On descent jusqu'une feuille
     while (hasCurrentNodeChildren)
     {
         // on recupere les fils du noeud courant
-        ChildrenPool children_l = pTree_m->getChildrenOfCurrentNode();
+        ChildrenPool children_l = pTree_m->getChildren(current_l);
         // on choisi le noeud suivant grace a la formule magique
-        int nextChild_l = chooseNextChildren(children_l);
-        // On avance au noeud suivant
-        NodeContentALG * pContent_l = pTree_m->setCurrentNodeToChild(nextChild_l);
+        iterator nextChild_l = chooseNextChildren(children_l);
         // On retient le noeud par lequel on est passe
-        pathToLeaf_l.push_back(pContent_l);
+        pathToLeaf_l.push_back(current_l);
+        // On avance au noeud suivant
+        current_l = nextChild_l;
         // On restreint l'espace de solution
-        pSpace_l->addDecision(pContent_l->pDecision_m);
+        pSpace_l->addDecision((*current_l).pDecision_m);
         // on regarde si l'on est arrive sur une feuille
-        hasCurrentNodeChildren = pTree_m->hasCurrentNodeChildren();
+        hasCurrentNodeChildren = pTree_m->hasChildren(current_l);
     }
 
     // Maintenant qu'on est sur une feuille on va brancher selon l'espace des solutions
@@ -85,7 +88,8 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
     for(DecisionsPool::iterator decisionIt_l = decisions_l.begin(); decisionIt_l != decisions_l.end(); ++decisionIt_l )
     {
         // on ajoute le noeud a l'arbre
-        pTree_m->addChildrenToCurrentNode(*decisionIt_l);
+        NodeContentALG content_l(*decisionIt_l);
+        pTree_m->addChildren(current_l, content_l);
         SpaceALG * pChildSpace_l = pSpace_l->clone();
         pChildSpace_l->addDecision(*decisionIt_l);
         SolutionALG * pSolution_l = pChildSpace_l->buildSolution();

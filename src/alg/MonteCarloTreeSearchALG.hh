@@ -9,27 +9,31 @@
     L'information est finalement remonter pour effectuer la prochaine descente.
  */
 
+#include "TreeALG.hh"
+#include "TreeSimpleImplALG.hh"
+
 class SolutionALG;
 class SpaceALG;
-class TreeALG;
 
 class MonteCarloTreeSearchALG
 {
     public:
+       typedef TreeALG< TreeSimpleImplALG<NodeContentALG> > Tree;
+
        MonteCarloTreeSearchALG();
        ~MonteCarloTreeSearchALG();
 
        SolutionALG * search();
 
-       void setpTree(TreeALG *);
-       TreeALG * getpTree() const;
+       void setpTree(Tree *);
+       Tree * getpTree() const;
 
     private:
        SpaceALG * initNewSpace();
        SpaceALG * performDescent();
        
        
-       TreeALG * pTree_m;
+       Tree * pTree_m;
 };
 
 #endif
