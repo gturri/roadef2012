@@ -1,4 +1,6 @@
 #include "tools/Log.hh"
+#include <boost/regex.hpp>
+using namespace boost;
 
 vector<string> LogHelper::vLogStrLvl_g = LogHelper::buildLogLvl();
 
@@ -19,4 +21,14 @@ vector<string> LogHelper::buildLogLvl(){
     result_l.push_back("WTF");
 
     return result_l;
+}
+
+string LogHelper::extractFilename(const string& path_p){
+    const static regex regex_l("([[:alpha:].]*)\\z");
+    smatch match_l;
+    if ( regex_search(path_p, match_l, regex_l) ){
+        return match_l[1];
+    } else {
+        return path_p;
+    }
 }

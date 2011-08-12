@@ -25,6 +25,11 @@ class LogHelper {
     public:
         static vector<string> buildLogLvl();
         static vector<string> vLogStrLvl_g;
+
+        /**
+         * Etant donne un path, extrait le nom du fichier
+         */
+        static string extractFilename(const string& path_p);
 };
 
 
@@ -41,7 +46,8 @@ class LogHelper {
 #define LOG(log_lvl) \
     BOOST_STATIC_ASSERT(0 <= log_lvl && log_lvl <= WTF); \
 if ( MIN_LOG_LVL > (log_lvl) ); \
-else clog << "[" << LogHelper::vLogStrLvl_g[(log_lvl)] << "] "
+else clog << "[" << LogHelper::vLogStrLvl_g[(log_lvl)] << " - " \
+    << LogHelper::extractFilename(__FILE__) << ":" <<  __LINE__<< "] "
 
 
 
