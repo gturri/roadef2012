@@ -42,6 +42,8 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/ProcessBO.cc \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
 	$(top_srcdir)/src/bo/ServiceBO.cc \
+	$(top_srcdir)/src/alg/ConstraintSystemALG.cc \
+	$(top_srcdir)/src/alg/EvaluationSystemALG.cc \
 	$(top_srcdir)/src/alg/SpaceALG.cc \
 	$(top_srcdir)/src/alg/DecisionALG.cc \
 	$(top_srcdir)/src/alg/RestrictionALG.cc \

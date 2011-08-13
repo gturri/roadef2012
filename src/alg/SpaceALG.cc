@@ -6,7 +6,7 @@
 #include "MonteCarloSimulationALG.hh"
 
 SpaceALG::SpaceALG()
-: pContext_m(0)
+: pContext_m(0), decisions_m()
 {
 }
 

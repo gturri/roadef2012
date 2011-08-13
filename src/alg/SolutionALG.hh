@@ -32,7 +32,7 @@ class SolutionALG
         typedef std::vector<RestrictionALG *> RestrictionPool;
         RestrictionPool restrictions_m;     
         
-        typedef std::vector<int> ExplicitRepresentation;
+        typedef std::vector<MachineId> ExplicitRepresentation;
         ExplicitRepresentation assignment_m;
 
         ConstraintSystemALG * pConstraintSystem_m;
