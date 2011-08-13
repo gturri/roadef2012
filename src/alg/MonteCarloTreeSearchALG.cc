@@ -1,6 +1,7 @@
 #include "MonteCarloTreeSearchALG.hh"
 #include "TreeALGDefs.hh"
 #include "TreeSimpleImplALGDefs.hh"
+#include "SolutionALG.hh"
 #include "SpaceALG.hh"
 
 #include <list>
@@ -13,15 +14,54 @@ typedef MonteCarloTreeSearchALG::Tree::iterator iterator;
     remonter en prive, mais ca sera le bordel au niveau inclusion
     ( possibilite d'argument aussi)
   */
-iterator chooseNextChildren(ChildrenPool const & children)
+iterator chooseNextChildren(ChildrenPool const & children_p)
 {
-    return children.front();
+    iterator childrenToExplore_l(children_p.front());
+    double minValue_l = 1.0;
+    for (ChildrenPool::const_iterator it_l = children_p.begin();
+                                      it_l != children_p.end(); 
+                                      ++it_l)
+    {
+        MonteCarloTreeSearchALG::Tree::iterator const & treeIt_l = *it_l;
+        NodeContentALG const & content_l = *treeIt_l;
+        // inserer ici la formule qui va bien
+        double value_l = content_l.sumOfEvaluations_m;
+        value_l /= content_l.numberOfSimulations_m;
+        if (value_l < minValue_l)
+        {
+            minValue_l = value_l;
+            childrenToExplore_l = *it_l;
+        }
+    }
+    return childrenToExplore_l;
 }
 
-void updatePath(std::list<iterator> & path_l, 
-                std::list<SolutionALG *> const & solutions_l)
+void updatePath(std::list<iterator> & path_p, 
+                std::list<SolutionALG *> const & solutions_p)
 {
+    typedef std::list<SolutionALG *> Solutions;
+    double sum_l = 0.0;
+    int evaluations_l = 0;
     
+    // Calcul de l'impact des evaluations sur l'arbre, certainement faux
+    for (Solutions::const_iterator it_l = solutions_p.begin();
+                                   it_l != solutions_p.end();
+                                   ++it_l)
+    {
+        SolutionALG * pSolution_l = *it_l;
+        sum_l += pSolution_l->evaluate();
+        evaluations_l += 1;
+    }
+    
+    for (std::list<iterator>::iterator it_l = path_p.begin();
+                                       it_l != path_p.end();
+                                       ++it_l)
+    {
+        iterator & treeIt_l = *it_l;
+        NodeContentALG & content_l = *treeIt_l;
+        content_l.sumOfEvaluations_m += sum_l;
+        content_l.numberOfSimulations_m += evaluations_l;
+    }
 }
 
 MonteCarloTreeSearchALG::MonteCarloTreeSearchALG()
@@ -35,21 +75,25 @@ MonteCarloTreeSearchALG::~MonteCarloTreeSearchALG()
 
 SolutionALG * MonteCarloTreeSearchALG::search()
 {
-    return 0;
+    SpaceALG * pSpace_l = performDescent();
+    SolutionALG * pSolution_l = pSpace_l->buildSolution();
+    delete pSpace_l;
+    return pSolution_l;
 }
 
-void MonteCarloTreeSearchALG::setpTree(Tree *)
+void MonteCarloTreeSearchALG::setpTree(Tree * pTree_p)
 {
+    pTree_m = pTree_p;
 }
 
 MonteCarloTreeSearchALG::Tree * MonteCarloTreeSearchALG::getpTree() const
 {
-    return 0;
+    return pTree_m;
 }
 
 SpaceALG * MonteCarloTreeSearchALG::initNewSpace()
 {
-    return 0;
+    return new SpaceALG();
 }
 
 SpaceALG * MonteCarloTreeSearchALG::performDescent()
@@ -89,11 +133,15 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
     {
         // on ajoute le noeud a l'arbre
         NodeContentALG content_l(*decisionIt_l);
-        pTree_m->addChildren(current_l, content_l);
         SpaceALG * pChildSpace_l = pSpace_l->clone();
         pChildSpace_l->addDecision(*decisionIt_l);
+        if (!pChildSpace_l->isSolution())
+        {
+            pTree_m->addChildren(current_l, content_l);
+            
+        }
         SolutionALG * pSolution_l = pChildSpace_l->buildSolution();
-        results_l.push_back(pSolution_l);
+        results_l.push_back(pSolution_l);        
         delete pChildSpace_l;
     }
 

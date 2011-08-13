@@ -23,6 +23,11 @@ struct TreeSimpleIteratorALG
     {
         return pTree_m->getNodeContent(currentNode_m);
     }
+
+    NodeContent const & operator*() const
+    {
+        return pTree_m->getNodeContent(currentNode_m);
+    }
 };
 
 /** Classe servant d'exemple d'implementation d'un arbre
