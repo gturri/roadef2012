@@ -4,6 +4,7 @@
 #include <vector>
 
 class ConstraintSystemALG;
+class EvaluationSystemALG;
 class RestrictionALG;
 
 class SolutionALG
@@ -19,6 +20,7 @@ class SolutionALG
                 
         void addRestriction(RestrictionALG *); 
         void setpConstraintSystem(ConstraintSystemALG *); 
+        void setpEvaluationSystem(EvaluationSystemALG *); 
 
         std::vector<ProcessId> getAvaiableProcesses() const;
         std::vector<MachineId> getAvaiableMachines(ProcessId) const;
@@ -36,6 +38,7 @@ class SolutionALG
         ExplicitRepresentation assignment_m;
 
         ConstraintSystemALG * pConstraintSystem_m;
+        EvaluationSystemALG * pEvaluationSystem_m;
         double incrementalValue_m;
 };
 

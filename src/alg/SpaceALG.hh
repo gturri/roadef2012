@@ -3,10 +3,13 @@
 
 #include <vector>
 
+class ConstraintSystemALG;
 class ContextALG;
 class DecisionALG;
+class EvaluationSystemALG;
 class RestrictionALG;
 class SolutionALG;
+
 
 /** Brouillon d'une classe Space qui represente la forme courante de l'espace
     des solutions. Elle s'appuyera completer au fur et a mesure du parcours de
@@ -32,8 +35,13 @@ class SpaceALG
         void setpContext(ContextALG *);
         ContextALG * getpContext() const;
 
+        void setpConstraintSystem(ConstraintSystemALG *); 
+        void setpEvaluationSystem(EvaluationSystemALG *); 
+
     private:        
         ContextALG * pContext_m;
+        EvaluationSystemALG * pEvaluationSystem_m;
+        ConstraintSystemALG * pConstraintSystem_m;
         DecisionsPool decisions_m;
 };
 

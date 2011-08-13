@@ -12,28 +12,34 @@
 #include "TreeALG.hh"
 #include "TreeSimpleImplALG.hh"
 
+class ConstraintSystemALG;
+class EvaluationSystemALG;
 class SolutionALG;
 class SpaceALG;
 
 class MonteCarloTreeSearchALG
 {
     public:
-       typedef TreeALG< TreeSimpleImplALG<NodeContentALG> > Tree;
+        typedef TreeALG< TreeSimpleImplALG<NodeContentALG> > Tree;
+        
+        MonteCarloTreeSearchALG();
+        ~MonteCarloTreeSearchALG();
+        
+        SolutionALG * search();
+        
+        void setpTree(Tree *);
+        Tree * getpTree() const;
 
-       MonteCarloTreeSearchALG();
-       ~MonteCarloTreeSearchALG();
-
-       SolutionALG * search();
-
-       void setpTree(Tree *);
-       Tree * getpTree() const;
-
+        void setpConstraintSystem(ConstraintSystemALG *); 
+        void setpEvaluationSystem(EvaluationSystemALG *); 
+        
     private:
-       SpaceALG * initNewSpace();
-       SpaceALG * performDescent();
-       
-       
-       Tree * pTree_m;
+        SpaceALG * initNewSpace();
+        SpaceALG * performDescent();
+        
+        ConstraintSystemALG * pConstraintSystem_m;
+        EvaluationSystemALG * pEvaluationSystem_m;      
+        Tree * pTree_m;
 };
 
 #endif

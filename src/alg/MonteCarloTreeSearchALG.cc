@@ -1,4 +1,6 @@
 #include "MonteCarloTreeSearchALG.hh"
+#include "ConstraintSystemALG.hh"
+#include "EvaluationSystemALG.hh"
 #include "TreeALGDefs.hh"
 #include "TreeSimpleImplALGDefs.hh"
 #include "SolutionALG.hh"
@@ -91,9 +93,22 @@ MonteCarloTreeSearchALG::Tree * MonteCarloTreeSearchALG::getpTree() const
     return pTree_m;
 }
 
+void MonteCarloTreeSearchALG::setpConstraintSystem(ConstraintSystemALG * pSystem_p)
+{
+    pConstraintSystem_m = pSystem_p;
+}
+
+void MonteCarloTreeSearchALG::setpEvaluationSystem(EvaluationSystemALG * pSystem_p)
+{
+    pEvaluationSystem_m = pSystem_p;
+}
+
 SpaceALG * MonteCarloTreeSearchALG::initNewSpace()
 {
-    return new SpaceALG();
+    SpaceALG * pSpace_l = new SpaceALG();
+    pSpace_l->setpConstraintSystem(pConstraintSystem_m);
+    pSpace_l->setpEvaluationSystem(pEvaluationSystem_m);
+    return pSpace_l;
 }
 
 SpaceALG * MonteCarloTreeSearchALG::performDescent()

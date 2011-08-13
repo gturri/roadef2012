@@ -38,6 +38,10 @@ bool SpaceALG::isSolution() const
 SolutionALG * SpaceALG::buildSolution() const
 {
     SolutionALG * pSolution_l = new SolutionALG;
+    
+    pSolution_l->setpConstraintSystem(pConstraintSystem_m);
+    pSolution_l->setpEvaluationSystem(pEvaluationSystem_m);
+    
     for (DecisionsPool::const_iterator it_l=decisions_m.begin(); 
                                        it_l != decisions_m.end(); 
                                        ++it_l)
@@ -56,6 +60,9 @@ SpaceALG * SpaceALG::clone()
 {
     SpaceALG * pClone_l = new SpaceALG;
     pClone_l->decisions_m = decisions_m;
+    pClone_l->pConstraintSystem_m = pConstraintSystem_m;
+    pClone_l->pEvaluationSystem_m = pEvaluationSystem_m;
+    
     return pClone_l;
 }
     
@@ -68,3 +75,14 @@ ContextALG * SpaceALG::getpContext() const
 {
     return pContext_m;
 }
+
+void SpaceALG::setpConstraintSystem(ConstraintSystemALG * pSystem_p)
+{
+    pConstraintSystem_m = pSystem_p;
+}
+
+void SpaceALG::setpEvaluationSystem(EvaluationSystemALG * pSystem_p)
+{
+    pEvaluationSystem_m = pSystem_p;
+}
+

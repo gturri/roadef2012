@@ -1,5 +1,7 @@
 #include "SolutionALG.hh"
 #include "RestrictionALG.hh"
+#include "ConstraintSystemALG.hh"
+#include "EvaluationSystemALG.hh"
 
 #include <list>
 
@@ -24,7 +26,7 @@ void SolutionALG::assign(ProcessId process_p, MachineId machine_p)
 
 double SolutionALG::evaluate()
 {
-    return incrementalValue_m;
+    return pEvaluationSystem_m->evaluate(assignment_m);
 }
 
 std::vector<SolutionALG::ProcessId> SolutionALG::getAvaiableProcesses() const
@@ -66,3 +68,13 @@ void SolutionALG::addRestriction(RestrictionALG * pRestriction_p)
     restrictions_m.push_back(pRestriction_p);
 }
 
+void SolutionALG::setpConstraintSystem(ConstraintSystemALG * pSystem_p)
+{
+    pConstraintSystem_m = pSystem_p;
+    addRestriction(pConstraintSystem_m);
+}
+
+void SolutionALG::setpEvaluationSystem(EvaluationSystemALG * pSystem_p)
+{
+    pEvaluationSystem_m = pSystem_p;
+}
