@@ -193,6 +193,14 @@ void InstanceReaderHumanReadable::readMachines(istream& is_p, ContextBO* pContex
         vector<int> vCapas_l = readListe(getNextLine(is_p), "Capa");
         vector<int> vSafetyCapas_l = readListe(getNextLine(is_p), "SafetyCapa");
         vMmcData_l.push_back(readListe(getNextLine(is_p), "MMC"));
+
+        if ( (int) vMmcData_l.back().size() != nbMachines_l ){
+            ostringstream oss_l;
+            oss_l << "La machine " << idxMachine_l << " decrit " << vMmcData_l.back().size()
+                << " mmc, alors que qu'il y a " << nbMachines_l;
+            throw oss_l.str();
+        }
+
         vDatas_l.push_back(make_tuple(idxMachine_l, idxNeigh_l, idxLoc_l, vCapas_l, vSafetyCapas_l));
     }
 
@@ -207,7 +215,7 @@ void InstanceReaderHumanReadable::readMachines(istream& is_p, ContextBO* pContex
         pContextBO_p->addLocation(new LocationBO(idxLoc_l));
     }
     for ( vector<tuple<int, int, int, vector<int>, vector<int> > >::iterator it_l=vDatas_l.begin() ; it_l != vDatas_l.end() ; it_l++){
-        NeighborhoodBO* pNeigh_l = pContextBO_p->getNeihborhood(get<1>(*it_l));
+        NeighborhoodBO* pNeigh_l = pContextBO_p->getNeighborhood(get<1>(*it_l));
         LocationBO* pLoc_l = pContextBO_p->getLocation(get<2>(*it_l));
         pContextBO_p->addMachine(new MachineBO(get<0>(*it_l), pLoc_l, pNeigh_l, get<3>(*it_l), get<4>(*it_l)));
     }

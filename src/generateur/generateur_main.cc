@@ -4,6 +4,7 @@
 #include "generateur/WriterSelecter.hh"
 #include "dtoout/InstanceWriterInterface.hh"
 #include "dtoout/SolutionDtoout.hh"
+#include "tools/Checker.hh"
 #include <iostream>
 #include <string>
 #include <boost/foreach.hpp>
@@ -22,6 +23,7 @@ int main(int argc, char** argv){
         shared_ptr<InstanceWriterInterface> writer_l = WriterSelecter::getWriter(args_l["writer"].as<string>());
 
         BOOST_FOREACH(shared_ptr<ContextBO> instance_l, instances_l){
+            assert(check(instance_l.get()));
             static int compteur_l(0);
             compteur_l++;
             ostringstream out_instance_filename_l;

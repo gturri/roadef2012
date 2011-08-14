@@ -43,7 +43,3 @@ void SolutionDtoout::writeSol(const vector<int>& vSol_p){
 
     copy(vSol_p.begin(), vSol_p.end(), ostream_iterator<int>(ofs_l, " "));
 }
-
-void SolutionDtoout::writeSol(const ContextALG& contextALG_p){
-    writeSol(contextALG_p.getCurrentSol());
-}
