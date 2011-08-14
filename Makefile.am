@@ -48,11 +48,12 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/alg/SpaceALG.cc \
 	$(top_srcdir)/src/alg/DecisionALG.cc \
 	$(top_srcdir)/src/alg/RestrictionALG.cc \
+	$(top_srcdir)/src/alg/MCTSStrategyOptim.cc \
 	$(top_srcdir)/src/alg/MonteCarloTreeSearchALG.cc \
 	$(top_srcdir)/src/alg/MonteCarloSimulationALG.cc \
 	$(top_srcdir)/src/alg/SolutionALG.cc \
-	$(top_srcdir)/src/tools/Log.cc
-    $(top_srcdir)/src/tools/Checker.cc \
+	$(top_srcdir)/src/tools/Log.cc \
+	$(top_srcdir)/src/tools/Checker.cc 
 
 
 fichiersCommunsTestsEtGenerateur = \

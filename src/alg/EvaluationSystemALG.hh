@@ -3,6 +3,8 @@
 
 #include "SolutionALG.hh"
 
+class ContextALG;
+
 class EvaluationSystemALG
 {
     public:
@@ -14,6 +16,12 @@ class EvaluationSystemALG
         ~EvaluationSystemALG();
         
         double evaluate(ExplicitRepresentation const &);
+        
+        void setpContext(ContextALG *);
+        ContextALG * getpContext() const;
+        
+    private:
+        ContextALG * pContext_m;
 };
 
 #endif

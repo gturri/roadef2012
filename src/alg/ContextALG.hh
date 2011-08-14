@@ -1,5 +1,6 @@
 #ifndef CONTEXTALG_HH
 #define CONTEXTALG_HH
+#include <vector>
 #include <tr1/unordered_set>
 using namespace std;
 using namespace std::tr1;

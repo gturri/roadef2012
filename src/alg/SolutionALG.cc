@@ -16,12 +16,14 @@ SolutionALG::~SolutionALG()
 
 void SolutionALG::unassign(ProcessId process_p)
 {
+    pConstraintSystem_m->unassign(process_p, assignment_m[process_p]);
     assignment_m[process_p] = unassigned;
 }
 
 void SolutionALG::assign(ProcessId process_p, MachineId machine_p)
 {
    assignment_m[process_p] = machine_p;
+   pConstraintSystem_m->assign(process_p, machine_p);
 }
 
 double SolutionALG::evaluate()
