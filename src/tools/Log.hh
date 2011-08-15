@@ -43,11 +43,20 @@ class LogHelper {
 #define MIN_LOG_LVL WARNING
 #endif
 
+#define LOGINIT(log_lvl) BOOST_STATIC_ASSERT(0 <= log_lvl && log_lvl <= WTF); \
+    if ( MIN_LOG_LVL > (log_lvl) ); \
+    else clog << "[" << LogHelper::vLogStrLvl_g[(log_lvl)] << " - "
+
+#define LOGENDMSG << LogHelper::extractFilename(__FILE__) << ":" <<  __LINE__<< "] "
+
 #define LOG(log_lvl) \
-    BOOST_STATIC_ASSERT(0 <= log_lvl && log_lvl <= WTF); \
-if ( MIN_LOG_LVL > (log_lvl) ); \
-else clog << "[" << LogHelper::vLogStrLvl_g[(log_lvl)] << " - " \
-    << LogHelper::extractFilename(__FILE__) << ":" <<  __LINE__<< "] "
+    LOGINIT(log_lvl) \
+    LOGENDMSG
+
+#define LOG_M(log_lvl, msg) \
+    LOGINIT(log_lvl) \
+    << msg << " - " \
+    LOGENDMSG
 
 
 
