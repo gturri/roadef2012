@@ -1,5 +1,6 @@
 #include "alg/ContextALG.hh"
 #include "alg/dummyStrategyOptim/DummyStrategyOptim.hh"
+#include "alg/StrategySelecter.hh"
 #include "dtoin/InstanceReaderDtoin.hh"
 #include "dtoin/SolutionDtoin.hh"
 #include "dtoout/InstanceWriterDtoout.hh"
@@ -30,16 +31,9 @@ int main(int argc, char **argv) {
         SolutionDtoin::read(opt_l["init"].as<string>(), &contextBO_l);
 
         /* Lancement de la sequence d'optim.
-         *
-         * FIXME : Il serait pertinent de virer cette logique du main.
-         * Plus precisement, il serait malin de creer une classe qui mange un ContextBO plus les donnees interessantes de la ligne de commande,
-         * qui construit une sequence de StrategyOptim et qui l'execute
-         *
-         * En attendant, je me contente d'executer une unique StrategyOptim bidon
-         * afin d'avoir une chaine complete
          */
         ContextALG contextALG_l(&contextBO_l);
-        StrategyOptim* pStrategy_l = new DummyStrategyOptim();
+        StrategyOptim* pStrategy_l = StrategySelecter::buildStrategy(opt_l);
         pStrategy_l->run(contextALG_l, time(0) + opt_l["time"].as<int>(), opt_l);
 
         /* Risque de fuite de memoire : si une exception est levee pendant l'optim,

@@ -18,6 +18,7 @@ EXTRA_PROGRAMS = testU generateurInstance
 machineReassignment_FILES = \
 	$(top_srcdir)/src/alg/ContextALG.cc \
 	$(top_srcdir)/src/alg/SequenceStrategyOptim.cc \
+	$(top_srcdir)/src/alg/StrategySelecter.cc \
 	$(top_srcdir)/src/alg/dummyStrategyOptim/DummyStrategyOptim.cc \
 	$(top_srcdir)/src/alg/StrategyOptim.cc \
 	$(top_srcdir)/src/dtoin/BalanceCostDtoin.cc \

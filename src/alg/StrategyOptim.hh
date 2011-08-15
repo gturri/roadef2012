@@ -9,6 +9,10 @@ using namespace boost::program_options;
 /**
  * Interface dont derive toutes les methodes d'optims,
  * afin de simplifier la manipulation de celles-ci
+ *
+ * Une implémentation de cette classe peut representer, conceptuellement :
+ * - une strategie simple strategie d'optim (eg : pl, recherche locale, ...)
+ * - une sequence d'optim enchaine strategies simples et/ou sous sequences
  */
 class StrategyOptim {
     public:
