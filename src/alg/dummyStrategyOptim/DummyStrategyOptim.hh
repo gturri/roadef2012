@@ -7,7 +7,7 @@
  * histoire d'illustrer l'utilisation de cette abstraction
  */
 class DummyStrategyOptim : public StrategyOptim {
-        virtual ContextALG run(ContextALG contextAlg_p, time_t heureFinMaxPreconisee_p);
+        virtual ContextALG run(ContextALG contextAlg_p, time_t heureFinMaxPreconisee_p, const variables_map& opt_p);
 
 };
 

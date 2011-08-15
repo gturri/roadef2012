@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
          */
         ContextALG contextALG_l(&contextBO_l);
         StrategyOptim* pStrategy_l = new DummyStrategyOptim();
-        pStrategy_l->run(contextALG_l, time(0) + opt_l["time"].as<int>());
+        pStrategy_l->run(contextALG_l, time(0) + opt_l["time"].as<int>(), opt_l);
 
         /* Risque de fuite de memoire : si une exception est levee pendant l'optim,
          * on ne deletera jamais cette strategie.

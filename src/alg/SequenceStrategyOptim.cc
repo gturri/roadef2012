@@ -8,9 +8,9 @@ SequenceStrategyOptim::~SequenceStrategyOptim(){
     }
 }
 
-ContextALG SequenceStrategyOptim::run(ContextALG contextAlg_p, time_t heureFinMaxPreconisee_p){
+ContextALG SequenceStrategyOptim::run(ContextALG contextAlg_p, time_t heureFinMaxPreconisee_p, const variables_map& opt_p){
     BOOST_FOREACH(StrategyOptim* pStrat_l, sequence_m){
-        contextAlg_p = pStrat_l->run(contextAlg_p, heureFinMaxPreconisee_p);
+        contextAlg_p = pStrat_l->run(contextAlg_p, heureFinMaxPreconisee_p, opt_p);
     }
     return contextAlg_p;
 }

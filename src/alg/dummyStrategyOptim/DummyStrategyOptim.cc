@@ -6,7 +6,7 @@
 #include <cassert>
 using namespace std;
 
-ContextALG DummyStrategyOptim::run(ContextALG contextAlg_p, time_t heureFinMaxPreconisee_p){
+ContextALG DummyStrategyOptim::run(ContextALG contextAlg_p, time_t heureFinMaxPreconisee_p, const variables_map& opt_p){
     vector<int> sol_l = contextAlg_p.getCurrentSol();
 
     /* "ContextAlg, cette solution est peut etre mieux que ce que tu connais, 
