@@ -44,7 +44,8 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
 	$(top_srcdir)/src/bo/ServiceBO.cc \
     $(top_srcdir)/src/tools/Checker.cc \
-	$(top_srcdir)/src/tools/Log.cc 
+	$(top_srcdir)/src/tools/Log.cc \
+	$(top_srcdir)/src/tools/ParseCmdLine.cc
 
 
 fichiersCommunsTestsEtGenerateur = \
@@ -62,7 +63,7 @@ generateurInstance_SOURCES = \
 	$(machineReassignment_FILES) \
     $(fichiersCommunsTestsEtGenerateur) \
 	$(top_srcdir)/src/generateur/alg/GenerateFromExisting.cc \
-	$(top_srcdir)/src/generateur/ParseCmdLine.cc \
+	$(top_srcdir)/src/generateur/ParseCmdLineGenerateur.cc \
 	$(top_srcdir)/src/generateur/StrategyGenerationSelecter.cc \
 	$(top_srcdir)/src/generateur/WriterSelecter.cc \
 	$(top_srcdir)/src/generateur/generateur_main.cc
@@ -92,6 +93,8 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/tools/CheckerPMCTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerSMCTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerSpreadTest.cc \
+	$(top_srcdir)/src/gtests/tools/ParseCmdLineTest.cc \
+	$(top_srcdir)/src/gtests/tools/ParseCmdLineTestHelper.cc \
     $(fichiersCommunsTestsEtGenerateur) \
 	$(machineReassignment_FILES)
 
