@@ -1,5 +1,8 @@
 #include "dtoout/SolutionDtoout.hh"
 #include "tools/ParseCmdLine.hh"
+#include <iostream>
+using namespace std;
+
 #define TEAM_ID 666 /* TODO : completer quand on sera inscrit et qu'on aura notre identifiant d'equipe */
 
 string ParseCmdLine::getHelp(){
