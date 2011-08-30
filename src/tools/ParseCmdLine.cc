@@ -21,7 +21,8 @@ options_description ParseCmdLine::getOptions(){
         ("init,i", value<string>()->default_value(""), "Nom du fichier de solution initiale")
         ("out,o", value<string>()->default_value(""), "Nom du fichier a ecrire")
         ("seed,s", value<int>()->default_value(0), "graine du generateur aleatoire")
-        ("name", value<string>(), "Affiche l'id de l'equipe");
+        ("name", value<string>(), "Affiche l'id de l'equipe")
+        ("strategy", value<string>(), "Nom de la strategy a construire");
 
     return result_l;
 }
