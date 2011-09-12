@@ -7,11 +7,13 @@ class SolutionALG;
 class DecisionALG
 {
     public:
+        typedef int ProcessId;
+
         DecisionALG();
         ~DecisionALG();
         
         virtual RestrictionALG * getRestriction(SolutionALG *) const = 0;
-        virtual bool workOnProcess() const = 0;
+        virtual bool workOnProcess(ProcessId) const = 0;
 };
 
 #endif
