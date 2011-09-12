@@ -26,11 +26,11 @@ class SpaceALG
         typedef std::vector<DecisionALG *> DecisionsPool;
 
         void addDecision(DecisionALG *);
-        DecisionsPool generateDecisions() const;
-        BoundValue bound() const;
+        virtual DecisionsPool generateDecisions() const;
+        virtual BoundValue bound() const;
         bool isSolution() const;
         SolutionALG * buildSolution() const;
-        SpaceALG * clone();
+        virtual SpaceALG * clone();
 
         void setpContext(ContextALG *);
         ContextALG * getpContext() const;
@@ -38,7 +38,7 @@ class SpaceALG
         void setpConstraintSystem(ConstraintSystemALG *); 
         void setpEvaluationSystem(EvaluationSystemALG *); 
 
-    private:        
+    protected:        
         ContextALG * pContext_m;
         EvaluationSystemALG * pEvaluationSystem_m;
         ConstraintSystemALG * pConstraintSystem_m;

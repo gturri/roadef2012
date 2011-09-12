@@ -10,7 +10,8 @@ class DecisionALG
         DecisionALG();
         ~DecisionALG();
         
-        virtual RestrictionALG * getRestriction(SolutionALG *) = 0;
+        virtual RestrictionALG * getRestriction(SolutionALG *) const = 0;
+        virtual bool workOnProcess() const = 0;
 };
 
 #endif
