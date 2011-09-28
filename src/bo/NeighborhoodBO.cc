@@ -33,6 +33,10 @@ bool NeighborhoodBO::operator==(const NeighborhoodBO& neigh_p) const{
     return true;
 }
 
+unordered_set<int> NeighborhoodBO::getMachines() const{
+	return machines_m;
+}
+
 bool NeighborhoodBO::operator!=(const NeighborhoodBO& neigh_p) const{
     return !this->operator==(neigh_p);
 }
