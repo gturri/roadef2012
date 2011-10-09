@@ -92,7 +92,7 @@ bool ContextALG::checkCompletAndMajBestSol(const vector<int>& candidatBestSol_p,
 }
 
 bool ContextALG::checkRapideAndMajBestSol(const vector<int>& candidatBestSol_p, int score_p){
-    if ( score_p > bestScore_m ){
+    if ( score_p < bestScore_m ){
         if ( mustWriteBestSol_m ){
             SolutionDtoout::writeSol(candidatBestSol_p);
         }
