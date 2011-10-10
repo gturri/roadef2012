@@ -17,26 +17,39 @@ typedef MonteCarloTreeSearchALG::Tree::iterator iterator;
     remonter en prive, mais ca sera le bordel au niveau inclusion
     ( possibilite d'argument aussi)
   */
+
+double uct(const NodeContentALG &node_p)
+{
+	// pour le moment, on fait juste le moins explore
+	return 1. / node_p.numberOfSimulations_m;
+}
+
 iterator chooseNextChildren(ChildrenPool const & children_p)
 {
-    iterator childrenToExplore_l(children_p.front());
-    double minValue_l = 0.0;
-    for (ChildrenPool::const_iterator it_l = children_p.begin();
-                                      it_l != children_p.end(); 
-                                      ++it_l)
+    ChildrenPool::const_iterator it_l = children_p.begin();
+    iterator childrenToExplore_l(*it_l);
+    double maxValue_l = uct(*childrenToExplore_l);
+
+    for (++it_l; it_l != children_p.end(); ++it_l)
     {
         MonteCarloTreeSearchALG::Tree::iterator const & treeIt_l = *it_l;
         NodeContentALG const & content_l = *treeIt_l;
         // inserer ici la formule qui va bien
-        double value_l = content_l.sumOfEvaluations_m;
-        value_l /= content_l.numberOfSimulations_m;
-        if (value_l > minValue_l)
+        int value_l = uct(content_l);
+        if (value_l > maxValue_l)
         {
-            minValue_l = value_l;
+            maxValue_l = value_l;
             childrenToExplore_l = *it_l;
         }
     }
     return childrenToExplore_l;
+}
+
+void updateNode(iterator &it_p, double sum_p, int nb_p)
+{
+    NodeContentALG & content_l = *it_p;
+    content_l.sumOfEvaluations_m += sum_p;
+    content_l.numberOfSimulations_m += nb_p;
 }
 
 void updatePath(std::list<iterator> & path_p, 
@@ -54,16 +67,14 @@ void updatePath(std::list<iterator> & path_p,
         SolutionALG * pSolution_l = *it_l;
         sum_l += pSolution_l->evaluate();
         evaluations_l += 1;
+	delete pSolution_l;
     }
     
     for (std::list<iterator>::iterator it_l = path_p.begin();
                                        it_l != path_p.end();
                                        ++it_l)
     {
-        iterator & treeIt_l = *it_l;
-        NodeContentALG & content_l = *treeIt_l;
-        content_l.sumOfEvaluations_m += sum_l;
-        content_l.numberOfSimulations_m += evaluations_l;
+	updateNode(*it_l, sum_l, evaluations_l);
     }
 }
 
@@ -111,15 +122,14 @@ SpaceALG * MonteCarloTreeSearchALG::initNewSpace()
 SpaceALG * MonteCarloTreeSearchALG::performDescent()
 {
     SpaceALG * pSpace_l = initNewSpace();
-    
     iterator current_l = pTree_m->getRootNode();
-
-    bool hasCurrentNodeChildren = pTree_m->hasChildren(current_l);
     std::list<iterator> pathToLeaf_l;
     
-     LOG(DEBUG) << "Descente" << std::endl;
+    pathToLeaf_l.push_back(current_l);
+    LOG(DEBUG) << "Descente" << std::endl;
+
     //On descent jusqu'une feuille
-    while (hasCurrentNodeChildren)
+    while (pTree_m->hasChildren(current_l))
     {
          LOG(DEBUG) << "on recupere les fils du noeud courant" << std::endl;
         // on recupere les fils du noeud courant
@@ -136,9 +146,6 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
         LOG(DEBUG) << "On restreint l'espace de solution" << std::endl;
         // On restreint l'espace de solution
         pSpace_l->addDecision((*current_l).pDecision_m);
-        LOG(DEBUG) << "on regarde si l'on est arrive sur une feuille" << std::endl;
-        // on regarde si l'on est arrive sur une feuille
-        hasCurrentNodeChildren = pTree_m->hasChildren(current_l);
     }
     
      LOG(DEBUG) << "Maintenant qu'on est sur une feuille on va brancher" << std::endl;
@@ -152,29 +159,32 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
     // Pour chaque decision de branchement, on fait une simulation et une recherche locale
     for(DecisionsPool::iterator decisionIt_l = decisions_l.begin(); decisionIt_l != decisions_l.end(); ++decisionIt_l )
     {
-         LOG(DEBUG) << "on ajoute le noeud a l'arbre" << std::endl;       
+        LOG(DEBUG) << "on ajoute le noeud a l'arbre" << std::endl;       
         // on ajoute le noeud a l'arbre
         NodeContentALG content_l(*decisionIt_l);
-         LOG(DEBUG) << "on clone l'espace courant" << std::endl;       
+        LOG(DEBUG) << "on clone l'espace courant" << std::endl;       
         // on clone l'espace courant
         SpaceALG * pChildSpace_l = pSpace_l->clone();
-         LOG(DEBUG) << "on ajoute les decisions" << std::endl;       
+        LOG(DEBUG) << "on ajoute les decisions" << std::endl;       
         // on ajoute les decisions
         pChildSpace_l->addDecision(*decisionIt_l);
-         LOG(DEBUG) << "est-ce une solution?" << std::endl;       
-        // est-ce une solution
-        if (!pChildSpace_l->isSolution())
-        {
-            pTree_m->addChildren(current_l, content_l);
-            // traiter la solution
-        }
-         LOG(DEBUG) << "on construit la solution en appelant monte carlo" << std::endl;       
+        LOG(DEBUG) << "est-ce une solution?" << std::endl;       
+	// on ajoute le nouveau noeud
+	iterator newNode_l = pTree_m->addChildren(current_l, content_l);
+	// traiter la solution
+        LOG(DEBUG) << "on construit la solution en appelant monte carlo" << std::endl;       
         // on construit la solution en appelant monte carlo
         SolutionALG * pSolution_l = pChildSpace_l->buildSolution();
-         LOG(DEBUG) << "on ajoute la solution" << std::endl;       
+        LOG(DEBUG) << "on ajoute la solution" << std::endl;       
         // on ajoute la solution
+	updateNode(newNode_l, pSolution_l->evaluate(), 1);
         results_l.push_back(pSolution_l);        
         delete pChildSpace_l;
+        if (!pChildSpace_l->isSolution())
+        {
+		// TODO delete le noeud, et si pas de fils, le papa, etc et
+		// updater le chelin restant
+        }
     }
 
      LOG(DEBUG) << "On remonte l'information" << std::endl;

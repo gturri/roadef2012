@@ -35,7 +35,7 @@ typename TreeSimpleImplALG<NodeContent>::iterator
                                                   NodeContent & content_p)
 {
     size_t nextId_l = nodes_m.size();
-    nodes_m[it_p.currentNode_m].second.push_back(nextId_l);
+    nodes_m.at(it_p.currentNode_m).second.push_back(nextId_l);
     nodes_m.push_back(Node(NodeContent(content_p),ChildrenList()));
     return iterator(nextId_l,this);
 }
@@ -43,7 +43,7 @@ typename TreeSimpleImplALG<NodeContent>::iterator
 template <class NodeContent>
 bool TreeSimpleImplALG<NodeContent>::hasChildren(iterator const & it_p)
 {
-    return (nodes_m[it_p.currentNode_m].second.size() != 0);
+	return (nodes_m.at(it_p.currentNode_m).second.size() != 0);
 }
 
 template <class NodeContent>
@@ -51,7 +51,7 @@ typename TreeSimpleImplALG<NodeContent>::ChildrenPool
     TreeSimpleImplALG<NodeContent>::getChildren(iterator const & it_p)
 {
     ChildrenPool pool_l;
-    ChildrenList const & list_l = nodes_m[it_p.currentNode_m].second;
+    ChildrenList const & list_l = nodes_m.at(it_p.currentNode_m).second;
     for (ChildrenList::const_iterator it_l = list_l.begin();
                                       it_l != list_l.end();
                                       ++it_l)
@@ -67,7 +67,7 @@ template <class NodeContent>
 NodeContent & TreeSimpleImplALG<NodeContent>::getNodeContent(int node_p)
 {
     // test + throw tout ca
-    return nodes_m[node_p].first;
+    return nodes_m.at(node_p).first;
 }
 
 
