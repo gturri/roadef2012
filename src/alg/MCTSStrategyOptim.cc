@@ -5,13 +5,16 @@
 
 #include "ConstraintSystemALG.hh"
 #include "EvaluationSystemALG.hh"
+#include "oneprocessdecisions/OPPMSpaceALG.hh"
 #include "MonteCarloTreeSearchALG.hh"
 #include "TreeSimpleImplALGDefs.hh"
 #include "TreeALGDefs.hh"
 
 using namespace std;
 
-ContextALG MCTSStrategyOptim::run(ContextALG contextAlg_p, time_t heureFinMaxPreconisee_p){
+ContextALG MCTSStrategyOptim::run( ContextALG contextAlg_p,
+                                   time_t heureFinMaxPreconisee_p,
+                                   boost::program_options::variables_map const & argv_p) {
     vector<int> sol_l = contextAlg_p.getCurrentSol();
 
     /* "ContextAlg, cette solution est peut etre mieux que ce que tu connais, 
@@ -21,19 +24,22 @@ ContextALG MCTSStrategyOptim::run(ContextALG contextAlg_p, time_t heureFinMaxPre
         LOG(USELESS) << "La solution initialement sur le contextALG envoie du pate !" << endl;
     }
 
-    cerr << "initializing object" << endl;
+    cerr << "initialisation des objets" << endl;
     Checker checker_l(&contextAlg_p);
     EvaluationSystemALG evaluation_l;
     evaluation_l.setpContext(&contextAlg_p);
     ConstraintSystemALG constraints_l;
     constraints_l.setpContext(&contextAlg_p);
+    OPPMSpaceALG * pInitialSpace_l = new OPPMSpaceALG;
+    pInitialSpace_l->setpConstraintSystem(&constraints_l);
+    pInitialSpace_l->setpEvaluationSystem(&evaluation_l);
+    pInitialSpace_l->setpContext(&contextAlg_p);
     
-    cerr << "building tree" << endl;
+    cerr << "construction de l'arbre" << endl;
     MonteCarloTreeSearchALG mcts_l;
     TreeALG< TreeSimpleImplALG<NodeContentALG> > tree_l;
     mcts_l.setpTree(&tree_l);
-    mcts_l.setpEvaluationSystem(&evaluation_l);
-    mcts_l.setpConstraintSystem(&constraints_l);
+    mcts_l.setpInitialSpace(pInitialSpace_l);
     
     cerr << "lancement de la methode de recherche arborescente" << endl;
     SolutionALG * pSolution_l = mcts_l.search();

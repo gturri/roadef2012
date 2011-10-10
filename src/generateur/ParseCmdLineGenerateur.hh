@@ -1,11 +1,11 @@
-#ifndef PARSECMDLINE_HH
-#define PARSECMDLINE_HH
+#ifndef PARSECMDLINEGENERATEUR_HH
+#define PARSECMDLINEGENERATEUR_HH
 #include <boost/program_options.hpp>
 #include <string>
 using namespace std;
 using namespace boost::program_options;
 
-class ParseCmdLine{
+class ParseCmdLineGenerateur{
     public:
         static variables_map parse(int argc, char** argv);
 

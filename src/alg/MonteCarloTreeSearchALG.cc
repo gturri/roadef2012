@@ -78,7 +78,7 @@ MonteCarloTreeSearchALG::~MonteCarloTreeSearchALG()
 
 SolutionALG * MonteCarloTreeSearchALG::search()
 {
-    std::cerr << "Performing search" << std::endl;
+    std::cerr << "Recherche arborescente de Monte Carlo" << std::endl;
     SpaceALG * pSpace_l = performDescent();
     SolutionALG * pSolution_l = pSpace_l->buildSolution();
     delete pSpace_l;
@@ -95,21 +95,14 @@ MonteCarloTreeSearchALG::Tree * MonteCarloTreeSearchALG::getpTree() const
     return pTree_m;
 }
 
-void MonteCarloTreeSearchALG::setpConstraintSystem(ConstraintSystemALG * pSystem_p)
+void MonteCarloTreeSearchALG::setpInitialSpace(SpaceALG * pSpace_p)
 {
-    pConstraintSystem_m = pSystem_p;
-}
-
-void MonteCarloTreeSearchALG::setpEvaluationSystem(EvaluationSystemALG * pSystem_p)
-{
-    pEvaluationSystem_m = pSystem_p;
+    pInitialSpace_m = pSpace_p;
 }
 
 SpaceALG * MonteCarloTreeSearchALG::initNewSpace()
 {
-    SpaceALG * pSpace_l = new SpaceALG();
-    pSpace_l->setpConstraintSystem(pConstraintSystem_m);
-    pSpace_l->setpEvaluationSystem(pEvaluationSystem_m);
+    SpaceALG * pSpace_l = pInitialSpace_m->clone();
     return pSpace_l;
 }
 
@@ -166,7 +159,7 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
         std::cerr << "on ajoute les decisions" << std::endl;       
         // on ajoute les decisions
         pChildSpace_l->addDecision(*decisionIt_l);
-        std::cerr << "est-ce une solution" << std::endl;       
+        std::cerr << "est-ce une solution?" << std::endl;       
         // est-ce une solution
         if (!pChildSpace_l->isSolution())
         {

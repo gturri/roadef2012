@@ -11,6 +11,7 @@ class OPPMSpaceALG : public SpaceALG
 
         typedef SpaceALG::DecisionsPool DecisionsPool;
         virtual DecisionsPool generateDecisions() const;
+        virtual SpaceALG * clone();
 };
 
 #endif

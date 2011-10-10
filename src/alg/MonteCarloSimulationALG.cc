@@ -21,4 +21,7 @@ MonteCarloSimulationALG::~MonteCarloSimulationALG()
 
 void MonteCarloSimulationALG::run(SolutionALG * pSolution_p)
 {
+    // remplir la solution actuellement vide
+    // -> passer le contexte aussi?
+    // -> donner une solution sans affectation?
 }

@@ -8,7 +8,7 @@ class SequenceStrategyOptim : public StrategyOptim {
     public:
         ~SequenceStrategyOptim();
 
-        ContextALG run(ContextALG contextAlg_p, time_t heureFinMaxPreconisee_p);
+        ContextALG run(ContextALG contextAlg_p, time_t heureFinMaxPreconisee_p, const variables_map& opt_p);
 
 
 

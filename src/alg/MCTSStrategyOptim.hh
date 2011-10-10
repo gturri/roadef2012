@@ -7,7 +7,9 @@
  * histoire d'illustrer l'utilisation de cette abstraction
  */
 class MCTSStrategyOptim : public StrategyOptim {
-        virtual ContextALG run(ContextALG contextAlg_p, time_t heureFinMaxPreconisee_p);
+        virtual ContextALG run(ContextALG contextAlg_p, 
+                           time_t heureFinMaxPreconisee_p,
+                           boost::program_options::variables_map const &);
 
 };
 

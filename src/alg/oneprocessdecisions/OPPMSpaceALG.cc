@@ -16,14 +16,21 @@ OPPMSpaceALG::OPPMSpaceALG()
 OPPMSpaceALG::~OPPMSpaceALG()
 {
 }
+
+SpaceALG * OPPMSpaceALG::clone()
+{
+    OPPMSpaceALG * pClone_l = new OPPMSpaceALG;
+    pClone_l->setpContext(getpContext());
+    return pClone_l;
+}
  
 OPPMSpaceALG::DecisionsPool OPPMSpaceALG::generateDecisions() const
 {
-    cerr << "on genere les solutions" << endl;
+    cerr << "\ton genere les decisions a partir de " << getpContext() << endl;
     
     ContextBO const * pContext_l = getpContext()->getContextBO();
     
-    cerr << "on liste les process disponible" << endl; 
+    cerr << "\ton liste les process disponibles" << endl; 
 
     std::list<int> eligibleProcesses_l;
     int nbProcesses_l = pContext_l->getNbProcesses();
@@ -47,28 +54,34 @@ OPPMSpaceALG::DecisionsPool OPPMSpaceALG::generateDecisions() const
 
     if (eligibleProcesses_l.size() == 0)
     {
-        cerr << "Aucun ne l'est, on retourne une liste vide" << endl;
+        cerr << "\tAucun ne l'est, on retourne une liste vide" << endl;
         return DecisionsPool();
     }
 
-    cerr << "On en a trouve " << eligibleProcesses_l.size() << endl; 
+    cerr << "\tOn en a trouve " << eligibleProcesses_l.size() << endl; 
 
     int target_l  = eligibleProcesses_l.front();
     int nbBuckets_l = 3;
+    
+    cerr << "\tOn reparti en " << nbBuckets_l << endl;
     typedef vector<OPPMDecisionALG *> LocalDecisionPool;
     LocalDecisionPool decisons_l;
     vector< OPPMDecisionALG::MachinePool > buckets_l;
     for (int idx_l = 0; idx_l < nbBuckets_l; ++idx_l)
     {
-        decisons_l[idx_l] = new OPPMDecisionALG;
+        decisons_l.push_back(new OPPMDecisionALG);
         buckets_l.push_back(OPPMDecisionALG::MachinePool());
     }
+    
+    cerr << "\tOn replit les buckets" << endl;
     int nbMachines_l = pContext_l->getNbMachines();
     for (int machine_l = 0; machine_l < nbMachines_l; ++machine_l)
     {
         int idx_l = machine_l % nbBuckets_l;
         buckets_l[idx_l].push_back(machine_l);
     }
+    
+    cerr << "\tOn cree les decision" << endl;
     DecisionsPool returnedDecisions_l;
     for(int idx_l = 0; idx_l < nbBuckets_l; ++idx_l)
     {

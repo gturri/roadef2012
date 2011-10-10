@@ -12,8 +12,6 @@
 #include "TreeALG.hh"
 #include "TreeSimpleImplALG.hh"
 
-class ConstraintSystemALG;
-class EvaluationSystemALG;
 class SolutionALG;
 class SpaceALG;
 
@@ -30,16 +28,14 @@ class MonteCarloTreeSearchALG
         void setpTree(Tree *);
         Tree * getpTree() const;
 
-        void setpConstraintSystem(ConstraintSystemALG *); 
-        void setpEvaluationSystem(EvaluationSystemALG *); 
+        void setpInitialSpace(SpaceALG *); 
         
     private:
         SpaceALG * initNewSpace();
         SpaceALG * performDescent();
         
-        ConstraintSystemALG * pConstraintSystem_m;
-        EvaluationSystemALG * pEvaluationSystem_m;      
         Tree * pTree_m;
+        SpaceALG * pInitialSpace_m;
 };
 
 #endif

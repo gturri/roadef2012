@@ -5,6 +5,8 @@
 #include "RestrictionALG.hh"
 #include "MonteCarloSimulationALG.hh"
 
+#include <iostream>
+
 SpaceALG::SpaceALG()
 : pContext_m(0), decisions_m()
 {
@@ -22,6 +24,7 @@ void SpaceALG::addDecision(DecisionALG * decision_p)
  
 SpaceALG::DecisionsPool SpaceALG::generateDecisions() const
 {
+    std::cerr << "Mauvaise surcharge" << std::endl;
     return DecisionsPool();
 }
 
@@ -37,6 +40,7 @@ bool SpaceALG::isSolution() const
 
 SolutionALG * SpaceALG::buildSolution() const
 {
+    std::cerr << "On construit une solution" << std::endl;
     SolutionALG * pSolution_l = new SolutionALG;
     
     pSolution_l->setpConstraintSystem(pConstraintSystem_m);
@@ -50,6 +54,8 @@ SolutionALG * SpaceALG::buildSolution() const
         RestrictionALG * pRestriction_l = pDec_l->getRestriction(pSolution_l);
         pSolution_l->addRestriction(pRestriction_l);        
     }
+
+    std::cerr << "On appelle la methode de monte carlo" << std::endl;
     MonteCarloSimulationALG monteCarlo_l;
     monteCarlo_l.run(pSolution_l);
     

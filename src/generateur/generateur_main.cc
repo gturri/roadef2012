@@ -1,5 +1,5 @@
 #include "generateur/alg/StrategyGeneration.hh"
-#include "generateur/ParseCmdLine.hh"
+#include "generateur/ParseCmdLineGenerateur.hh"
 #include "generateur/StrategyGenerationSelecter.hh"
 #include "generateur/WriterSelecter.hh"
 #include "dtoout/InstanceWriterInterface.hh"
@@ -16,7 +16,7 @@ using namespace std;
 
 int main(int argc, char** argv){
     try {
-        variables_map args_l = ParseCmdLine::parse(argc, argv);
+        variables_map args_l = ParseCmdLineGenerateur::parse(argc, argv);
         shared_ptr<StrategyGeneration> pStrategy_l = StrategyGenerationSelecter::getStrategy(args_l["strategy"].as<string>());
         list<shared_ptr<ContextBO> > instances_l = pStrategy_l->generate(args_l);
 
