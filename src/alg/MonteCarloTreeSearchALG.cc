@@ -20,7 +20,7 @@ typedef MonteCarloTreeSearchALG::Tree::iterator iterator;
 iterator chooseNextChildren(ChildrenPool const & children_p)
 {
     iterator childrenToExplore_l(children_p.front());
-    double minValue_l = 1.0;
+    double minValue_l = 0.0;
     for (ChildrenPool::const_iterator it_l = children_p.begin();
                                       it_l != children_p.end(); 
                                       ++it_l)
@@ -30,7 +30,7 @@ iterator chooseNextChildren(ChildrenPool const & children_p)
         // inserer ici la formule qui va bien
         double value_l = content_l.sumOfEvaluations_m;
         value_l /= content_l.numberOfSimulations_m;
-        if (value_l < minValue_l)
+        if (value_l > minValue_l)
         {
             minValue_l = value_l;
             childrenToExplore_l = *it_l;
@@ -45,8 +45,6 @@ void updatePath(std::list<iterator> & path_p,
     typedef std::list<SolutionALG *> Solutions;
     double sum_l = 0.0;
     int evaluations_l = 0;
-    
-    LOG(DEBUG)<< "c'est la que ca plante" << std::endl;
     
     // Calcul de l'impact des evaluations sur l'arbre, certainement faux
     for (Solutions::const_iterator it_l = solutions_p.begin();
@@ -80,11 +78,28 @@ MonteCarloTreeSearchALG::~MonteCarloTreeSearchALG()
 
 SolutionALG * MonteCarloTreeSearchALG::search()
 {
-     LOG(DEBUG) << "Recherche arborescente de Monte Carlo" << std::endl;
-    SpaceALG * pSpace_l = performDescent();
-    SolutionALG * pSolution_l = pSpace_l->buildSolution();
-    delete pSpace_l;
-    return pSolution_l;
+    LOG(DEBUG) << "Recherche arborescente de Monte Carlo" << std::endl;
+    
+    double bestEval_l = 0.0;
+    SolutionALG * pBestOne_l = 0;
+    for (int i_l = 0; i_l < 10; ++i_l)
+    {
+        SpaceALG * pSpace_l = performDescent();
+        SolutionALG * pSolution_l = pSpace_l->buildSolution();
+        double value_l = pSolution_l->evaluate();
+        if (value_l > bestEval_l )
+        {
+            bestEval_l = value_l;
+            delete pBestOne_l;
+            pBestOne_l = pSolution_l;
+        }
+        else
+        {
+            delete pSolution_l;
+        }
+        delete pSpace_l;
+    }
+    return pBestOne_l;
 }
 
 void MonteCarloTreeSearchALG::setpTree(Tree * pTree_p)
@@ -124,19 +139,19 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
          LOG(DEBUG) << "on recupere les fils du noeud courant" << std::endl;
         // on recupere les fils du noeud courant
         ChildrenPool children_l = pTree_m->getChildren(current_l);
-     LOG(DEBUG) << "on choisi le noeud suivant grace a la formule magique" << std::endl;
+        LOG(DEBUG) << "on choisi le noeud suivant grace a la formule magique" << std::endl;
         // on choisi le noeud suivant grace a la formule magique
         iterator nextChild_l = chooseNextChildren(children_l);
-     LOG(DEBUG) << "On retient le noeud par lequel on est passe" << std::endl;
+        LOG(DEBUG) << "On retient le noeud par lequel on est passe" << std::endl;
         // On retient le noeud par lequel on est passe
         pathToLeaf_l.push_back(current_l);
-     LOG(DEBUG) << "On avance au noeud suivant" << std::endl;
+        LOG(DEBUG) << "On avance au noeud suivant" << std::endl;
         // On avance au noeud suivant
         current_l = nextChild_l;
-     LOG(DEBUG) << "On restreint l'espace de solution" << std::endl;
+        LOG(DEBUG) << "On restreint l'espace de solution" << std::endl;
         // On restreint l'espace de solution
         pSpace_l->addDecision((*current_l).pDecision_m);
-     LOG(DEBUG) << "on regarde si l'on est arrive sur une feuille" << std::endl;
+        LOG(DEBUG) << "on regarde si l'on est arrive sur une feuille" << std::endl;
         // on regarde si l'on est arrive sur une feuille
         hasCurrentNodeChildren = pTree_m->hasChildren(current_l);
     }
@@ -146,7 +161,7 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
     typedef SpaceALG::DecisionsPool DecisionsPool;
     DecisionsPool decisions_l = pSpace_l->generateDecisions();
 
-     LOG(DEBUG) << "On va retenir les solutions que l'on a trouver" << std::endl;
+    LOG(DEBUG) << "On va retenir les solutions que l'on a trouver" << std::endl;
     // On va retenir les solutions que l'on a trouver
     std::list<SolutionALG *> results_l;
     // Pour chaque decision de branchement, on fait une simulation et une recherche locale

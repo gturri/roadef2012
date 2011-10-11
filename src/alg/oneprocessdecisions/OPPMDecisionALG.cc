@@ -21,7 +21,7 @@ void OPPMDecisionALG::setRestrictedSubset(MachinePool const & subset_p)
 
 bool OPPMDecisionALG::workOnProcess(ProcessId process_p) const
 {
-    return (process_p != target_m);
+    return (process_p == target_m);
 }
 
 RestrictionALG * OPPMDecisionALG::getRestriction(SolutionALG * pSolution_p) const

@@ -74,7 +74,7 @@ std::vector<SolutionALG::MachineId>
                                          ++it_l)
     {
         RestrictionALG * pRestriction_l = *it_l;
-        pRestriction_l->filter(possibles_l);
+        pRestriction_l->filter(process_p,possibles_l);
     }
     
     return_l.insert(return_l.begin(), possibles_l.begin(), possibles_l.end());

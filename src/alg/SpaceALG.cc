@@ -60,7 +60,8 @@ SolutionALG * SpaceALG::buildSolution() const
         pSolution_l->addRestriction(pRestriction_l);        
     }
 
-    std::cerr << "On appelle la methode de monte carlo" << std::endl;
+    std::cerr << "On appelle la methode de monte carlo avec " 
+              << decisions_m.size() << " restrictions" << std::endl;
     MonteCarloSimulationALG monteCarlo_l;
     monteCarlo_l.run(pSolution_l);
     

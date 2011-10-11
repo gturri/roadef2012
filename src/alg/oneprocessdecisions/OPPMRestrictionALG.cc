@@ -1,5 +1,7 @@
 #include "OPPMRestrictionALG.hh"
 
+#include "tools/Log.hh"
+
 OPPMRestrictionALG::OPPMRestrictionALG( ProcessId target_p,
                                         MachinePool const & subset_p)
 : target_m(target_p), pool_m()
@@ -21,6 +23,7 @@ void OPPMRestrictionALG::filter( ProcessId const & process_p,
 {
     if( process_p == target_m)
     {
+        LOG(WTF) << "On restreint pour le process " << process_p << std::endl;
         // A refaire : il existe un algo plus rapide si les listes sont triees
         MachinePool::iterator it_l = allowAssignment_p.begin();
         while (it_l != allowAssignment_p.end())
