@@ -21,6 +21,9 @@ SpaceALG * OPPMSpaceALG::clone()
 {
     OPPMSpaceALG * pClone_l = new OPPMSpaceALG;
     pClone_l->setpContext(getpContext());
+    pClone_l->setpConstraintSystem(pConstraintSystem_m);
+    pClone_l->setpEvaluationSystem(pEvaluationSystem_m);
+    
     // transmission des decisions, memoire gerer par l'arbre
     for(DecisionsPool::iterator it_l = decisions_m.begin();
                                 it_l != decisions_m.end();

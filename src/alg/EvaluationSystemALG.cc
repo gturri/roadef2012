@@ -32,12 +32,20 @@ double EvaluationSystemALG::evaluate(ExplicitRepresentation const & solution_p)
     int nbMachines = pContext_m->getContextBO()->getNbMachines();
     for(size_t i_l = 0; i_l < size_l; ++i_l)
     {
-        value_l += solution_p[i_l] / nbMachines;
+        value_l += solution_p[i_l];
     }
     value_l /= size_l;
+    value_l /= nbMachines;
     
     std::cout << "On evalue la solution a " << value_l 
-              << "avec " << size_l << " process " 
-              << " et " << nbMachines << " machines" << std::endl;
-    return value_l;
+              << " avec " << size_l 
+              << "process et " << nbMachines << " machines" << std::endl;
+    if( value_l >= 0)
+    {
+        return value_l;
+    }
+    else
+    {
+        return 0.0;
+    }
 }
