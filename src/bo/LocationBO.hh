@@ -13,6 +13,8 @@ class LocationBO {
         void addMachine(int idxMachine_p);
         int getId() const;
 
+        unordered_set<int> getMachines() const;
+
         bool operator==(const LocationBO& loc_p) const;
         bool operator!=(const LocationBO& loc_p) const;
 

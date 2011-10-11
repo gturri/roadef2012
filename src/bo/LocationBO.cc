@@ -19,6 +19,10 @@ int LocationBO::getId() const{
     return id_m;
 }
 
+unordered_set<int> LocationBO::getMachines() const {
+	return machines_m;
+}
+
 bool LocationBO::operator==(const LocationBO& loc_p) const {
     if ( id_m != loc_p.id_m || machines_m.size() != loc_p.machines_m.size()){
         return false;
