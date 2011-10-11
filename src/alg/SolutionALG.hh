@@ -10,13 +10,13 @@ class RestrictionALG;
 class SolutionALG
 {
     public:
-        SolutionALG();
+        explicit SolutionALG(size_t);
         ~SolutionALG();
 
         typedef int ProcessId;
         typedef int MachineId;
 
-        static const MachineId unassigned = -1;
+        static const MachineId unassigned;
                 
         void addRestriction(RestrictionALG *); 
         void setpConstraintSystem(ConstraintSystemALG *); 

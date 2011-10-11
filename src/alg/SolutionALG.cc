@@ -5,8 +5,10 @@
 
 #include <list>
 
-SolutionALG::SolutionALG()
-:assignment_m(),incrementalValue_m(0.0)
+const SolutionALG::MachineId SolutionALG::unassigned = -1;
+
+SolutionALG::SolutionALG(size_t nbProcesses_p)
+:assignment_m(nbProcesses_p,unassigned),incrementalValue_m(0.0)
 {
 }
 

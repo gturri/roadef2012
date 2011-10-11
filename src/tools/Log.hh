@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <boost/static_assert.hpp>
-using namespace std;
 
 #define USELESS 0 /*LOG(USELESS) << "C'est toto qui va a la plage, et..." */
 #define DEBUG 1   /*LOG(DEBUG)   << "Je viens d'initialiser ma structure interne" */
@@ -23,13 +22,13 @@ using namespace std;
 
 class LogHelper {
     public:
-        static vector<string> buildLogLvl();
-        static vector<string> vLogStrLvl_g;
+        static std::vector<std::string> buildLogLvl();
+        static std::vector<std::string> vLogStrLvl_g;
 
         /**
          * Etant donne un path, extrait le nom du fichier
          */
-        static string extractFilename(const string& path_p);
+        static std::string extractFilename(const std::string& path_p);
 };
 
 
@@ -45,7 +44,7 @@ class LogHelper {
 
 #define LOGINIT(log_lvl) BOOST_STATIC_ASSERT(0 <= log_lvl && log_lvl <= WTF); \
     if ( MIN_LOG_LVL > (log_lvl) ); \
-    else clog << "[" << LogHelper::vLogStrLvl_g[(log_lvl)] << " - "
+    else std::clog << "[" << LogHelper::vLogStrLvl_g[(log_lvl)] << " - "
 
 #define LOGENDMSG << LogHelper::extractFilename(__FILE__) << ":" <<  __LINE__<< "] "
 

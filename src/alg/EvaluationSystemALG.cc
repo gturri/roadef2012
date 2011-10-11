@@ -3,7 +3,7 @@
 #include "bo/ContextBO.hh"
 #include "tools/Checker.hh"
 
-#include <iostream>
+#include "tools/Log.hh"
 
 EvaluationSystemALG::EvaluationSystemALG()
 : pContext_m(0)

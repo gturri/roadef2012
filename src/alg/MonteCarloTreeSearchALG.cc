@@ -7,7 +7,7 @@
 #include "SpaceALG.hh"
 
 #include <list>
-#include <iostream>
+#include "tools/Log.hh"
 
 typedef MonteCarloTreeSearchALG::Tree::ChildrenPool ChildrenPool;
 typedef MonteCarloTreeSearchALG::Tree::iterator iterator; 
@@ -46,6 +46,8 @@ void updatePath(std::list<iterator> & path_p,
     double sum_l = 0.0;
     int evaluations_l = 0;
     
+    LOG(USELESS) << "c'est la que ca plante" << std::endl;
+    
     // Calcul de l'impact des evaluations sur l'arbre, certainement faux
     for (Solutions::const_iterator it_l = solutions_p.begin();
                                    it_l != solutions_p.end();
@@ -78,7 +80,7 @@ MonteCarloTreeSearchALG::~MonteCarloTreeSearchALG()
 
 SolutionALG * MonteCarloTreeSearchALG::search()
 {
-    std::cerr << "Recherche arborescente de Monte Carlo" << std::endl;
+     LOG(USELESS)  << "Recherche arborescente de Monte Carlo" << std::endl;
     SpaceALG * pSpace_l = performDescent();
     SolutionALG * pSolution_l = pSpace_l->buildSolution();
     delete pSpace_l;
@@ -115,69 +117,70 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
     bool hasCurrentNodeChildren = pTree_m->hasChildren(current_l);
     std::list<iterator> pathToLeaf_l;
     
-    std::cerr << "Descente" << std::endl;
+     LOG(USELESS)  << "Descente" << std::endl;
     //On descent jusqu'une feuille
     while (hasCurrentNodeChildren)
     {
-        std::cerr << "on recupere les fils du noeud courant" << std::endl;
+         LOG(USELESS)  << "on recupere les fils du noeud courant" << std::endl;
         // on recupere les fils du noeud courant
         ChildrenPool children_l = pTree_m->getChildren(current_l);
-    std::cerr << "on choisi le noeud suivant grace a la formule magique" << std::endl;
+     LOG(USELESS)  << "on choisi le noeud suivant grace a la formule magique" << std::endl;
         // on choisi le noeud suivant grace a la formule magique
         iterator nextChild_l = chooseNextChildren(children_l);
-    std::cerr << "On retient le noeud par lequel on est passe" << std::endl;
+     LOG(USELESS)  << "On retient le noeud par lequel on est passe" << std::endl;
         // On retient le noeud par lequel on est passe
         pathToLeaf_l.push_back(current_l);
-    std::cerr << "On avance au noeud suivant" << std::endl;
+     LOG(USELESS)  << "On avance au noeud suivant" << std::endl;
         // On avance au noeud suivant
         current_l = nextChild_l;
-    std::cerr << "On restreint l'espace de solution" << std::endl;
+     LOG(USELESS)  << "On restreint l'espace de solution" << std::endl;
         // On restreint l'espace de solution
         pSpace_l->addDecision((*current_l).pDecision_m);
-    std::cerr << "on regarde si l'on est arrive sur une feuille" << std::endl;
+     LOG(USELESS)  << "on regarde si l'on est arrive sur une feuille" << std::endl;
         // on regarde si l'on est arrive sur une feuille
         hasCurrentNodeChildren = pTree_m->hasChildren(current_l);
     }
     
-    std::cerr << "Maintenant qu'on est sur une feuille on va brancher" << std::endl;
+     LOG(USELESS)  << "Maintenant qu'on est sur une feuille on va brancher" << std::endl;
     // Maintenant qu'on est sur une feuille on va brancher selon l'espace des solutions
     typedef SpaceALG::DecisionsPool DecisionsPool;
     DecisionsPool decisions_l = pSpace_l->generateDecisions();
 
-    std::cerr << "On va retenir les solutions que l'on a trouver" << std::endl;
+     LOG(USELESS)  << "On va retenir les solutions que l'on a trouver" << std::endl;
     // On va retenir les solutions que l'on a trouver
     std::list<SolutionALG *> results_l;
     // Pour chaque decision de branchement, on fait une simulation et une recherche locale
     for(DecisionsPool::iterator decisionIt_l = decisions_l.begin(); decisionIt_l != decisions_l.end(); ++decisionIt_l )
     {
-        std::cerr << "on ajoute le noeud a l'arbre" << std::endl;       
+         LOG(USELESS)  << "on ajoute le noeud a l'arbre" << std::endl;       
         // on ajoute le noeud a l'arbre
         NodeContentALG content_l(*decisionIt_l);
-        std::cerr << "on clone l'espace courant" << std::endl;       
+         LOG(USELESS)  << "on clone l'espace courant" << std::endl;       
         // on clone l'espace courant
         SpaceALG * pChildSpace_l = pSpace_l->clone();
-        std::cerr << "on ajoute les decisions" << std::endl;       
+         LOG(USELESS)  << "on ajoute les decisions" << std::endl;       
         // on ajoute les decisions
         pChildSpace_l->addDecision(*decisionIt_l);
-        std::cerr << "est-ce une solution?" << std::endl;       
+         LOG(USELESS)  << "est-ce une solution?" << std::endl;       
         // est-ce une solution
         if (!pChildSpace_l->isSolution())
         {
             pTree_m->addChildren(current_l, content_l);
-            
+            // traiter la solution
         }
-        std::cerr << "on construit la solution en appelant monte carlo" << std::endl;       
+         LOG(USELESS)  << "on construit la solution en appelant monte carlo" << std::endl;       
         // on construit la solution en appelant monte carlo
         SolutionALG * pSolution_l = pChildSpace_l->buildSolution();
-        std::cerr << "on ajoute la solution" << std::endl;       
+         LOG(USELESS)  << "on ajoute la solution" << std::endl;       
         // on ajoute la solution
         results_l.push_back(pSolution_l);        
         delete pChildSpace_l;
     }
 
-    std::cerr << "On remonte l'information" << std::endl;
+     LOG(USELESS)  << "On remonte l'information" << std::endl;
     // On remonte l'information
     updatePath(pathToLeaf_l,results_l);
 
     return pSpace_l;
 }
+

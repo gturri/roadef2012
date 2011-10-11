@@ -1,11 +1,13 @@
 #include "SpaceALG.hh"
 
+#include "ContextALG.hh"
 #include "SolutionALG.hh"
 #include "DecisionALG.hh"
 #include "RestrictionALG.hh"
 #include "MonteCarloSimulationALG.hh"
 
 #include <iostream>
+#include "bo/ContextBO.hh"
 
 SpaceALG::SpaceALG()
 : pContext_m(0), decisions_m()
@@ -40,8 +42,11 @@ bool SpaceALG::isSolution() const
 
 SolutionALG * SpaceALG::buildSolution() const
 {
+    ContextBO const * pContext_l = getpContext()->getContextBO();
+    int nbProcesses_l = pContext_l->getNbProcesses();
+    
     std::cerr << "On construit une solution" << std::endl;
-    SolutionALG * pSolution_l = new SolutionALG;
+    SolutionALG * pSolution_l = new SolutionALG(nbProcesses_l);
     
     pSolution_l->setpConstraintSystem(pConstraintSystem_m);
     pSolution_l->setpEvaluationSystem(pEvaluationSystem_m);

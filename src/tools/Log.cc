@@ -1,6 +1,7 @@
 #include "tools/Log.hh"
 #include <boost/regex.hpp>
 using namespace boost;
+using namespace std;
 
 vector<string> LogHelper::vLogStrLvl_g = LogHelper::buildLogLvl();
 
