@@ -6,6 +6,7 @@
 #include <list>
 
 const SolutionALG::MachineId SolutionALG::unassigned = -1;
+const SolutionALG::MachineId SolutionALG::failToAssign = -2;
 
 SolutionALG::SolutionALG(size_t nbProcesses_p)
 :assignment_m(nbProcesses_p,unassigned),incrementalValue_m(0.0)
@@ -64,7 +65,21 @@ std::vector<SolutionALG::ProcessId> SolutionALG::getAvaiableProcesses() const
 std::vector<SolutionALG::MachineId> 
     SolutionALG::getAvaiableMachines(ProcessId process_p) const
 {
-    return std::vector<SolutionALG::MachineId>();
+    std::vector<SolutionALG::MachineId> return_l;
+    
+    std::list<MachineId> possibles_l = pConstraintSystem_m->getLegalMachinePool(process_p);
+     
+    for (RestrictionPool::const_iterator it_l = restrictions_m.begin(); 
+                                         it_l != restrictions_m.end();
+                                         ++it_l)
+    {
+        RestrictionALG * pRestriction_l = *it_l;
+        pRestriction_l->filter(possibles_l);
+    }
+    
+    return_l.insert(return_l.begin(), possibles_l.begin(), possibles_l.end());
+    
+    return return_l;
 }
 
 void SolutionALG::addRestriction(RestrictionALG * pRestriction_p)

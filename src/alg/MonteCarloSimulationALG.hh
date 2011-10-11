@@ -15,7 +15,7 @@ class MonteCarloSimulationALG
         
     private:
         int roll_die(int);
-        boost::mt19937 gen_m;
+        static boost::mt19937 gen_m;
         
 };
 

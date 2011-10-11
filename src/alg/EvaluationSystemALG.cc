@@ -39,7 +39,7 @@ double EvaluationSystemALG::evaluate(ExplicitRepresentation const & solution_p)
     
     std::cout << "On evalue la solution a " << value_l 
               << " avec " << size_l 
-              << "process et " << nbMachines << " machines" << std::endl;
+              << " process et " << nbMachines << " machines" << std::endl;
     if( value_l >= 0)
     {
         return value_l;

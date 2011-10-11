@@ -17,6 +17,7 @@ class SolutionALG
         typedef int MachineId;
 
         static const MachineId unassigned;
+        static const MachineId failToAssign;
                 
         void addRestriction(RestrictionALG *); 
         void setpConstraintSystem(ConstraintSystemALG *); 

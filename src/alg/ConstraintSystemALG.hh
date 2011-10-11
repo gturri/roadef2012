@@ -25,6 +25,8 @@ class ConstraintSystemALG : public RestrictionALG
         void setpContext(ContextALG *);
         ContextALG * getpContext() const;
         
+        MachinePool getLegalMachinePool(ProcessId) const;
+        
     private:
         ContextALG * pContext_m;
 };
