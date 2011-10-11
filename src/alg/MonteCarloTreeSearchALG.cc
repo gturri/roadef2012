@@ -80,26 +80,11 @@ SolutionALG * MonteCarloTreeSearchALG::search()
 {
     LOG(DEBUG) << "Recherche arborescente de Monte Carlo" << std::endl;
     
-    double bestEval_l = 0.0;
-    SolutionALG * pBestOne_l = 0;
     for (int i_l = 0; i_l < 10; ++i_l)
     {
         SpaceALG * pSpace_l = performDescent();
-        SolutionALG * pSolution_l = pSpace_l->buildSolution();
-        double value_l = pSolution_l->evaluate();
-        if (value_l > bestEval_l )
-        {
-            bestEval_l = value_l;
-            delete pBestOne_l;
-            pBestOne_l = pSolution_l;
-        }
-        else
-        {
-            delete pSolution_l;
-        }
-        delete pSpace_l;
     }
-    return pBestOne_l;
+    return pInitialSpace_m->buildSolution();
 }
 
 void MonteCarloTreeSearchALG::setpTree(Tree * pTree_p)
