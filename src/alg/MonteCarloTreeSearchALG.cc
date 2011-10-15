@@ -8,6 +8,8 @@
 
 #include <list>
 #include <sstream>
+#include <limits>
+#include <cmath>
 #include "tools/Log.hh"
 
 typedef MonteCarloTreeSearchALG::Tree::ChildrenPool ChildrenPool;
@@ -19,37 +21,37 @@ typedef MonteCarloTreeSearchALG::Tree::iterator iterator;
     ( possibilite d'argument aussi)
 */
 
-double uct(const NodeContentALG &node_p)
+// voir http://arxiv.org/abs/cs/0703062v1 pour pleins de formules cools
+double uct(const NodeContentALG &node_p, const std::vector<iterator> &path_p)
 {
-    // pour le moment, on fait juste le moins explore
     if (node_p.numberOfSimulations_m == 0)
-        return 2.;
+        return std::numeric_limits<double>::infinity();
 
-    return 1. / node_p.numberOfSimulations_m;
+    // number of eval of the parent
+    double p_l = (**path_p.rbegin()).numberOfSimulations_m;
+    double ni_l = node_p.numberOfSimulations_m;
+    double mean_l = node_p.sumOfEvaluations_m / ni_l;
+    double ci_l = sqrt(2. * log(p_l) / ni_l);
+
+    return mean_l + ci_l;
 }
 
-iterator chooseNextChildren(ChildrenPool const & children_p)
+iterator
+chooseNextChildren(ChildrenPool const & children_p,
+                   const std::vector<iterator> &path_p)
 {
     ChildrenPool::const_iterator it_l = children_p.begin();
     iterator childrenToExplore_l(*it_l);
     std::stringstream dump_l;
-    double maxValue_l = uct(*childrenToExplore_l);
+    double maxValue_l = uct(**it_l, path_p);
 
-    dump_l << maxValue_l << "+";
-
-    for (++it_l; it_l != children_p.end(); ++it_l)
-    {
-        // inserer ici la formule qui va bien
-        double value_l = uct(**it_l);
-        dump_l << " " << value_l;
-        if (value_l > maxValue_l)
-        {
+    for (++it_l; it_l != children_p.end(); ++it_l) {
+        double value_l = uct(**it_l, path_p);
+        if (value_l > maxValue_l) {
             maxValue_l = value_l;
             childrenToExplore_l = *it_l;
-            dump_l << "+";
         }
     }
-    LOG(DEBUG) << "chooseNextChild: " << dump_l.str() << std::endl;
     return childrenToExplore_l;
 }
 
@@ -60,10 +62,11 @@ void updateNode(iterator &it_p, double sum_p, int nb_p)
     content_l.numberOfSimulations_m += nb_p;
 }
 
-void updatePath(std::list<iterator> & path_p, 
-                std::list<SolutionALG *> const & solutions_p)
+void
+updatePath(std::vector<iterator> & path_p,
+           std::vector<SolutionALG *> const & solutions_p)
 {
-    typedef std::list<SolutionALG *> Solutions;
+    typedef std::vector<SolutionALG *> Solutions;
     double sum_l = 0.0;
     int evaluations_l = 0;
     
@@ -78,7 +81,7 @@ void updatePath(std::list<iterator> & path_p,
         delete pSolution_l;
     }
     
-    for (std::list<iterator>::iterator it_l = path_p.begin();
+    for (std::vector<iterator>::iterator it_l = path_p.begin();
          it_l != path_p.end();
          ++it_l)
     {
@@ -93,18 +96,17 @@ MonteCarloTreeSearchALG::MonteCarloTreeSearchALG() :
 
 MonteCarloTreeSearchALG::~MonteCarloTreeSearchALG()
 {
-    delete pTree_m;
 }
 
 SolutionALG * MonteCarloTreeSearchALG::search()
 {
-    LOG(DEBUG) << "Recherche arborescente de Monte Carlo" << std::endl;
+    LOG(INFO) << "Lancement de MCTS" << std::endl;
     
-    for (int i_l = 0; i_l < 10; ++i_l)
+    for (int i_l = 0; i_l < 100000; ++i_l)
     {
         SpaceALG * pSpace_l = performDescent();
-        LOG(DEBUG) << std::endl << pTree_m->toString();
     }
+    LOG(INFO) << std::endl << pTree_m->toString(2);
     return pInitialSpace_m->buildSolution();
 }
 
@@ -133,7 +135,7 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
 {
     SpaceALG * pSpace_l = initNewSpace();
     iterator current_l = pTree_m->getRootNode();
-    std::list<iterator> pathToLeaf_l;
+    std::vector<iterator> pathToLeaf_l;
     
     pathToLeaf_l.push_back(current_l);
     LOG(DEBUG) << "Descente" << std::endl;
@@ -144,7 +146,7 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
         // on recupere les fils du noeud courant
         ChildrenPool children_l = pTree_m->getChildren(current_l);
         // on choisi le noeud suivant grace a la formule magique
-        iterator nextChild_l = chooseNextChildren(children_l);
+        iterator nextChild_l = chooseNextChildren(children_l, pathToLeaf_l);
         // On avance au noeud suivant
         current_l = nextChild_l;
         // On retient le noeud par lequel on est passe
@@ -159,7 +161,7 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
     DecisionsPool decisions_l = pSpace_l->generateDecisions();
 
     // On va retenir les solutions que l'on a trouver
-    std::list<SolutionALG *> results_l;
+    std::vector<SolutionALG *> results_l;
     // Pour chaque decision de branchement, on fait une simulation et une
     // recherche locale
     for (DecisionsPool::iterator decisionIt_l = decisions_l.begin();
