@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "bo/ContextBO.hh"
+#include "tools/Log.hh"
 
 SpaceALG::SpaceALG()
 : pContext_m(0), decisions_m()
@@ -26,7 +27,7 @@ void SpaceALG::addDecision(DecisionALG * decision_p)
  
 SpaceALG::DecisionsPool SpaceALG::generateDecisions() const
 {
-    std::cerr << "Mauvaise surcharge" << std::endl;
+    LOG(WTF) << "Mauvaise surcharge" << std::endl;
     return DecisionsPool();
 }
 
@@ -45,7 +46,7 @@ SolutionALG * SpaceALG::buildSolution() const
     ContextBO const * pContext_l = getpContext()->getContextBO();
     int nbProcesses_l = pContext_l->getNbProcesses();
     
-    std::cerr << "On construit une solution" << std::endl;
+    LOG(USELESS) << "On construit une solution" << std::endl;
     SolutionALG * pSolution_l = new SolutionALG(nbProcesses_l);
     
     pSolution_l->setpConstraintSystem(pConstraintSystem_m);
@@ -60,8 +61,8 @@ SolutionALG * SpaceALG::buildSolution() const
         pSolution_l->addRestriction(pRestriction_l);        
     }
 
-    std::cerr << "On appelle la methode de monte carlo avec " 
-              << decisions_m.size() << " restrictions" << std::endl;
+    LOG(USELESS) << "On appelle la methode de monte carlo avec " 
+                 << decisions_m.size() << " restrictions" << std::endl;
     MonteCarloSimulationALG monteCarlo_l;
     monteCarlo_l.run(pSolution_l);
     

@@ -28,8 +28,8 @@ class SpaceALG
         void addDecision(DecisionALG *);
         virtual DecisionsPool generateDecisions() const;
         virtual BoundValue bound() const;
-        bool isSolution() const;
-        SolutionALG * buildSolution() const;
+        virtual bool isSolution() const;
+        virtual SolutionALG * buildSolution() const;
         virtual SpaceALG * clone();
 
         void setpContext(ContextALG *);
