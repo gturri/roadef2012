@@ -5,13 +5,14 @@
 
 class OPPMSpaceALG : public SpaceALG
 {
-    public:
-        OPPMSpaceALG();
-        ~OPPMSpaceALG();
+public:
+    OPPMSpaceALG();
+    ~OPPMSpaceALG();
 
-        typedef SpaceALG::DecisionsPool DecisionsPool;
-        virtual DecisionsPool generateDecisions() const;
-        virtual SpaceALG * clone();
+    typedef SpaceALG::DecisionsPool DecisionsPool;
+    virtual DecisionsPool generateDecisions() const;
+    virtual SpaceALG * clone();
+    virtual bool isSolution() const;
 };
 
 #endif

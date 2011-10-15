@@ -4,6 +4,7 @@
 #include "alg/ContextALG.hh"
 #include "alg/DecisionALG.hh"
 #include "bo/ContextBO.hh"
+#include "tools/Log.hh"
 #include <list>
 
 #include <iostream>
@@ -33,15 +34,35 @@ SpaceALG * OPPMSpaceALG::clone()
     }
     return pClone_l;
 }
+
+// implémentation fausse, mais c'est pour tester
+bool OPPMSpaceALG::isSolution() const
+{
+    ContextBO const * pContext_l = getpContext()->getContextBO();
+    int nbProcesses_l = pContext_l->getNbProcesses();
+    for(int process_l = 0; process_l < nbProcesses_l; ++process_l)
+    {
+        bool dontAppearInDecisions_l = true;
+        for (DecisionsPool::const_iterator it_l = decisions_m.begin();
+             it_l != decisions_m.end(); ++it_l) {
+            if ( (*it_l)->workOnProcess(process_l)) {
+                dontAppearInDecisions_l = false;
+                break;
+            }
+        }
+        if (dontAppearInDecisions_l) {
+            return false;
+        }
+    }
+
+    LOG(DEBUG) << "on a une solution" << std::endl;
+    return true;
+}
+
  
 OPPMSpaceALG::DecisionsPool OPPMSpaceALG::generateDecisions() const
 {
-    cerr << "\ton genere les decisions a partir de " << getpContext() << endl;
-    
     ContextBO const * pContext_l = getpContext()->getContextBO();
-    
-    cerr << "\ton liste les process disponibles" << endl; 
-
     std::list<int> eligibleProcesses_l;
     int nbProcesses_l = pContext_l->getNbProcesses();
     for(int process_l = 0; process_l<nbProcesses_l; ++process_l)
@@ -64,16 +85,12 @@ OPPMSpaceALG::DecisionsPool OPPMSpaceALG::generateDecisions() const
 
     if (eligibleProcesses_l.size() == 0)
     {
-        cerr << "\tAucun ne l'est, on retourne une liste vide" << endl;
         return DecisionsPool();
     }
 
-    cerr << "\tOn en a trouve " << eligibleProcesses_l.size() << endl; 
-
     int target_l  = eligibleProcesses_l.front();
-    int nbBuckets_l = 3;
+    int nbBuckets_l = 4;
     
-    cerr << "\tOn reparti en " << nbBuckets_l << endl;
     typedef vector<OPPMDecisionALG *> LocalDecisionPool;
     LocalDecisionPool decisons_l;
     vector< OPPMDecisionALG::MachinePool > buckets_l;
@@ -83,7 +100,6 @@ OPPMSpaceALG::DecisionsPool OPPMSpaceALG::generateDecisions() const
         buckets_l.push_back(OPPMDecisionALG::MachinePool());
     }
     
-    cerr << "\tOn replit les buckets" << endl;
     int nbMachines_l = pContext_l->getNbMachines();
     for (int machine_l = 0; machine_l < nbMachines_l; ++machine_l)
     {
@@ -91,7 +107,6 @@ OPPMSpaceALG::DecisionsPool OPPMSpaceALG::generateDecisions() const
         buckets_l[idx_l].push_back(machine_l);
     }
     
-    cerr << "\tOn cree les decision" << endl;
     DecisionsPool returnedDecisions_l;
     for(int idx_l = 0; idx_l < nbBuckets_l; ++idx_l)
     {
