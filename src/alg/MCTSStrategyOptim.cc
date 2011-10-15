@@ -24,7 +24,7 @@ ContextALG MCTSStrategyOptim::run( ContextALG contextAlg_p,
         LOG(USELESS) << "La solution initialement sur le contextALG envoie du pate !" << endl;
     }
 
-    cerr << "initialisation des objets" << endl;
+    LOG(USELESS) << "initialisation des objets" << endl;
     Checker checker_l(&contextAlg_p);
     EvaluationSystemALG evaluation_l;
     evaluation_l.setpContext(&contextAlg_p);
@@ -35,13 +35,13 @@ ContextALG MCTSStrategyOptim::run( ContextALG contextAlg_p,
     pInitialSpace_l->setpEvaluationSystem(&evaluation_l);
     pInitialSpace_l->setpContext(&contextAlg_p);
     
-    cerr << "construction de l'arbre" << endl;
+    LOG(USELESS) << "construction de l'arbre" << endl;
     MonteCarloTreeSearchALG mcts_l;
     TreeALG< TreeSimpleImplALG<NodeContentALG> > tree_l;
     mcts_l.setpTree(&tree_l);
     mcts_l.setpInitialSpace(pInitialSpace_l);
     
-    cerr << "lancement de la methode de recherche arborescente" << endl;
+    LOG(INFO) << "Lauching MCTS" << endl;
     SolutionALG * pSolution_l = mcts_l.search();
     
 

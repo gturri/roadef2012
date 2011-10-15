@@ -47,20 +47,22 @@ bool TreeALG<TreeImpl>::hasChildren(iterator const & it_p)
 
 template<typename TreeImpl>
 std::string
-TreeALG<TreeImpl>::toString(const std::string &header_p)
+TreeALG<TreeImpl>::toString(int level_p, const std::string &header_p)
 {
-    return toString(header_p, getRootNode());
+    return toString(level_p, header_p, getRootNode());
 }
 template<typename TreeImpl>
 std::string
-TreeALG<TreeImpl>::toString(const std::string &header_p, const iterator &it_p)
+TreeALG<TreeImpl>::toString(int level_p, const std::string &header_p,
+                            const iterator &it_p)
 {
     std::string res_l = header_p + "(" + (*it_p).toString() + ")\n";
     ChildrenPool children_l = getChildren(it_p);
 
+    if (level_p != 0)
     for (typename ChildrenPool::const_iterator it_l = children_l.begin();
          it_l != children_l.end(); ++it_l) {
-        res_l += toString(header_p + "  ", *it_l);
+        res_l += toString(level_p - 1, header_p + "  ", *it_l);
     }
 
     return res_l;

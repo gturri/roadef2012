@@ -72,8 +72,8 @@ public:
     // renvoie un iterateur sur le noeud courant?
     iterator addChildren(iterator const &, NodeContentALG &);
 
-    std::string toString(const std::string & = "");
-    std::string toString(const std::string &, iterator const &);
+    std::string toString(int = -1, const std::string & = "");
+    std::string toString(int, const std::string &, iterator const &);
 
 private:
     TreeImpl impl_m;
