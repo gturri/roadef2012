@@ -10,7 +10,7 @@ class DecisionALG
         typedef int ProcessId;
 
         DecisionALG();
-        ~DecisionALG();
+        virtual ~DecisionALG();
         
         virtual RestrictionALG * getRestriction(SolutionALG *) const = 0;
         virtual bool workOnProcess(ProcessId) const = 0;

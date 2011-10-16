@@ -12,18 +12,17 @@ class OPPMDecisionALG : public DecisionALG
         typedef std::vector<MachineId> MachinePool;
         
         OPPMDecisionALG();
-        ~OPPMDecisionALG();
+        virtual ~OPPMDecisionALG();
         
-        void setTarget(ProcessId);
-        void setRestrictedSubset(MachinePool const &);
+        virtual void setTarget(ProcessId);
+        virtual void setRestrictedSubset(MachinePool const &);
         
-        RestrictionALG * getRestriction(SolutionALG *) const;
-        bool workOnProcess(ProcessId) const;
+        virtual RestrictionALG * getRestriction(SolutionALG *) const;
+        virtual bool workOnProcess(ProcessId) const;
         
     private:
         ProcessId target_m;
         MachinePool subset_m;
-        
 };
 
 #endif

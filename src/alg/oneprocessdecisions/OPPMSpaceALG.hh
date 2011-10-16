@@ -7,7 +7,7 @@ class OPPMSpaceALG : public SpaceALG
 {
 public:
     OPPMSpaceALG();
-    ~OPPMSpaceALG();
+    virtual ~OPPMSpaceALG();
 
     typedef SpaceALG::DecisionsPool DecisionsPool;
     virtual DecisionsPool generateDecisions() const;

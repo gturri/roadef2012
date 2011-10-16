@@ -32,7 +32,7 @@ double uct(const iterator &it_p)
     double mean_l = it_p->sumEval_m / ni_l;
     double ci_l = sqrt(2. * log(p_l) / ni_l);
 
-    return mean_l + 0.01 * ci_l;
+    return mean_l + 0.1 * ci_l;
 }
 
 iterator
@@ -140,6 +140,11 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
         pChildSpace_l->addDecision(*it_l);
 
         if (pChildSpace_l->isSolution()) {
+            // faut-il générer la solution ?
+            //SolutionALG *pSolution_l = pChildSpace_l->buildSolution();
+            //delete pSolution_l;
+
+            // on delete la decision car on ne l'ajoute pas à l'arbre
             delete *it_l;
         } else {
             // si c'est pas une solution, on l'ajoute à l'arbre

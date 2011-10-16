@@ -8,7 +8,7 @@ class RestrictionALG
 {
     public:
         RestrictionALG() {}
-        ~RestrictionALG() {}
+        virtual ~RestrictionALG() {}
         
         typedef SolutionALG::ProcessId ProcessId;
         typedef std::vector<ProcessId> ProcessPool;

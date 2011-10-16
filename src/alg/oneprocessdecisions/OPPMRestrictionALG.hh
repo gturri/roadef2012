@@ -14,10 +14,10 @@ class OPPMRestrictionALG : public RestrictionALG
         typedef RestrictionALG::MachinePool MachinePool;
     
         OPPMRestrictionALG(ProcessId,MachinePool const &);
-        ~OPPMRestrictionALG();
+        virtual ~OPPMRestrictionALG();
         
-        void filter(ProcessPool &) const;
-        void filter(ProcessId const &, MachinePool &) const;
+        virtual void filter(ProcessPool &) const;
+        virtual void filter(ProcessId const &, MachinePool &) const;
         
     private:
         ProcessId target_m;
