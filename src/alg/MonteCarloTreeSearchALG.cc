@@ -38,7 +38,7 @@ double uct(const iterator &it_p)
 iterator
 chooseNextChildren(MonteCarloTreeSearchALG::Tree *pTree_p, const iterator &it_p)
 {
-    ChildrenPool children_l = pTree_p->getChildren(it_p);
+    ChildrenPool children_l = pTree_p->children(it_p);
     ChildrenPool::const_iterator itPool_l = children_l.begin();
     iterator res_l = *itPool_l;
     double maxValue_l = uct(*itPool_l);
@@ -88,7 +88,7 @@ SolutionALG * MonteCarloTreeSearchALG::search()
             LOG(INFO) << "nb iter = " << i_l << std::endl << pTree_m->toString(2);
         }
         delete pSpace_l;
-    } while (pTree_m->hasChildren(pTree_m->getRootNode()) && ++i_l < 50000);
+    } while (pTree_m->hasChildren(pTree_m->root()) && ++i_l < 50000);
 
     LOG(INFO) << std::endl << pTree_m->toString(2);
     return pInitialSpace_m->buildSolution();
@@ -117,7 +117,7 @@ SpaceALG * MonteCarloTreeSearchALG::initNewSpace()
 SpaceALG * MonteCarloTreeSearchALG::performDescent()
 {
     SpaceALG * pSpace_l = initNewSpace();
-    iterator current_l = pTree_m->getRootNode();
+    iterator current_l = pTree_m->root();
 
     //On descent jusqu'une feuille
     while (pTree_m->hasChildren(current_l)) {

@@ -77,7 +77,7 @@ bool TreeSimpleImplALG<NodeContent>::hasChildren(const iterator & it_p)
 
 template <class NodeContent>
 typename TreeSimpleImplALG<NodeContent>::ChildrenPool 
-    TreeSimpleImplALG<NodeContent>::getChildren(const iterator & it_p)
+    TreeSimpleImplALG<NodeContent>::children(const iterator & it_p)
 {
     ChildrenPool pool_l;
     const ChildrenList &list_l = it_p.pNode_m->children_m;

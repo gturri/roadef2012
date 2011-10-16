@@ -28,16 +28,16 @@ TreeALG<TreeImpl>::addChildren(iterator &it_p, NodeContentALG &content_p)
 }
 
 template<typename TreeImpl>
-typename TreeALG<TreeImpl>::iterator TreeALG<TreeImpl>::getRootNode()
+typename TreeALG<TreeImpl>::iterator TreeALG<TreeImpl>::root()
 {
     return impl_m.root();
 }
 
 template<typename TreeImpl>
 typename TreeALG<TreeImpl>::ChildrenPool
-TreeALG<TreeImpl>::getChildren(iterator const & it_p)
+TreeALG<TreeImpl>::children(iterator const & it_p)
 {
-    return impl_m.getChildren(it_p);
+    return impl_m.children(it_p);
 }
 
 template<typename TreeImpl>
@@ -50,7 +50,7 @@ template<typename TreeImpl>
 std::string
 TreeALG<TreeImpl>::toString(int level_p, const std::string &header_p)
 {
-    return toString(level_p, header_p, getRootNode());
+    return toString(level_p, header_p, root());
 }
 template<typename TreeImpl>
 std::string
@@ -58,7 +58,7 @@ TreeALG<TreeImpl>::toString(int level_p, const std::string &header_p,
                             const iterator &it_p)
 {
     std::string res_l = header_p + "(" + (*it_p).toString() + ")\n";
-    ChildrenPool children_l = getChildren(it_p);
+    ChildrenPool children_l = children(it_p);
 
     if (level_p != 0)
     for (typename ChildrenPool::const_iterator it_l = children_l.begin();

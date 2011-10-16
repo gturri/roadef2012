@@ -60,7 +60,7 @@ public:
     void deleteNode(iterator &);
     iterator addChildren(iterator &, const NodeContent &);
     bool hasChildren(iterator const &);
-    ChildrenPool getChildren(iterator const &);
+    ChildrenPool children(iterator const &);
     
     // should be potected
     struct Node

@@ -31,7 +31,7 @@ struct NodeContentALG
         //delete pDecision_m;
     }
 
-    // du coup on fait un cleanup manuel lors de la destruction d'un Node
+    // du coup on fait un clear manuel lors de la destruction d'un Node
     void clear() {delete pDecision_m; pDecision_m = 0; nbSimu_m = 0; sumEval_m = 0;}
 
     std::string toString() const
@@ -60,13 +60,13 @@ public:
     typedef std::vector<iterator> ChildrenPool;
 
     // renvoie un iterateur sur la racine
-    iterator getRootNode();
+    iterator root();
 
     // renvoie vrai si un iterateur a des fils
     bool hasChildren(iterator const &);
 
     // renvoie la liste des fils d'un iterateur
-    ChildrenPool getChildren(iterator const &);
+    ChildrenPool children(iterator const &);
 
     // detruit le noeud de l'iterateur qui devient donc invalide
     void deleteNode(iterator &);
