@@ -43,7 +43,7 @@ ContextALG MCTSStrategyOptim::run( ContextALG contextAlg_p,
     
     LOG(INFO) << "Lauching MCTS" << endl;
     SolutionALG * pSolution_l = mcts_l.search();
-    
+    delete pSolution_l;
 
     /* On souhaite que la prochaine strategie (s'il y en a une) considere comme solution courante la derniere qu'on a considere
      * (cette strategie pourra, si elle le desire, ignorer cette solution initial qu'on lui fourni)
