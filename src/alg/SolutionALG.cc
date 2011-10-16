@@ -38,7 +38,7 @@ std::vector<SolutionALG::ProcessId> SolutionALG::getAvaiableProcesses() const
 {
     std::vector<SolutionALG::ProcessId> return_l;
     
-    std::list<ProcessId> unassigned_l;
+    std::vector<ProcessId> unassigned_l;
     ProcessId current_l = 0;
     ProcessId end_l = assignment_m.size();
     for( ; current_l < end_l; ++current_l)
@@ -67,7 +67,7 @@ std::vector<SolutionALG::MachineId>
 {
     std::vector<SolutionALG::MachineId> return_l;
     
-    std::list<MachineId> possibles_l = pConstraintSystem_m->getLegalMachinePool(process_p);
+    std::vector<MachineId> possibles_l = pConstraintSystem_m->getLegalMachinePool(process_p);
      
     for (RestrictionPool::const_iterator it_l = restrictions_m.begin(); 
                                          it_l != restrictions_m.end();

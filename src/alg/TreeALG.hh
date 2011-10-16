@@ -1,6 +1,8 @@
 #ifndef TREEALG_HH
 #define TREEALG_HH
 
+#include "DecisionALG.hh"
+
 #include <vector>
 #include <list>
 #include <string>
@@ -11,12 +13,10 @@
     aura toujours besoin.
 */
 
-class DecisionALG;
-
 struct NodeContentALG
 {
-    int numberOfSimulations_m;
-    double sumOfEvaluations_m;
+    uint32_t numberOfSimulations_m;
+    float sumOfEvaluations_m;
     DecisionALG * pDecision_m;
 
     NodeContentALG() :
@@ -30,6 +30,15 @@ struct NodeContentALG
         sumOfEvaluations_m(0.0),
         pDecision_m(pDecision_p)
     {}
+
+    ~NodeContentALG()
+    {
+        // faudrait deleter là, mais si on delete, faut faire une copie pour le
+        // move du vector...
+        //delete pDecision_m;
+    }
+
+    void cleanup() {delete pDecision_m; pDecision_m = 0;}
 
     std::string toString() const
     {
@@ -67,10 +76,10 @@ public:
     ChildrenPool getChildren(iterator const &);
 
     // detruit le noeud de l'iterateur qui devient donc invalide
-    void deleteNode(iterator const &);
+    void deleteNode(iterator &);
 
     // renvoie un iterateur sur le noeud courant?
-    iterator addChildren(iterator const &, NodeContentALG &);
+    iterator addChildren(iterator &, NodeContentALG &);
 
     std::string toString(int = -1, const std::string & = "");
     std::string toString(int, const std::string &, iterator const &);

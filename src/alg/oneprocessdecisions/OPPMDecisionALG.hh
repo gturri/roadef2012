@@ -2,14 +2,14 @@
 #define OPPMDECISIONALG_HH
 
 #include "src/alg/DecisionALG.hh"
-#include <list>
+#include <vector>
 
 class OPPMDecisionALG : public DecisionALG
 {
     public:
         typedef int ProcessId;
         typedef int MachineId;
-        typedef std::list<MachineId> MachinePool;
+        typedef std::vector<MachineId> MachinePool;
         
         OPPMDecisionALG();
         ~OPPMDecisionALG();

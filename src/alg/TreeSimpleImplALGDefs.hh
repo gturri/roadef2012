@@ -2,11 +2,24 @@
 #define TREESIMPLEIMPLALGDEFS_HH_
 
 #include "TreeSimpleImplALG.hh"
+#include "tools/Log.hh"
+
+template<class TreeSimpleImplALG>
+TreeSimpleIteratorALG<TreeSimpleImplALG>
+TreeSimpleIteratorALG<TreeSimpleImplALG>::father() const
+{
+    TreeSimpleIteratorALG<TreeSimpleImplALG> res_l = *this;
+
+    res_l.pNode_m = path_m.back().first;
+    res_l.path_m.pop_back();
+
+    return res_l;
+}
+
 
 template <class NodeContent>
 TreeSimpleImplALG<NodeContent>::TreeSimpleImplALG()
 {
-    nodes_m.push_back(Node());
 }
 
 template <class NodeContent>
@@ -19,56 +32,54 @@ template <class NodeContent>
 typename TreeSimpleImplALG<NodeContent>::iterator 
     TreeSimpleImplALG<NodeContent>::root()
 {
-    return iterator(0,this);
+    return iterator(&root_m);
 }
 
-
 template <class NodeContent>
-void TreeSimpleImplALG<NodeContent>::deleteNode(iterator const & it_p)
+void TreeSimpleImplALG<NodeContent>::deleteNode(iterator & it_p)
 {
-    
+    if (it_p.pNode_m->second.size() != 0) {
+        LOG(WTF) << "On essaie de deleter un node non vide!" << std::endl;
+        return;
+    }
+
+    ChildrenList &cl_l = it_p.path_m.back().first->second;
+    int idx_l = it_p.path_m.back().second;
+
+    it_p.pNode_m->first.cleanup();
+    cl_l.erase(cl_l.begin() + idx_l);
+    // clear the iterator for bug visibility
+    it_p.pNode_m = 0;
+    it_p.path_m.clear();
 }
 
 template <class NodeContent>
 typename TreeSimpleImplALG<NodeContent>::iterator
-    TreeSimpleImplALG<NodeContent>::addChildren( iterator const & it_p,
-                                                  NodeContent & content_p)
+TreeSimpleImplALG<NodeContent>::addChildren(iterator &it_p,
+                                            const NodeContent &content_p)
 {
-    size_t nextId_l = nodes_m.size();
-    nodes_m.at(it_p.currentNode_m).second.push_back(nextId_l);
-    nodes_m.push_back(Node(NodeContent(content_p),ChildrenList()));
-    return iterator(nextId_l,this);
+    it_p.pNode_m->second.push_back(Node(content_p,ChildrenList()));
+    return iterator(it_p, it_p.pNode_m->second.size() - 1);
 }
 
 template <class NodeContent>
-bool TreeSimpleImplALG<NodeContent>::hasChildren(iterator const & it_p)
+bool TreeSimpleImplALG<NodeContent>::hasChildren(const iterator & it_p)
 {
-	return (nodes_m.at(it_p.currentNode_m).second.size() != 0);
+	return (it_p.pNode_m->second.size() != 0);
 }
 
 template <class NodeContent>
 typename TreeSimpleImplALG<NodeContent>::ChildrenPool 
-    TreeSimpleImplALG<NodeContent>::getChildren(iterator const & it_p)
+    TreeSimpleImplALG<NodeContent>::getChildren(const iterator & it_p)
 {
     ChildrenPool pool_l;
-    ChildrenList const & list_l = nodes_m.at(it_p.currentNode_m).second;
-    for (ChildrenList::const_iterator it_l = list_l.begin();
-                                      it_l != list_l.end();
-                                      ++it_l)
-    {
-        pool_l.push_back(iterator(*it_l,this));
+    ChildrenList const &list_l = it_p.pNode_m->second;
+
+    for (size_t i_l = 0; i_l < list_l.size(); ++i_l) {
+        pool_l.push_back(iterator(it_p, i_l));
     }
     
     return pool_l;
 }
-
-
-template <class NodeContent>
-NodeContent & TreeSimpleImplALG<NodeContent>::getNodeContent(int node_p)
-{
-    // test + throw tout ca
-    return nodes_m.at(node_p).first;
-}
-
 
 #endif //TREESIMPLEIMPLALGDEFS_HH_

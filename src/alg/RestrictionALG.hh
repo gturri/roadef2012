@@ -2,7 +2,7 @@
 #define RESTRICTIONALG_HH
 
 #include "SolutionALG.hh"
-#include <list>
+#include <vector>
 
 class RestrictionALG
 {
@@ -11,10 +11,10 @@ class RestrictionALG
         ~RestrictionALG() {}
         
         typedef SolutionALG::ProcessId ProcessId;
-        typedef std::list<ProcessId> ProcessPool;
+        typedef std::vector<ProcessId> ProcessPool;
         
         typedef SolutionALG::MachineId MachineId;
-        typedef std::list<MachineId> MachinePool;
+        typedef std::vector<MachineId> MachinePool;
     
         virtual void filter(ProcessPool &) const = 0;
         virtual void filter(ProcessId const &, MachinePool &) const = 0;

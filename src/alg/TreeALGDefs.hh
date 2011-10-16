@@ -14,14 +14,14 @@ TreeALG<TreeImpl>::~TreeALG()
 }
 
 template<typename TreeImpl>
-void TreeALG<TreeImpl>::deleteNode(iterator const & it_p)
+void TreeALG<TreeImpl>::deleteNode(iterator & it_p)
 {
     impl_m.deleteNode(it_p);
 }
 
 template<typename TreeImpl>
 typename TreeALG<TreeImpl>::iterator 
-TreeALG<TreeImpl>::addChildren(iterator const &it_p, NodeContentALG &content_p)
+TreeALG<TreeImpl>::addChildren(iterator &it_p, NodeContentALG &content_p)
 {
     return impl_m.addChildren(it_p,content_p);
 }

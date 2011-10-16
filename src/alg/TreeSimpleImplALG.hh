@@ -4,30 +4,37 @@
 #include <vector>
 #include <list>
 
-template<class NodeContent> class TreeSimpleImplALG;
-
-template<class NodeContent>
+template<class TreeSimpleImplALG>
 struct TreeSimpleIteratorALG
 {
-    typedef TreeSimpleImplALG<NodeContent> * TreePointer;
+    typedef typename TreeSimpleImplALG::NodeContent NodeContent;
+    typedef typename TreeSimpleImplALG::Node Node;
 
-    TreePointer pTree_m;
-    int currentNode_m;
-
-    TreeSimpleIteratorALG(int current_p,TreePointer pTree_p)
-    : pTree_m(pTree_p),currentNode_m(current_p)
+    TreeSimpleIteratorALG(Node *pN_p) :
+        pNode_m(pN_p)
     {
     }
-        
-    NodeContent & operator*()
+    TreeSimpleIteratorALG(const TreeSimpleIteratorALG &it_p, size_t idx_p) :
+        pNode_m(0),
+        path_m(it_p.path_m)
     {
-        return pTree_m->getNodeContent(currentNode_m);
+        path_m.push_back(std::make_pair(it_p.pNode_m, idx_p));
+        pNode_m = &it_p.pNode_m->second[idx_p];
     }
 
-    NodeContent const & operator*() const
-    {
-        return pTree_m->getNodeContent(currentNode_m);
-    }
+    TreeSimpleIteratorALG father() const;
+    bool isRoot() const {return path_m.size() == 0;}
+    NodeContent &operator*() {return pNode_m->first;}
+    const NodeContent &operator*() const {return pNode_m->first;}
+    NodeContent &operator->() {return pNode_m->first;}
+    const NodeContent &operator->() const {return pNode_m->first;}
+
+    // should be protected
+    typedef std::pair<Node*,size_t> Vertex;
+    typedef std::vector<Vertex> Path;
+
+    Node *pNode_m;
+    Path path_m;
 };
 
 /** Classe servant d'exemple d'implementation d'un arbre
@@ -36,31 +43,37 @@ struct TreeSimpleIteratorALG
   */
 
 
-template <class NodeContent>
+template <class T>
 class TreeSimpleImplALG
 {
-    public:
-        TreeSimpleImplALG();
-        ~TreeSimpleImplALG();
+public:
+    typedef T NodeContent;
+    typedef TreeSimpleIteratorALG<TreeSimpleImplALG> iterator;
+    typedef std::vector<iterator> ChildrenPool;
 
-        typedef TreeSimpleIteratorALG<NodeContent> iterator;
-        typedef std::vector<iterator> ChildrenPool;
+    TreeSimpleImplALG();
+    ~TreeSimpleImplALG();
 
-        iterator root();
-        void deleteNode(iterator const &);
-        iterator addChildren(iterator const &,NodeContent &);
-        bool hasChildren(iterator const &);
-        ChildrenPool getChildren(iterator const &);
- 
-        NodeContent & getNodeContent(int);
-        bool hasChildren(int);
-
-    private:
-        typedef std::list<int> ChildrenList;
-        typedef std::pair<NodeContent,ChildrenList> Node;
-        typedef std::vector<Node> Nodes;
-
-        Nodes nodes_m;
+    iterator root();
+    void deleteNode(iterator &);
+    iterator addChildren(iterator &, const NodeContent &);
+    bool hasChildren(iterator const &);
+    ChildrenPool getChildren(iterator const &);
+    
+    // should be potected
+    struct Node
+    {
+        typedef std::vector<Node> ChildrenList;
+        Node() {}
+        Node(const NodeContent &nc_p, const ChildrenList &v_p) :
+            first(nc_p), second(v_p)
+        {}
+        NodeContent first;
+        ChildrenList second;
+    };
+    typedef typename Node::ChildrenList ChildrenList;    
+protected:
+    Node root_m;
 };
 
 #endif

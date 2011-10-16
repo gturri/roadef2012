@@ -33,7 +33,7 @@ double uct(const NodeContentALG &node_p, const std::vector<iterator> &path_p)
     double mean_l = node_p.sumOfEvaluations_m / ni_l;
     double ci_l = sqrt(2. * log(p_l) / ni_l);
 
-    return mean_l + ci_l;
+    return mean_l + 0.01 * ci_l;
 }
 
 iterator
@@ -70,7 +70,6 @@ updatePath(std::vector<iterator> & path_p,
     double sum_l = 0.0;
     int evaluations_l = 0;
     
-    // Calcul de l'impact des evaluations sur l'arbre, certainement faux
     for (Solutions::const_iterator it_l = solutions_p.begin();
          it_l != solutions_p.end();
          ++it_l)
@@ -102,9 +101,13 @@ SolutionALG * MonteCarloTreeSearchALG::search()
 {
     LOG(INFO) << "Lancement de MCTS" << std::endl;
     
-    for (int i_l = 0; i_l < 100000; ++i_l)
+    for (int i_l = 0; i_l < 50000; ++i_l)
     {
         SpaceALG * pSpace_l = performDescent();
+        if ((i_l % 1000) == 0) {
+            LOG(INFO) << "nb iter = " << i_l << std::endl << pTree_m->toString(2);
+        }
+        delete pSpace_l;
     }
     LOG(INFO) << std::endl << pTree_m->toString(2);
     return pInitialSpace_m->buildSolution();
@@ -165,14 +168,17 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
     // Pour chaque decision de branchement, on fait une simulation et une
     // recherche locale
     for (DecisionsPool::iterator decisionIt_l = decisions_l.begin();
-         decisionIt_l != decisions_l.end(); ++decisionIt_l)
-    {
+         decisionIt_l != decisions_l.end(); ++decisionIt_l) {
         // on ajoute le noeud a l'arbre
         NodeContentALG content_l(*decisionIt_l);
         // on clone l'espace courant
         SpaceALG * pChildSpace_l = pSpace_l->clone();
         // on ajoute les decisions
         pChildSpace_l->addDecision(*decisionIt_l);
+        // si c'est une solution, on l'ajoute pas à l'arbre
+        if (pChildSpace_l->isSolution()) {
+            continue;
+        }
         // on ajoute le nouveau noeud
         iterator newNode_l = pTree_m->addChildren(current_l, content_l);
         // traiter la solution
@@ -182,15 +188,20 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
         updateNode(newNode_l, pSolution_l->evaluate(), 1);
         results_l.push_back(pSolution_l);        
         delete pChildSpace_l;
-        if (!pChildSpace_l->isSolution())
-        {
-            // TODO delete le noeud, et si pas de fils, le papa, etc et
-            // updater le chelin restant
-        }
     }
 
-    // On remonte l'information
-    updatePath(pathToLeaf_l,results_l);
+    if (results_l.size() == 0) {
+        while (pTree_m->getChildren(current_l).size() == 0 &&
+               ! current_l.isRoot()) {
+            iterator father_l = current_l.father();
+            // TODO effacer données simulations
+            pTree_m->deleteNode(current_l);
+            current_l = father_l;
+        }
+    } else {
+        // On remonte l'information
+        updatePath(pathToLeaf_l,results_l);
+    }
 
     return pSpace_l;
 }
