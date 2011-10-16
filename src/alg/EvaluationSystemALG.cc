@@ -4,6 +4,7 @@
 #include "tools/Checker.hh"
 
 #include "tools/Log.hh"
+#include <assert.h>
 
 EvaluationSystemALG::EvaluationSystemALG()
 : pContext_m(0)
@@ -35,17 +36,17 @@ double EvaluationSystemALG::evaluate(ExplicitRepresentation const & solution_p)
         value_l += solution_p[i_l];
     }
     value_l /= size_l;
-    value_l /= nbMachines;
+    value_l /= nbMachines - 1;
     
     LOG(USELESS) << "On evalue la solution a " << value_l 
                  << " avec " << size_l 
                  << " process et " << nbMachines << " machines" << std::endl;
-    if( value_l >= 0)
-    {
-        return value_l;
+
+    if (value_l < 0) {
+        value_l = 0;
     }
-    else
-    {
-        return 0.0;
-    }
+
+    assert(0 <= value_l && value_l <= 1);
+
+    return value_l;
 }
