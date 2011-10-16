@@ -2,6 +2,7 @@
 #define TREEALGDEFS_HH_
 
 #include "TreeALG.hh"
+#include "tools/Log.hh"
 
 template<typename TreeImpl>
 TreeALG<TreeImpl>::TreeALG()

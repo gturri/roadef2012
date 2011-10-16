@@ -15,6 +15,12 @@ SolutionALG::SolutionALG(size_t nbProcesses_p)
 
 SolutionALG::~SolutionALG()
 {
+    for (RestrictionPool::const_iterator it_l = restrictions_m.begin(); 
+         it_l != restrictions_m.end(); ++it_l) {
+        RestrictionALG * pRestriction_l = *it_l;
+        if (pRestriction_l != pConstraintSystem_m)
+            delete pRestriction_l;
+    }
 }
 
 void SolutionALG::unassign(ProcessId process_p)

@@ -15,20 +15,13 @@
 
 struct NodeContentALG
 {
-    uint32_t numberOfSimulations_m;
-    float sumOfEvaluations_m;
+    uint32_t nbSimu_m;
+    float sumEval_m;
     DecisionALG * pDecision_m;
 
-    NodeContentALG() :
-        numberOfSimulations_m(0),
-        sumOfEvaluations_m(0.0),
-        pDecision_m(0)
-    {}
-
+    NodeContentALG() : nbSimu_m(0), sumEval_m(0.0), pDecision_m(0) {}
     NodeContentALG(DecisionALG * pDecision_p) :
-        numberOfSimulations_m(0),
-        sumOfEvaluations_m(0.0),
-        pDecision_m(pDecision_p)
+        nbSimu_m(0), sumEval_m(0.0), pDecision_m(pDecision_p)
     {}
 
     ~NodeContentALG()
@@ -38,13 +31,13 @@ struct NodeContentALG
         //delete pDecision_m;
     }
 
-    void cleanup() {delete pDecision_m; pDecision_m = 0;}
+    // du coup on fait un cleanup manuel lors de la destruction d'un Node
+    void clear() {delete pDecision_m; pDecision_m = 0; nbSimu_m = 0; sumEval_m = 0;}
 
     std::string toString() const
     {
         std::stringstream ss_l;
-        ss_l << sumOfEvaluations_m / numberOfSimulations_m
-             << "(" << numberOfSimulations_m << ")";
+        ss_l << sumEval_m / nbSimu_m << "(" << nbSimu_m << ")";
         return ss_l.str();
     }
 };

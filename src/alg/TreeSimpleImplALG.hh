@@ -1,6 +1,7 @@
 #ifndef TREESIMPLEIMPLALG_HH
 #define TREESIMPLEIMPLALG_HH
 
+#include <assert.h>
 #include <vector>
 #include <list>
 
@@ -18,16 +19,17 @@ struct TreeSimpleIteratorALG
         pNode_m(0),
         path_m(it_p.path_m)
     {
+        assert(idx_p < it_p.pNode_m->children_m.size());
         path_m.push_back(std::make_pair(it_p.pNode_m, idx_p));
-        pNode_m = &it_p.pNode_m->second[idx_p];
+        pNode_m = &(it_p.pNode_m->children_m[idx_p]);
     }
 
     TreeSimpleIteratorALG father() const;
     bool isRoot() const {return path_m.size() == 0;}
-    NodeContent &operator*() {return pNode_m->first;}
-    const NodeContent &operator*() const {return pNode_m->first;}
-    NodeContent &operator->() {return pNode_m->first;}
-    const NodeContent &operator->() const {return pNode_m->first;}
+    NodeContent &operator*() {return pNode_m->content_m;}
+    const NodeContent &operator*() const {return pNode_m->content_m;}
+    NodeContent *operator->() {return &pNode_m->content_m;}
+    const NodeContent *operator->() const {return &pNode_m->content_m;}
 
     // should be protected
     typedef std::pair<Node*,size_t> Vertex;
@@ -66,10 +68,10 @@ public:
         typedef std::vector<Node> ChildrenList;
         Node() {}
         Node(const NodeContent &nc_p, const ChildrenList &v_p) :
-            first(nc_p), second(v_p)
+            content_m(nc_p), children_m(v_p)
         {}
-        NodeContent first;
-        ChildrenList second;
+        NodeContent content_m;
+        ChildrenList children_m;
     };
     typedef typename Node::ChildrenList ChildrenList;    
 protected:
