@@ -42,13 +42,13 @@ ContextALG MCTSStrategyOptim::run( ContextALG contextAlg_p,
     mcts_l.setpInitialSpace(pInitialSpace_l);
     
     LOG(INFO) << "Lauching MCTS" << endl;
-    SolutionALG * pSolution_l = mcts_l.search();
-    delete pSolution_l;
+    mcts_l.search();
 
-    /* On souhaite que la prochaine strategie (s'il y en a une) considere comme solution courante la derniere qu'on a considere
-     * (cette strategie pourra, si elle le desire, ignorer cette solution initial qu'on lui fourni)
+    /* On souhaite que la prochaine strategie (s'il y en a une) considere comme
+     * solution courante la derniere qu'on a considere (cette strategie pourra,
+     * si elle le desire, ignorer cette solution initial qu'on lui fourni)
      */
 
-    contextAlg_p.setCurrentSol(sol_l);
+    contextAlg_p.setCurrentSol(contextAlg_p.getBestSol());
     return contextAlg_p;
 }

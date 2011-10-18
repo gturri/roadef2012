@@ -77,21 +77,22 @@ MonteCarloTreeSearchALG::~MonteCarloTreeSearchALG()
 {
 }
 
-SolutionALG * MonteCarloTreeSearchALG::search()
+void MonteCarloTreeSearchALG::search()
 {
     LOG(INFO) << "Lancement de MCTS" << std::endl;
-    int i_l = 0;
+    int i_l = 0, nbSimu_l = 0;
     
     do {
-        SpaceALG * pSpace_l = performDescent();
+        nbSimu_l += performDescent();
         if ((i_l % 1000) == 0) {
-            LOG(INFO) << "nb iter = " << i_l << std::endl << pTree_m->toString(2);
+            LOG(INFO) << "nb iter = " << i_l << ", nbSimu = " << nbSimu_l
+                      << std::endl << pTree_m->toString(2);
         }
-        delete pSpace_l;
-    } while (pTree_m->hasChildren(pTree_m->root()) && ++i_l < 50000);
+        ++i_l;
+    } while (pTree_m->hasChildren(pTree_m->root()));// && i_l < 50000);
 
-    LOG(INFO) << std::endl << pTree_m->toString(2);
-    return pInitialSpace_m->buildSolution();
+    LOG(INFO) << "End MCTS: nb iter = " << i_l << ", nbSimu = " << nbSimu_l
+              << std::endl << pTree_m->toString(2);
 }
 
 void MonteCarloTreeSearchALG::setpTree(Tree * pTree_p)
@@ -114,7 +115,7 @@ SpaceALG * MonteCarloTreeSearchALG::initNewSpace()
     return pInitialSpace_m->clone();
 }
 
-SpaceALG * MonteCarloTreeSearchALG::performDescent()
+int MonteCarloTreeSearchALG::performDescent()
 {
     SpaceALG * pSpace_l = initNewSpace();
     iterator current_l = pTree_m->root();
@@ -140,9 +141,8 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
         pChildSpace_l->addDecision(*it_l);
 
         if (pChildSpace_l->isSolution()) {
-            // faut-il générer la solution ?
-            //SolutionALG *pSolution_l = pChildSpace_l->buildSolution();
-            //delete pSolution_l;
+            // on fait tout ce qu'il faut pour gérer la solution
+            (void) pChildSpace_l->evaluate();
 
             // on delete la decision car on ne l'ajoute pas à l'arbre
             delete *it_l;
@@ -152,15 +152,12 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
             iterator newNode_l = pTree_m->addChildren(current_l, newNC_l);
 
             // on construit la solution
-            SolutionALG *pSolution_l = pChildSpace_l->buildSolution();
+            double eval_l =  pChildSpace_l->evaluate();
 
             // on met à jour les évaluations
-            double eval_l = pSolution_l->evaluate();
             updateNode(newNode_l, 1, eval_l);
             ++nbSimu_l;
             sumEval_l += eval_l;
-
-            delete pSolution_l;
         }
         delete pChildSpace_l;
     }
@@ -181,5 +178,6 @@ SpaceALG * MonteCarloTreeSearchALG::performDescent()
     // On remonte l'information
     updatePath(current_l, nbSimu_l, sumEval_l);
 
-    return pSpace_l;
+    delete pSpace_l;
+    return std::max(0, nbSimu_l);
 }

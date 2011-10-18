@@ -9,9 +9,10 @@
 #include <iostream>
 #include "bo/ContextBO.hh"
 #include "tools/Log.hh"
+#include "tools/Checker.hh"
 
-SpaceALG::SpaceALG()
-: pContext_m(0), decisions_m()
+SpaceALG::SpaceALG() :
+    origEval_m(1), pContext_m(0), pEvaluationSystem_m(0), pConstraintSystem_m(0)
 {
 }
 
@@ -41,7 +42,7 @@ bool SpaceALG::isSolution() const
     return false;
 }
 
-SolutionALG * SpaceALG::buildSolution() const
+double SpaceALG::evaluate() const
 {
     ContextBO const * pContext_l = getpContext()->getContextBO();
     int nbProcesses_l = pContext_l->getNbProcesses();
@@ -65,23 +66,32 @@ SolutionALG * SpaceALG::buildSolution() const
                  << decisions_m.size() << " restrictions" << std::endl;
     MonteCarloSimulationALG monteCarlo_l;
     monteCarlo_l.run(pSolution_l);
-    
-    return pSolution_l;
+
+    double eval_l = 0;
+    const std::vector<int> &sol_l = pSolution_l->getSolution();
+    Checker checker_l(pContext_m->getContextBO(), pSolution_l->getSolution());
+    if (checker_l.isValid()){
+        int intEval_l = checker_l.computeScore();
+        if (pContext_m->checkRapideAndMajBestSol(sol_l, intEval_l)) {
+            LOG(INFO) << "Better solution: " << intEval_l << endl;
+        }
+        eval_l = (double) origEval_m / (origEval_m + intEval_l);
+    }
+
+    delete pSolution_l;
+
+    return eval_l;
 }
 
 SpaceALG * SpaceALG::clone()
 {
-    SpaceALG * pClone_l = new SpaceALG;
-    pClone_l->decisions_m = decisions_m;
-    pClone_l->pConstraintSystem_m = pConstraintSystem_m;
-    pClone_l->pEvaluationSystem_m = pEvaluationSystem_m;
-    
-    return pClone_l;
+    return new SpaceALG(*this);
 }
     
 void SpaceALG::setpContext(ContextALG * pContext_p)
 {
     pContext_m = pContext_p;
+    origEval_m = pContext_p->getScoreBestSol();
 }
 
 ContextALG * SpaceALG::getpContext() const

@@ -25,6 +25,7 @@ class SolutionALG
 
         std::vector<ProcessId> getAvaiableProcesses() const;
         std::vector<MachineId> getAvaiableMachines(ProcessId) const;
+        const std::vector<MachineId> &getSolution() const {return assignment_m;}
 
         void unassign(ProcessId);
         void assign(ProcessId, MachineId);

@@ -29,7 +29,7 @@ class SpaceALG
         virtual DecisionsPool generateDecisions() const;
         virtual BoundValue bound() const;
         virtual bool isSolution() const;
-        virtual SolutionALG * buildSolution() const;
+        virtual double evaluate() const;
         virtual SpaceALG * clone();
 
         virtual void setpContext(ContextALG *);
@@ -38,7 +38,8 @@ class SpaceALG
         virtual void setpConstraintSystem(ConstraintSystemALG *); 
         virtual void setpEvaluationSystem(EvaluationSystemALG *); 
 
-    protected:        
+    protected:
+        int origEval_m;
         ContextALG * pContext_m;
         EvaluationSystemALG * pEvaluationSystem_m;
         ConstraintSystemALG * pConstraintSystem_m;

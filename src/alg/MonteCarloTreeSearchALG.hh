@@ -23,7 +23,7 @@ class MonteCarloTreeSearchALG
         MonteCarloTreeSearchALG();
         ~MonteCarloTreeSearchALG();
         
-        SolutionALG * search();
+        void search();
         
         void setpTree(Tree *);
         Tree * getpTree() const;
@@ -32,7 +32,7 @@ class MonteCarloTreeSearchALG
         
     private:
         SpaceALG * initNewSpace();
-        SpaceALG * performDescent();
+        int performDescent();
         
         Tree * pTree_m;
         SpaceALG * pInitialSpace_m;
