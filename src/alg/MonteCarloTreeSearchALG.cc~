@@ -142,16 +142,20 @@ int MonteCarloTreeSearchALG::performDescent()
          it_l != decisions_l.end(); ++it_l) {
         SpaceALG * pChildSpace_l = pSpace_l->clone();
         pChildSpace_l->addDecision(*it_l);
-        // on construit la solution
-        double eval_l =  pChildSpace_l->evaluate();
 
         if (pChildSpace_l->isSolution()) {
+            // on fait tout ce qu'il faut pour gérer la solution
+            (void) pChildSpace_l->evaluate();
+
             // on delete la decision car on ne l'ajoute pas à l'arbre
             delete *it_l;
         } else {
             // si c'est pas une solution, on l'ajoute à l'arbre
             NodeContentALG newNC_l(*it_l);
             iterator newNode_l = pTree_m->addChildren(current_l, newNC_l);
+
+            // on construit la solution
+            double eval_l =  pChildSpace_l->evaluate();
 
             // on met à jour les évaluations
             updateNode(newNode_l, 1, eval_l);
