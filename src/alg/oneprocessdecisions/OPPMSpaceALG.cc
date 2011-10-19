@@ -35,7 +35,6 @@ SpaceALG * OPPMSpaceALG::clone()
     return pClone_l;
 }
 
-// implémentation fausse, mais c'est pour tester
 bool OPPMSpaceALG::isSolution() const
 {
     ContextBO const * pContext_l = getpContext()->getContextBO();
@@ -63,14 +62,14 @@ bool OPPMSpaceALG::isSolution() const
 OPPMSpaceALG::DecisionsPool OPPMSpaceALG::generateDecisions() const
 {
     ContextBO const * pContext_l = getpContext()->getContextBO();
-    std::list<int> eligibleProcesses_l;
+    int target_l = -1;
     int nbProcesses_l = pContext_l->getNbProcesses();
-    for(int process_l = 0; process_l<nbProcesses_l; ++process_l)
+    for(int process_l = 0; target_l == -1 && process_l<nbProcesses_l; ++process_l)
     {
         bool dontAppearInDecisions_l = true;
         for (DecisionsPool::const_iterator it_l = decisions_m.begin();
-                                           it_l != decisions_m.end();
-                                           ++it_l)
+             dontAppearInDecisions_l && it_l != decisions_m.end();
+             ++it_l)
         {
             if ( (*it_l)->workOnProcess(process_l))
             {
@@ -79,42 +78,26 @@ OPPMSpaceALG::DecisionsPool OPPMSpaceALG::generateDecisions() const
         }
         if (dontAppearInDecisions_l)
         {
-            eligibleProcesses_l.push_back(process_l);
+            target_l = process_l;
         }
     }
 
-    if (eligibleProcesses_l.size() == 0)
+    if (target_l == -1)
     {
         return DecisionsPool();
     }
 
-    int target_l  = eligibleProcesses_l.front();
-    int nbBuckets_l = 4;
-    
-    typedef vector<OPPMDecisionALG *> LocalDecisionPool;
-    LocalDecisionPool decisons_l;
-    vector< OPPMDecisionALG::MachinePool > buckets_l;
-    for (int idx_l = 0; idx_l < nbBuckets_l; ++idx_l)
-    {
-        decisons_l.push_back(new OPPMDecisionALG);
-        buckets_l.push_back(OPPMDecisionALG::MachinePool());
-    }
-    
+    DecisionsPool returnedDecisions_l;
     int nbMachines_l = pContext_l->getNbMachines();
     for (int machine_l = 0; machine_l < nbMachines_l; ++machine_l)
     {
-        int idx_l = machine_l % nbBuckets_l;
-        buckets_l[idx_l].push_back(machine_l);
+        OPPMDecisionALG * pDecision_l = new OPPMDecisionALG;
+        OPPMDecisionALG::MachinePool pool_l;
+        pool_l.push_back(machine_l);
+        pDecision_l->setRestrictedSubset(pool_l);
+        pDecision_l->setTarget(target_l);
+        returnedDecisions_l.push_back(pDecision_l);
     }
     
-    DecisionsPool returnedDecisions_l;
-    for(int idx_l = 0; idx_l < nbBuckets_l; ++idx_l)
-    {
-        OPPMDecisionALG * pDecisions_l = decisons_l[idx_l];
-        pDecisions_l->setRestrictedSubset(buckets_l[idx_l]);
-        pDecisions_l->setTarget(target_l);
-        returnedDecisions_l.push_back(pDecisions_l);
-    }
-
     return returnedDecisions_l;
 }

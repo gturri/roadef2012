@@ -10,6 +10,7 @@
 #include <sstream>
 #include <limits>
 #include <cmath>
+#include <algorithm>
 #include "tools/Log.hh"
 
 typedef MonteCarloTreeSearchALG::Tree::ChildrenPool ChildrenPool;
@@ -55,8 +56,10 @@ chooseNextChildren(MonteCarloTreeSearchALG::Tree *pTree_p, const iterator &it_p)
 
 void updateNode(iterator &it_p, int nb_p, double sum_p)
 {
-    it_p->sumEval_m += sum_p;
     it_p->nbSimu_m += nb_p;
+    it_p->sumEval_m += sum_p;
+    // for rounding errors
+    it_p->sumEval_m = std::max<float>(0, it_p->sumEval_m);
 }
 
 void updatePath(iterator it_p, int nb_p, double sum_p)
@@ -92,7 +95,7 @@ void MonteCarloTreeSearchALG::search()
     } while (pTree_m->hasChildren(pTree_m->root()));// && i_l < 50000);
 
     LOG(INFO) << "End MCTS: nb iter = " << i_l << ", nbSimu = " << nbSimu_l
-              << std::endl << pTree_m->toString(2);
+              << std::endl;
 }
 
 void MonteCarloTreeSearchALG::setpTree(Tree * pTree_p)
