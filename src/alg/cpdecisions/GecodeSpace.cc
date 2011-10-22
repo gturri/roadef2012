@@ -30,8 +30,10 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
         RessourceBO *pRes_l = pContext_p->getRessource(res_l);
 
         // facultative
+        /*
         if (pRes_l->isTransient())
             continue;
+        */
 
         IntVarArgs load_l(*this, nbMach_l, 0, Int::Limits::max);
         for (int mach_l = 0; mach_l < nbMach_l; ++mach_l) {
@@ -66,7 +68,6 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
             linear(*this, sizes_l, x_l.row(mach_l), IRT_EQ, load_l[mach_l]);
     }
 
-
     /*
      * Conflict
      */
@@ -82,6 +83,16 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
 
         distinct(*this, machine_l);
     }
+
+    /*
+     * Spread
+     */
+    // Quentin, c'est a toi !
+
+    /*
+     * Depedency
+     */
+    // TODO
 
     /*
      * Transient
