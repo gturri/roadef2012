@@ -1,5 +1,10 @@
 #include "GecodeSpace.hh"
+#include "bo/MachineBO.hh"
+#include "bo/ProcessBO.hh"
+#include "bo/RessourceBO.hh"
 #include "tools/Log.hh"
+
+#include <gecode/minimodel.hh>
 
 using namespace Gecode;
 
@@ -7,12 +12,102 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
     machine_m(*this, pContext_p->getNbProcesses(),
               0, pContext_p->getNbMachines() - 1)
 {
-    /*
     int nbProc_l = pContext_p->getNbProcesses();
+    int nbMach_l = pContext_p->getNbMachines();
+
+    /*
+     * Capacity
+     */
     for (int res_l = 0; res_l < pContext_p->getNbRessources(); ++res_l) {
         RessourceBO *pRes_l = pContext_p->getRessource(res_l);
+
+        // facultative
+        if (pRes_l->isTransient())
+            continue;
+
+        IntVarArgs load_l(*this, nbMach_l, 0, Int::Limits::max);
+        for (int mach_l = 0; mach_l < nbMach_l; ++mach_l) {
+            MachineBO *pMach_l = pContext_p->getMachine(mach_l);
+            int capa_l = pMach_l->getCapa(res_l);
+            rel(*this, load_l[mach_l], IRT_LQ, capa_l);
+        }
+
+        IntArgs sizes_l(nbProc_l);
+        int totalSize_l = 0;
+        for (int proc_l = 0; proc_l < nbProc_l; ++proc_l) {
+            ProcessBO *pProc_l = pContext_p->getProcess(proc_l);
+            int req_l = pProc_l->getRequirement(res_l);
+            sizes_l[proc_l] = req_l;
+            totalSize_l += req_l;
+        }
+
+        /*
+         * This is _the_ constraint for non transient resources, but seems too
+         * slow for our needs
+         */
+        //binpacking(*this, load_l, machine_m, sizes_l);
+
+        /*
+         * So naive implementation from Gecode example of bin packing
+         */
+        // All loads must add up to all item sizes
+        linear(*this, load_l, IRT_EQ, totalSize_l);
+ 
+        // Load must be equal to packed items
+        BoolVarArgs tmpX_l(*this, nbProc_l * nbMach_l, 0, 1);
+        Matrix<BoolVarArgs> x_l(tmpX_l, nbProc_l, nbMach_l);
+       
+        for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
+            channel(*this, x_l.col(proc_l), machine_m[proc_l]);
+ 
+        for (int mach_l = 0; mach_l < nbMach_l; ++mach_l)
+            linear(*this, sizes_l, x_l.row(mach_l), IRT_EQ, load_l[mach_l]);
     }
-    */
+
+
+    /*
+     * Transient
+     */
+    for (int res_l = 0; res_l < pContext_p->getNbRessources(); ++res_l) {
+        RessourceBO *pRes_l = pContext_p->getRessource(res_l);
+        if (! pRes_l->isTransient())
+            continue;
+
+        /*
+         * Inspired by the naive imprementation of bin packing in Gecode example
+         */
+ 
+        // Load must be equal to packed items
+        IntVarArgs load_l(*this, nbMach_l, 0, Int::Limits::max);
+        BoolVarArgs tmpX_l(*this, nbProc_l * nbMach_l, 0, 1);
+        Matrix<BoolVarArgs> x_l(tmpX_l, nbProc_l, nbMach_l);
+       
+        for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
+            channel(*this, x_l.col(proc_l), machine_m[proc_l]);
+ 
+        for (int mach_l = 0; mach_l < nbMach_l; ++mach_l) {
+            MachineBO *pMach_l = pContext_p->getMachine(mach_l);
+            int capa_l = pMach_l->getCapa(res_l);
+            IntArgs sizes_l;
+            BoolVarArgs otherProc_l;
+            int unremovableCapa_l = 0;
+            std::vector<int> solInit_l = pContext_p->getSolInit();
+
+            for (int proc_l = 0; proc_l < nbProc_l; ++proc_l) {
+                ProcessBO *pProc_l = pContext_p->getProcess(proc_l);
+                int req_l = pProc_l->getRequirement(res_l);
+                if (solInit_l[proc_l] == mach_l)
+                    unremovableCapa_l += req_l;
+                else {
+                    otherProc_l << x_l(proc_l, mach_l);
+                    sizes_l << req_l;
+                }
+            }
+            
+            rel(*this, load_l[mach_l], IRT_LQ, capa_l - unremovableCapa_l);
+            linear(*this, sizes_l, otherProc_l, IRT_EQ, load_l[mach_l]);
+        }
+    }
 
     // random branching to do a Monte Carlo generation
     branch(*this, machine_m, INT_VAR_SIZE_MIN, INT_VAL_RND);
