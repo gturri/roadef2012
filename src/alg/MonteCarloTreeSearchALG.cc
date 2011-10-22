@@ -80,19 +80,28 @@ MonteCarloTreeSearchALG::~MonteCarloTreeSearchALG()
 {
 }
 
+bool isPowerOf10(int i_p)
+{
+    if (i_p <= 0)
+        return true;
+
+    int log_l = log10(i_p);
+    return i_p % ((int) pow(10., log_l)) == 0;
+}
+
 void MonteCarloTreeSearchALG::search()
 {
     LOG(INFO) << "Lancement de MCTS" << std::endl;
     int i_l = 0, nbSimu_l = 0;
     
     do {
+        ++i_l;
         nbSimu_l += performDescent();
-        if ((i_l % 1000) == 0) {
+        if (isPowerOf10(i_l)) {
             LOG(INFO) << "nb iter = " << i_l << ", nbSimu = " << nbSimu_l
                       << std::endl << pTree_m->toString(2);
         }
-        ++i_l;
-    } while (pTree_m->hasChildren(pTree_m->root()));// && i_l < 50000);
+    } while (pTree_m->hasChildren(pTree_m->root()));
 
     LOG(INFO) << "End MCTS: nb iter = " << i_l << ", nbSimu = " << nbSimu_l
               << std::endl;
