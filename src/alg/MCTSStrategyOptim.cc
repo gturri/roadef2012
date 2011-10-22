@@ -5,7 +5,7 @@
 
 #include "ConstraintSystemALG.hh"
 #include "EvaluationSystemALG.hh"
-#include "oneprocessdecisions/OPPMSpaceALG.hh"
+#include "cpdecisions/CPSpaceALG.hh"
 #include "MonteCarloTreeSearchALG.hh"
 #include "TreeSimpleImplALGDefs.hh"
 #include "TreeALGDefs.hh"
@@ -30,7 +30,7 @@ ContextALG MCTSStrategyOptim::run( ContextALG contextAlg_p,
     evaluation_l.setpContext(&contextAlg_p);
     ConstraintSystemALG constraints_l;
     constraints_l.setpContext(&contextAlg_p);
-    OPPMSpaceALG * pInitialSpace_l = new OPPMSpaceALG;
+    CPSpaceALG * pInitialSpace_l = new CPSpaceALG;
     pInitialSpace_l->setpConstraintSystem(&constraints_l);
     pInitialSpace_l->setpEvaluationSystem(&evaluation_l);
     pInitialSpace_l->setpContext(&contextAlg_p);

@@ -45,6 +45,8 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
 	$(top_srcdir)/src/bo/ServiceBO.cc \
 	$(top_srcdir)/src/alg/cpdecisions/GecodeSpace.cc \
+	$(top_srcdir)/src/alg/cpdecisions/CPSpaceALG.cc \
+	$(top_srcdir)/src/alg/cpdecisions/CPDecisionALG.cc \
 	$(top_srcdir)/src/alg/oneprocessdecisions/OPPMSpaceALG.cc \
 	$(top_srcdir)/src/alg/oneprocessdecisions/OPPMDecisionALG.cc \
 	$(top_srcdir)/src/alg/oneprocessdecisions/OPPMRestrictionALG.cc \
