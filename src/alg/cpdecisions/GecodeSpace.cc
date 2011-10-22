@@ -27,10 +27,9 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
      * Capacity
      */
     for (int res_l = 0; res_l < pContext_p->getNbRessources(); ++res_l) {
-        RessourceBO *pRes_l = pContext_p->getRessource(res_l);
-
         // facultative
         /*
+        RessourceBO *pRes_l = pContext_p->getRessource(res_l);
         if (pRes_l->isTransient())
             continue;
         */
@@ -127,8 +126,13 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
                     sizes_l << req_l;
                 }
             }
-            
+
+            // the capacity is decreased by the capacity used by preassigned
+            // processus
             rel(*this, load_l[mach_l], IRT_LQ, capa_l - unremovableCapa_l);
+
+            // only the processus not on the machine on the initial solution use
+            // capacity
             linear(*this, sizes_l, otherProc_l, IRT_EQ, load_l[mach_l]);
         }
     }
