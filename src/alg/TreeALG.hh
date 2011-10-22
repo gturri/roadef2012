@@ -37,7 +37,7 @@ struct NodeContentALG
     std::string toString() const
     {
         std::stringstream ss_l;
-        ss_l << sumEval_m / nbSimu_m << "(" << nbSimu_m << ")";
+        ss_l << sumEval_m / nbSimu_m << "," << nbSimu_m;
         return ss_l.str();
     }
 };
@@ -74,8 +74,8 @@ public:
     // renvoie un iterateur sur le noeud courant?
     iterator addChildren(iterator &, NodeContentALG &);
 
-    std::string toString(int = -1, const std::string & = "");
-    std::string toString(int, const std::string &, iterator const &);
+    std::string toString(int = -1);
+    std::string toString(int, iterator const &);
 
 private:
     TreeImpl impl_m;

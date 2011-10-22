@@ -99,7 +99,7 @@ void MonteCarloTreeSearchALG::search()
         nbSimu_l += performDescent();
         if (isPowerOf10(i_l)) {
             LOG(INFO) << "nb iter = " << i_l << ", nbSimu = " << nbSimu_l
-                      << std::endl << pTree_m->toString(2);
+                      << ", tree = " << pTree_m->toString(2) << std::endl;;
         }
     } while (pTree_m->hasChildren(pTree_m->root()));
 
