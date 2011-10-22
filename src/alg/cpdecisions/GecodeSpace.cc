@@ -2,6 +2,7 @@
 #include "bo/MachineBO.hh"
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
+#include "bo/ServiceBO.hh"
 #include "tools/Log.hh"
 
 #include <gecode/minimodel.hh>
@@ -14,6 +15,13 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
 {
     int nbProc_l = pContext_p->getNbProcesses();
     int nbMach_l = pContext_p->getNbMachines();
+
+    // matrix proc x mach
+    BoolVarArgs tmpX_l(*this, nbProc_l * nbMach_l, 0, 1);
+    Matrix<BoolVarArgs> x_l(tmpX_l, nbProc_l, nbMach_l);
+       
+    for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
+        channel(*this, x_l.col(proc_l), machine_m[proc_l]);
 
     /*
      * Capacity
@@ -53,17 +61,27 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
         // All loads must add up to all item sizes
         linear(*this, load_l, IRT_EQ, totalSize_l);
  
-        // Load must be equal to packed items
-        BoolVarArgs tmpX_l(*this, nbProc_l * nbMach_l, 0, 1);
-        Matrix<BoolVarArgs> x_l(tmpX_l, nbProc_l, nbMach_l);
-       
-        for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
-            channel(*this, x_l.col(proc_l), machine_m[proc_l]);
- 
+        // Load must be equal to packed items 
         for (int mach_l = 0; mach_l < nbMach_l; ++mach_l)
             linear(*this, sizes_l, x_l.row(mach_l), IRT_EQ, load_l[mach_l]);
     }
 
+
+    /*
+     * Conflict
+     */
+    int nbServ_l = pContext_p->getNbServices();
+    for (int serv_l = 0; serv_l < nbServ_l; ++serv_l) {
+        ServiceBO *pServ_l = pContext_p->getService(serv_l);
+        typedef unordered_set<int> IntSet;
+        IntSet s_l = pServ_l->getProcesses();
+        IntVarArgs machine_l;
+
+        for (IntSet::const_iterator it_l = s_l.begin(); it_l != s_l.end(); ++it_l)
+            machine_l << machine_m[*it_l];
+
+        distinct(*this, machine_l);
+    }
 
     /*
      * Transient
@@ -79,11 +97,6 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
  
         // Load must be equal to packed items
         IntVarArgs load_l(*this, nbMach_l, 0, Int::Limits::max);
-        BoolVarArgs tmpX_l(*this, nbProc_l * nbMach_l, 0, 1);
-        Matrix<BoolVarArgs> x_l(tmpX_l, nbProc_l, nbMach_l);
-       
-        for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
-            channel(*this, x_l.col(proc_l), machine_m[proc_l]);
  
         for (int mach_l = 0; mach_l < nbMach_l; ++mach_l) {
             MachineBO *pMach_l = pContext_p->getMachine(mach_l);
