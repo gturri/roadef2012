@@ -21,6 +21,7 @@ public:
 protected:
     // machine[ProcessId] == the machine on which ProcessId is affectd
     Gecode::IntVarArray machine_m;
+    Gecode::IntVar nbUnmovedProcs_m;
 };
 
 #endif //GECODESPACE_HH_

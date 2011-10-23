@@ -13,10 +13,19 @@ using namespace Gecode;
 
 GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
     machine_m(*this, pContext_p->getNbProcesses(),
-              0, pContext_p->getNbMachines() - 1)
+              0, pContext_p->getNbMachines() - 1),
+    nbUnmovedProcs_m(*this, 0, pContext_p->getNbProcesses())
 {
     int nbProc_l = pContext_p->getNbProcesses();
     int nbMach_l = pContext_p->getNbMachines();
+    typedef std::vector<int> Solution;
+    const Solution solInit_l = pContext_p->getSolInit();
+
+    // nbUnmovedProcs_m
+    IntArgs solInitArgs_l;
+    for (Solution::const_iterator it_l = solInit_l.begin(); it_l != solInit_l.end(); ++it_l)
+        solInitArgs_l << *it_l;
+    count(*this, machine_m, solInitArgs_l, IRT_EQ, nbUnmovedProcs_m);
 
     // matrix proc x mach
     BoolVarArgs tmpX_l(*this, nbProc_l * nbMach_l, 0, 1);
@@ -116,7 +125,6 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
             IntArgs sizes_l;
             BoolVarArgs otherProc_l;
             int unremovableCapa_l = 0;
-            std::vector<int> solInit_l = pContext_p->getSolInit();
 
             for (int proc_l = 0; proc_l < nbProc_l; ++proc_l) {
                 ProcessBO *pProc_l = pContext_p->getProcess(proc_l);
@@ -140,13 +148,21 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
     }
 
     // random branching to do a Monte Carlo generation
-    branch(*this, machine_m, INT_VAR_SIZE_MIN, INT_VAL_RND);
+    // celui-la est pas top random... faut le randomiser.
+    branch(*this, nbUnmovedProcs_m, INT_VAL_MAX);
+    branch(*this, machine_m,
+           tiebreak(//INT_VAR_DEGREE_MAX,
+                    INT_VAR_AFC_MAX,
+                    INT_VAR_SIZE_MIN,
+                    INT_VAR_RND),
+           INT_VAL_RND);
 }
 
 GecodeSpace::GecodeSpace(bool share_p, GecodeSpace &that) :
     Space(share_p, that)
 {
     machine_m.update(*this, share_p, that.machine_m);
+    nbUnmovedProcs_m.update(*this, share_p, that.nbUnmovedProcs_m);
 }
 
 Gecode::Space *GecodeSpace::copy(bool share_p)
@@ -182,16 +198,15 @@ GecodeSpace::DecisionPool GecodeSpace::generateDecisions()
 
     // find the bigest var
     int target_l = 0;
-    IntVar toBranch_l = machine_m[0];
     for (int i_l = 1; i_l < machine_m.size(); ++i_l)
-        if (machine_m[i_l].size() > toBranch_l.size()) {
-            toBranch_l = machine_m[i_l];
+        if (machine_m[i_l].size() > machine_m[target_l].size())
             target_l = i_l;
-        }
+
+    assert(machine_m[target_l].size() > 1);
 
     // for the moment, simple median branching
-    res_l.push_back(new CPDecisionALG(target_l, toBranch_l.min(), toBranch_l.med()));
-    res_l.push_back(new CPDecisionALG(target_l, toBranch_l.med() + 1, toBranch_l.max()));
+    res_l.push_back(new CPDecisionALG(target_l, machine_m[target_l].min(), machine_m[target_l].med()));
+    res_l.push_back(new CPDecisionALG(target_l, machine_m[target_l].med() + 1, machine_m[target_l].max()));
 
     return res_l;
 }
