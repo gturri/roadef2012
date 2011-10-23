@@ -4,7 +4,7 @@ AC_DEFUN([AC_GECODE], [
             [
             AS_IF([test "x$withval" != "xno"],
                 [
-                    CPPFLAGS="$CPPFLAGS -I$withval/include"
+                    CPPFLAGS="$CPPFLAGS -I$withval/include -DUSE_GECODE"
                     LDFLAGS="$LDFLAGS -L$withval/lib -lgecodeint -lgecodesearch -lgecodeminimodel -pthread"
                 ]
             )
