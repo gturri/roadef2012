@@ -1,3 +1,5 @@
+#ifdef USE_GECODE
+
 #include "GecodeSpace.hh"
 #include "bo/MachineBO.hh"
 #include "bo/ProcessBO.hh"
@@ -193,3 +195,5 @@ GecodeSpace::DecisionPool GecodeSpace::generateDecisions()
 
     return res_l;
 }
+
+#endif //USE_GECODE

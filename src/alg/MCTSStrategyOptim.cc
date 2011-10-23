@@ -5,10 +5,14 @@
 
 #include "ConstraintSystemALG.hh"
 #include "EvaluationSystemALG.hh"
-#include "cpdecisions/CPSpaceALG.hh"
+#include "oneprocessdecisions/OPPMSpaceALG.hh"
 #include "MonteCarloTreeSearchALG.hh"
 #include "TreeSimpleImplALGDefs.hh"
 #include "TreeALGDefs.hh"
+
+#ifdef USE_GECODE
+#include "cpdecisions/CPSpaceALG.hh"
+#endif
 
 using namespace std;
 
@@ -30,7 +34,11 @@ ContextALG MCTSStrategyOptim::run( ContextALG contextAlg_p,
     evaluation_l.setpContext(&contextAlg_p);
     ConstraintSystemALG constraints_l;
     constraints_l.setpContext(&contextAlg_p);
+#ifdef USE_GECODE
     CPSpaceALG * pInitialSpace_l = new CPSpaceALG;
+#else
+    OPPMSpaceALG * pInitialSpace_l = new OPPMSpaceALG;
+#endif
     pInitialSpace_l->setpConstraintSystem(&constraints_l);
     pInitialSpace_l->setpEvaluationSystem(&evaluation_l);
     pInitialSpace_l->setpContext(&contextAlg_p);

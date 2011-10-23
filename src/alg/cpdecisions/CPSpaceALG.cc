@@ -1,3 +1,5 @@
+#ifdef USE_GECODE
+
 #include "CPSpaceALG.hh"
 #include "alg/ContextALG.hh"
 #include "tools/Checker.hh"
@@ -110,3 +112,5 @@ double CPSpaceALG::evaluate() const
 
     return res_l;
 }
+
+#endif //USE_GECODE
