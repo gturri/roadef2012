@@ -36,3 +36,13 @@ TEST(ParseCmdLine, usualOptions){
     EXPECT_FALSE(opt_l.count("help"));
     EXPECT_FALSE(opt_l.count("name"));
 }
+
+TEST(ParseCmdLine, defaultOutFile){
+    ParseCmdLineTestHelper helper_l;
+
+    variables_map opt_l = ParseCmdLine::parse(helper_l.argc(), helper_l.argv());
+
+    EXPECT_NE(opt_l["out"].as<string>(), "");
+
+
+}
