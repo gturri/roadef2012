@@ -88,12 +88,22 @@ double CPSpaceALG::evaluate() const
         return res_l;
 
     // Montecarlo: on demande une solution à Gecode
-    DFS<GecodeSpace> search_l(pGecodeSpace_m);
+    int nbProc_l = pContext_m->getContextBO()->getNbProcesses();
+    int nbMach_l = pContext_m->getContextBO()->getNbMachines();
+    Search::FailStop stop_l(100);//(nbProc_l * nbMach_l);
+    Search::Options options_l;
+    options_l.stop = &stop_l;
+    //options_l.c_d = 1000;
+    DFS<GecodeSpace> search_l(pGecodeSpace_m, options_l);
     GecodeSpace *pSol_l = search_l.next();
 
     // Gecode a pas trouvé de solution réalisable
-    if (! pSol_l)
+    if (! pSol_l) {
+        if (search_l.stopped()){
+            LOG(INFO) << "Search stopped." << endl;
+        }
         return res_l;
+    }
 
     // on récupère la solution
     std::vector<int> sol_l = pSol_l->solution();
@@ -104,10 +114,11 @@ double CPSpaceALG::evaluate() const
     Checker checker_l(pContext_m->getContextBO(), sol_l);
     if (checker_l.isValid()){
         int intEval_l = checker_l.computeScore();
+        res_l = (double) origEval_m / ((double) origEval_m + intEval_l);
         if (pContext_m->checkRapideAndMajBestSol(sol_l, intEval_l)) {
-            LOG(INFO) << "Better solution: " << intEval_l << endl;
+            LOG(INFO) << "Better solution: " << intEval_l
+                      << ", eval = " << res_l << endl;
         }
-        res_l = (double) origEval_m / (origEval_m + intEval_l);
     }
 
     return res_l;
