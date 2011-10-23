@@ -72,10 +72,11 @@ double SpaceALG::evaluate() const
     Checker checker_l(pContext_m->getContextBO(), pSolution_l->getSolution());
     if (checker_l.isValid()){
         int intEval_l = checker_l.computeScore();
-        if (pContext_m->checkRapideAndMajBestSol(sol_l, intEval_l)) {
-            LOG(INFO) << "Better solution: " << intEval_l << endl;
-        }
         eval_l = (double) origEval_m / (origEval_m + intEval_l);
+        if (pContext_m->checkRapideAndMajBestSol(sol_l, intEval_l)) {
+            LOG(INFO) << "Better solution: " << intEval_l
+                      << ", eval = " << eval_l << endl;
+        }
     }
 
     delete pSolution_l;
@@ -92,6 +93,7 @@ void SpaceALG::setpContext(ContextALG * pContext_p)
 {
     pContext_m = pContext_p;
     origEval_m = pContext_p->getScoreBestSol();
+    LOG(INFO) << "firstEval = " << origEval_m << std::endl;
 }
 
 ContextALG * SpaceALG::getpContext() const
