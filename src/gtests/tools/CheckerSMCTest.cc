@@ -35,5 +35,5 @@ TEST(Checker, checkSMC){
     solCur_l.push_back(1);
     contextALG_l.setCurrentSol(solCur_l);
     Checker checker_l(&contextALG_l);
-    EXPECT_EQ(checker_l.computeSMC(), 1);
+    EXPECT_EQ(checker_l.computeSMC(), (uint64_t) 1);
 }

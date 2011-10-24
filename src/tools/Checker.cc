@@ -41,7 +41,7 @@ bool Checker::isValid(){
         && checkDependances();
 }
 
-int Checker::computeScore(){
+uint64_t Checker::computeScore(){
     ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
     return computeLoadCost()
         + computeBalanceCost()
@@ -171,8 +171,8 @@ bool Checker::checkDependances(){
     return true;
 }
 
-int Checker::computeLoadCost(){
-    int result_l(0);
+uint64_t Checker::computeLoadCost(){
+    uint64_t result_l(0);
     ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
     const int nbRess_l = pContextBO_l->getNbRessources();
     for ( int idxRess_l=0 ; idxRess_l < nbRess_l ; idxRess_l++ ){
@@ -183,8 +183,8 @@ int Checker::computeLoadCost(){
     return result_l;
 }
 
-int Checker::computeLoadCost(int idxRess_p){
-    int result_l(0);
+uint64_t Checker::computeLoadCost(int idxRess_p){
+    uint64_t result_l(0);
     const int nbMachine_l = pContextALG_m->getContextBO()->getNbMachines();
     for ( int idxMachine_l=0 ; idxMachine_l < nbMachine_l ; idxMachine_l++ ){
         result_l += computeLoadCost(idxRess_p, idxMachine_l);
@@ -194,19 +194,19 @@ int Checker::computeLoadCost(int idxRess_p){
     return result_l;
 }
 
-int Checker::computeLoadCost(int idxRess_p, int idxMachine_p){
+uint64_t Checker::computeLoadCost(int idxRess_p, int idxMachine_p){
     MachineBO* pMachine_l = pContextALG_m->getContextBO()->getMachine(idxMachine_p);
 
     int safetyCapa_l = pMachine_l->getSafetyCapa(idxRess_p);
-    int result_l = max(0, pContextALG_m->getRessUsedOnMachine(idxRess_p, idxMachine_p) - safetyCapa_l);
+    uint64_t result_l = max(0, pContextALG_m->getRessUsedOnMachine(idxRess_p, idxMachine_p) - safetyCapa_l);
     LOG(USELESS) << "\t\tload cost pour la ress " << idxRess_p << " sur la machine "
         << idxMachine_p << " : " << result_l << endl;
     return result_l;
 }
 
-int Checker::computeBalanceCost(){
+uint64_t Checker::computeBalanceCost(){
     const int nbMachines_l = pContextALG_m->getContextBO()->getNbMachines();
-    int result_l(0);
+    uint64_t result_l(0);
     for ( int idxMachine_l=0 ; idxMachine_l < nbMachines_l ; idxMachine_l++ ){
         result_l += computeBalanceCost(idxMachine_l);
     }
@@ -214,9 +214,9 @@ int Checker::computeBalanceCost(){
     return result_l;
 }
 
-int Checker::computeBalanceCost(int idxMachine_p){
+uint64_t Checker::computeBalanceCost(int idxMachine_p){
     const int nbBalanceCost_l = pContextALG_m->getContextBO()->getNbBalanceCosts();
-    int result_l(0);
+    uint64_t result_l(0);
 
     for ( int idxBC_l=0 ; idxBC_l < nbBalanceCost_l ; idxBC_l++ ){
         result_l += computeBalanceCost(idxMachine_p, idxBC_l);
@@ -225,7 +225,7 @@ int Checker::computeBalanceCost(int idxMachine_p){
     return result_l;
 }
 
-int Checker::computeBalanceCost(int idxMachine_p, int idxBC_l ){
+uint64_t Checker::computeBalanceCost(int idxMachine_p, int idxBC_l ){
     BalanceCostBO const * pBC_l = pContextALG_m->getContextBO()->getBalanceCost(idxBC_l);
     RessourceBO* pRess1_l = pBC_l->getRessource1();
     RessourceBO* pRess2_l = pBC_l->getRessource2();
@@ -244,8 +244,8 @@ int Checker::computeBalanceCost(int idxMachine_p, int idxBC_l ){
     return pBC_l->getPoids() * max(0, pBC_l->getTarget()*a1_l - a2_l);
 }
 
-int Checker::computePMC(){
-    int result_l = 0;
+uint64_t Checker::computePMC(){
+    uint64_t result_l = 0;
 
     const vector<int> curSol_l = pContextALG_m->getCurrentSol();
     for ( int idx_l=0 ; idx_l < (int) curSol_l.size() ; idx_l++ ){
@@ -258,7 +258,7 @@ int Checker::computePMC(){
     return result_l;
 }
 
-int Checker::computeSMC(){
+uint64_t Checker::computeSMC(){
     const vector<int> curSol_l = pContextALG_m->getCurrentSol();
     const int nbProcess_l = curSol_l.size();
     const int nbServices_l = pContextALG_m->getContextBO()->getNbServices();
@@ -271,19 +271,19 @@ int Checker::computeSMC(){
         }
     }
 
-    int max_l = 0;
+    uint64_t max_l = 0;
     BOOST_FOREACH(int nbPMoved_l, nbProcessMovedByService_l){
-        max_l = max(max_l, nbPMoved_l);
+        max_l = max(max_l, (uint64_t) nbPMoved_l);
     }
 
     return max_l;
 }
 
-int Checker::computeMMC(){
+uint64_t Checker::computeMMC(){
     const vector<int> curSol_l = pContextALG_m->getCurrentSol();
     const int nbP_l = curSol_l.size();
     MMCBO* pMMCBO_l = pContextALG_m->getContextBO()->getMMCBO();
-    int result_l(0);
+    uint64_t result_l(0);
 
     for ( int idxP_l=0 ; idxP_l < nbP_l ; idxP_l++ ){
         result_l += pMMCBO_l->getCost(pContextALG_m->getContextBO()->getProcess(idxP_l)->getMachineInit()->getId() , curSol_l[idxP_l]);

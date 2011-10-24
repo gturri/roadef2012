@@ -30,7 +30,7 @@ TEST(Checker, checkLoadCost){
     ContextALG contextALG_l(&contextBO_l);
     contextALG_l.setCurrentSol(vector<int>(1, 1));
     Checker checker_l(&contextALG_l);
-    EXPECT_EQ(checker_l.computeLoadCost(0), 14);
-    EXPECT_EQ(checker_l.computeLoadCost(1), 0);
-    EXPECT_EQ(checker_l.computeLoadCost(), 14);
+    EXPECT_EQ(checker_l.computeLoadCost(0), (uint64_t) 14);
+    EXPECT_EQ(checker_l.computeLoadCost(1), (uint64_t) 0);
+    EXPECT_EQ(checker_l.computeLoadCost(), (uint64_t) 14);
 }

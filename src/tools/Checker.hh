@@ -1,6 +1,7 @@
 #ifndef CHECKER_HH
 #define CHECKER_HH
 #include <vector>
+#include <stdint.h>
 using namespace std;
 
 
@@ -39,7 +40,7 @@ class Checker {
          * Calcule le score en supposant que l'instance est valide.
          * Dans le cas contrainte, le comportement est indetermine
          */
-        int computeScore();
+        uint64_t computeScore();
 
         /**
          * Methodes permettant de ne checker que quelques contraintes
@@ -52,17 +53,17 @@ class Checker {
         /**
          * Methodes permettant de ne calculer que certains couts
          */
-        int computeLoadCost();
-        int computeLoadCost(int idxRess_p);
-        int computeLoadCost(int idxRess_p, int idxMachine_p);
+        uint64_t computeLoadCost();
+        uint64_t computeLoadCost(int idxRess_p);
+        uint64_t computeLoadCost(int idxRess_p, int idxMachine_p);
 
-        int computeBalanceCost();
-        int computeBalanceCost(int idxMachine_p);
-        int computeBalanceCost(int idxMachine_p, int idxBalanceCost_p);
+        uint64_t computeBalanceCost();
+        uint64_t computeBalanceCost(int idxMachine_p);
+        uint64_t computeBalanceCost(int idxMachine_p, int idxBalanceCost_p);
 
-        int computePMC();
-        int computeSMC();
-        int computeMMC();
+        uint64_t computePMC();
+        uint64_t computeSMC();
+        uint64_t computeMMC();
 
     private:
         bool checkCapaIncludingTransient(RessourceBO const * pRess_p);
