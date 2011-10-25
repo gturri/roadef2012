@@ -117,6 +117,8 @@ double CPSpaceALG::evaluate() const
             LOG(INFO) << "Better solution: " << intEval_l
                       << ", eval = " << res_l << endl;
         }
+    } else {
+        LOG(INFO) << "Simulation not valid." << endl;
     }
 
     return res_l;
