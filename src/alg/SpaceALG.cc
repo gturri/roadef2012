@@ -71,7 +71,7 @@ double SpaceALG::evaluate() const
     const std::vector<int> &sol_l = pSolution_l->getSolution();
     Checker checker_l(pContext_m->getContextBO(), pSolution_l->getSolution());
     if (checker_l.isValid()){
-        int intEval_l = checker_l.computeScore();
+        uint64_t intEval_l = checker_l.computeScore();
         eval_l = (double) origEval_m / (origEval_m + intEval_l);
         if (pContext_m->checkRapideAndMajBestSol(sol_l, intEval_l)) {
             LOG(INFO) << "Better solution: " << intEval_l

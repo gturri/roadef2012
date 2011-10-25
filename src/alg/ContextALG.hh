@@ -53,10 +53,10 @@ class ContextALG {
          * Attention : on fait confiance a la classe cliente pour fournir un score correct
          * @return TRUE si une maj a ete effectuee
          */
-        bool checkRapideAndMajBestSol(const vector<int>& candidatBestSol_p, int score_p);
+        bool checkRapideAndMajBestSol(const vector<int>& candidatBestSol_p, uint64_t score_p);
 
         vector<int> getBestSol() const;
-        int getScoreBestSol() const;
+        uint64_t getScoreBestSol() const;
 
     private:
         /**
@@ -83,7 +83,7 @@ class ContextALG {
         /**
          * score de la meilleure solution
          */
-        int bestScore_m;
+        uint64_t bestScore_m;
 
         /**
          * Quand une meilleure sol est trouvee, celle-ci est aussitot ecrite.

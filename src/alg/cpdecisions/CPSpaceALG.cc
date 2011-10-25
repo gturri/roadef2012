@@ -88,9 +88,7 @@ double CPSpaceALG::evaluate() const
         return res_l;
 
     // Montecarlo: on demande une solution à Gecode
-    int nbProc_l = pContext_m->getContextBO()->getNbProcesses();
-    int nbMach_l = pContext_m->getContextBO()->getNbMachines();
-    Search::FailStop stop_l(100);//(nbProc_l * nbMach_l);
+    Search::FailStop stop_l(1000);
     Search::Options options_l;
     options_l.stop = &stop_l;
     //options_l.c_d = 1000;
@@ -113,7 +111,7 @@ double CPSpaceALG::evaluate() const
     // checker
     Checker checker_l(pContext_m->getContextBO(), sol_l);
     if (checker_l.isValid()){
-        int intEval_l = checker_l.computeScore();
+        uint64_t intEval_l = checker_l.computeScore();
         res_l = (double) origEval_m / ((double) origEval_m + intEval_l);
         if (pContext_m->checkRapideAndMajBestSol(sol_l, intEval_l)) {
             LOG(INFO) << "Better solution: " << intEval_l

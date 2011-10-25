@@ -39,7 +39,7 @@ class SpaceALG
         virtual void setpEvaluationSystem(EvaluationSystemALG *); 
 
     protected:
-        int origEval_m;
+        uint64_t origEval_m;
         ContextALG * pContext_m;
         EvaluationSystemALG * pEvaluationSystem_m;
         ConstraintSystemALG * pConstraintSystem_m;
