@@ -26,11 +26,12 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
     for (Solution::const_iterator it_l = solInit_l.begin(); it_l != solInit_l.end(); ++it_l)
         solInitArgs_l << *it_l;
     count(*this, machine_m, solInitArgs_l, IRT_EQ, nbUnmovedProcs_m);
+    // on veut pas la solution initiale
+    rel(*this, nbUnmovedProcs_m, IRT_NQ, nbProc_l);
 
     // matrix proc x mach
     BoolVarArgs tmpX_l(*this, nbProc_l * nbMach_l, 0, 1);
     Matrix<BoolVarArgs> x_l(tmpX_l, nbProc_l, nbMach_l);
-       
     for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
         channel(*this, x_l.col(proc_l), machine_m[proc_l]);
 
