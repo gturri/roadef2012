@@ -31,7 +31,7 @@ TEST(Checker, checkBalanceCost){
 
     ContextALG contextALG_l(&contextBO_l);
     Checker checker_l(&contextALG_l);
-    EXPECT_EQ(checker_l.computeBalanceCost(0), 14);
-    EXPECT_EQ(checker_l.computeBalanceCost(1), 0);
-    EXPECT_EQ(checker_l.computeBalanceCost(), 14);
+    EXPECT_EQ(checker_l.computeBalanceCost(0), (uint64_t) 14);
+    EXPECT_EQ(checker_l.computeBalanceCost(1), (uint64_t) 0);
+    EXPECT_EQ(checker_l.computeBalanceCost(), (uint64_t) 14);
 }

@@ -2,6 +2,7 @@
 #include "alg/StrategyOptim.hh"
 #include "alg/dummyStrategyOptim/DummyStrategyOptim.hh"
 #include "alg/MCTSStrategyOptim.hh"
+#include "alg/printDebug/PrintDebugStrategy.hh"
 
 StrategyOptim* StrategySelecter::buildStrategy(const variables_map& opt_p){
     string strategyName_l;
@@ -14,6 +15,10 @@ StrategyOptim* StrategySelecter::buildStrategy(const variables_map& opt_p){
 
     if(strategyName_l == "mcts")
         return new MCTSStrategyOptim();
+
+    if(strategyName_l == "print" ){
+        return new PrintDebugStrategy();
+    }
 
     //Cas par defaut (ou : lever une exception ?)
     return new DummyStrategyOptim();

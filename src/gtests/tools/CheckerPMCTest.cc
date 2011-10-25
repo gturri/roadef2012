@@ -26,5 +26,5 @@ TEST(Checker, checkPMC){
     vector<int> solCur_l; solCur_l.push_back(1); solCur_l.push_back(1); solCur_l.push_back(0);
     contextALG_l.setCurrentSol(solCur_l);
     Checker checker_l(&contextALG_l);
-    EXPECT_EQ(checker_l.computePMC(), 8);
+    EXPECT_EQ(checker_l.computePMC(), (uint64_t) 8);
 }

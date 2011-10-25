@@ -36,5 +36,5 @@ TEST(Checker, checkMMC){
     solCur_l[3]=0;
     contextALG_l.setCurrentSol(solCur_l);
     Checker checker_l(&contextALG_l);
-    EXPECT_EQ(checker_l.computeMMC(), 24);
+    EXPECT_EQ(checker_l.computeMMC(), (uint64_t) 24);
 }
