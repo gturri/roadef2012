@@ -1,7 +1,7 @@
 #ifndef OPPMDECISIONALG_HH
 #define OPPMDECISIONALG_HH
 
-#include "src/alg/DecisionALG.hh"
+#include "src/alg/MCTS/DecisionALG.hh"
 #include <vector>
 
 class OPPMDecisionALG : public DecisionALG

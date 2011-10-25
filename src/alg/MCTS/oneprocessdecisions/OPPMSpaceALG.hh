@@ -1,7 +1,7 @@
 #ifndef OPPMSPACEALG_HH
 #define OPPMSPACEALG_HH
 
-#include "src/alg/SpaceALG.hh"
+#include "src/alg/MCTS/SpaceALG.hh"
 
 class OPPMSpaceALG : public SpaceALG
 {

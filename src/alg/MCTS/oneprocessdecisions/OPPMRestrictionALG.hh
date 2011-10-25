@@ -1,7 +1,7 @@
 #ifndef OPPMRESTRICTIONALG_HH
 #define OPPMRESTRICTIONALG_HH
 
-#include "src/alg/RestrictionALG.hh"
+#include "src/alg/MCTS/RestrictionALG.hh"
 #include <set>
 
 class OPPMRestrictionALG : public RestrictionALG

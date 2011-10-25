@@ -1,7 +1,7 @@
 #include "alg/StrategySelecter.hh"
 #include "alg/StrategyOptim.hh"
 #include "alg/dummyStrategyOptim/DummyStrategyOptim.hh"
-#include "alg/MCTSStrategyOptim.hh"
+#include "alg/MCTS/MCTSStrategyOptim.hh"
 #include "alg/printDebug/PrintDebugStrategy.hh"
 
 StrategyOptim* StrategySelecter::buildStrategy(const variables_map& opt_p){

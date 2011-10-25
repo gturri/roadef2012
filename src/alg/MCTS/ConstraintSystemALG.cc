@@ -1,5 +1,5 @@
 #include "ConstraintSystemALG.hh"
-#include "ContextALG.hh"
+#include "alg/ContextALG.hh"
 #include "bo/ContextBO.hh"
 
 ConstraintSystemALG::ConstraintSystemALG()

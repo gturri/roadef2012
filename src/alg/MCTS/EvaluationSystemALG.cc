@@ -1,5 +1,5 @@
 #include "EvaluationSystemALG.hh"
-#include "ContextALG.hh"
+#include "alg/ContextALG.hh"
 #include "bo/ContextBO.hh"
 #include "tools/Checker.hh"
 

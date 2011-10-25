@@ -1,7 +1,7 @@
 #ifndef CPSPACEALG_HH
 #define CPSPACEALG_HH
 
-#include "src/alg/SpaceALG.hh"
+#include "src/alg/MCTS/SpaceALG.hh"
 #include "CPDecisionALG.hh"
 #include "GecodeSpace.hh"
 

@@ -1,6 +1,6 @@
 #include "SpaceALG.hh"
 
-#include "ContextALG.hh"
+#include "alg/ContextALG.hh"
 #include "SolutionALG.hh"
 #include "DecisionALG.hh"
 #include "RestrictionALG.hh"

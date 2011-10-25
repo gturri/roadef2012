@@ -20,6 +20,21 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/alg/SequenceStrategyOptim.cc \
 	$(top_srcdir)/src/alg/StrategySelecter.cc \
 	$(top_srcdir)/src/alg/dummyStrategyOptim/DummyStrategyOptim.cc \
+	$(top_srcdir)/src/alg/MCTS/cpdecisions/GecodeSpace.cc \
+	$(top_srcdir)/src/alg/MCTS/cpdecisions/CPSpaceALG.cc \
+	$(top_srcdir)/src/alg/MCTS/cpdecisions/CPDecisionALG.cc \
+	$(top_srcdir)/src/alg/MCTS/oneprocessdecisions/OPPMSpaceALG.cc \
+	$(top_srcdir)/src/alg/MCTS/oneprocessdecisions/OPPMDecisionALG.cc \
+	$(top_srcdir)/src/alg/MCTS/oneprocessdecisions/OPPMRestrictionALG.cc \
+	$(top_srcdir)/src/alg/MCTS/ConstraintSystemALG.cc \
+	$(top_srcdir)/src/alg/MCTS/EvaluationSystemALG.cc \
+	$(top_srcdir)/src/alg/MCTS/SpaceALG.cc \
+	$(top_srcdir)/src/alg/MCTS/DecisionALG.cc \
+	$(top_srcdir)/src/alg/MCTS/RestrictionALG.cc \
+	$(top_srcdir)/src/alg/MCTS/MCTSStrategyOptim.cc \
+	$(top_srcdir)/src/alg/MCTS/MonteCarloTreeSearchALG.cc \
+	$(top_srcdir)/src/alg/MCTS/MonteCarloSimulationALG.cc \
+	$(top_srcdir)/src/alg/MCTS/SolutionALG.cc \
 	$(top_srcdir)/src/alg/printDebug/PrintDebugStrategy.cc \
 	$(top_srcdir)/src/alg/StrategyOptim.cc \
 	$(top_srcdir)/src/dtoin/BalanceCostDtoin.cc \
@@ -45,21 +60,6 @@ machineReassignment_FILES = \
 	$(top_srcdir)/src/bo/ProcessBO.cc \
 	$(top_srcdir)/src/bo/RessourceBO.cc \
 	$(top_srcdir)/src/bo/ServiceBO.cc \
-	$(top_srcdir)/src/alg/cpdecisions/GecodeSpace.cc \
-	$(top_srcdir)/src/alg/cpdecisions/CPSpaceALG.cc \
-	$(top_srcdir)/src/alg/cpdecisions/CPDecisionALG.cc \
-	$(top_srcdir)/src/alg/oneprocessdecisions/OPPMSpaceALG.cc \
-	$(top_srcdir)/src/alg/oneprocessdecisions/OPPMDecisionALG.cc \
-	$(top_srcdir)/src/alg/oneprocessdecisions/OPPMRestrictionALG.cc \
-	$(top_srcdir)/src/alg/ConstraintSystemALG.cc \
-	$(top_srcdir)/src/alg/EvaluationSystemALG.cc \
-	$(top_srcdir)/src/alg/SpaceALG.cc \
-	$(top_srcdir)/src/alg/DecisionALG.cc \
-	$(top_srcdir)/src/alg/RestrictionALG.cc \
-	$(top_srcdir)/src/alg/MCTSStrategyOptim.cc \
-	$(top_srcdir)/src/alg/MonteCarloTreeSearchALG.cc \
-	$(top_srcdir)/src/alg/MonteCarloSimulationALG.cc \
-	$(top_srcdir)/src/alg/SolutionALG.cc \
 	$(top_srcdir)/src/tools/Log.cc \
 	$(top_srcdir)/src/tools/Checker.cc \
 	$(top_srcdir)/src/tools/ParseCmdLine.cc

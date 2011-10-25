@@ -1,7 +1,7 @@
 #ifndef CPDECISIONALG_HH
 #define CPDECISIONALG_HH
 
-#include "src/alg/DecisionALG.hh"
+#include "src/alg/MCTS/DecisionALG.hh"
 
 class CPDecisionALG : public DecisionALG
 {

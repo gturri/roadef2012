@@ -2,7 +2,7 @@
 #include "OPPMDecisionALG.hh"
 
 #include "alg/ContextALG.hh"
-#include "alg/DecisionALG.hh"
+#include "alg/MCTS/DecisionALG.hh"
 #include "bo/ContextBO.hh"
 #include "tools/Log.hh"
 #include <list>
