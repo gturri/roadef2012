@@ -2,6 +2,7 @@
 #define SPACEALG_HH
 
 #include <vector>
+#include <stdint.h>
 
 class ConstraintSystemALG;
 class ContextALG;
