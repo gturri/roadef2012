@@ -2,6 +2,7 @@
 
 #include "GecodeSpace.hh"
 #include "bo/MachineBO.hh"
+#include "bo/NeighborhoodBO.hh"
 #include "bo/ProcessBO.hh"
 #include "bo/RessourceBO.hh"
 #include "bo/ServiceBO.hh"
@@ -103,7 +104,40 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
     /*
      * Depedency
      */
-    // TODO
+    IntArgs machToNeigh_l;
+    for (int mach_l = 0; mach_l < nbMach_l; ++mach_l) {
+        MachineBO *pMach_l = pContext_p->getMachine(mach_l);
+        machToNeigh_l <<  pMach_l->getNeighborhood()->getId();
+    }
+    IntSharedArray sMachToNeigh_l(machToNeigh_l);
+
+    int nbNeigh_l = pContext_p->getNbNeighborhoods();
+    SetVarArray neighborhoods_l(*this, nbServ_l,
+                                IntSet::empty, IntSet(0, nbNeigh_l - 1));
+    for (int serv_l = 0; serv_l < nbServ_l; ++serv_l) {
+        ServiceBO *pServ_l = pContext_p->getService(serv_l);
+        typedef unordered_set<int> IntSet;
+        IntSet s_l = pServ_l->getProcesses();
+        IntVarArgs machine_l;
+
+        for (IntSet::const_iterator it_l = s_l.begin(); it_l != s_l.end(); ++it_l)
+            machine_l << machine_m[*it_l];
+
+        IntVarArgs servNeigh_l(*this, s_l.size(), 0, nbNeigh_l - 1);
+        for (size_t i_l = 0; i_l < s_l.size(); ++i_l)
+            element(*this, sMachToNeigh_l, machine_l[i_l], servNeigh_l[i_l]);
+
+        // neighborhoods_l[serv_l] is the set of neighborhoods where we can find
+        // serv_l
+        channel(*this, servNeigh_l, neighborhoods_l[serv_l]);
+
+        // s1 depends on s2 <=> neighborhoods_l[s1] is included in
+        // neighborhoods_l[s2]
+        IntSet depend_l = pServ_l->getServicesIDependOn();
+        for (IntSet::const_iterator it_l = depend_l.begin();
+             it_l != depend_l.end(); ++it_l)
+            rel(*this, neighborhoods_l[serv_l], SRT_SUB, neighborhoods_l[*it_l]);
+    }
 
     /*
      * Transient
