@@ -7,6 +7,7 @@
 #include <list>
 #include <string>
 #include <sstream>
+#include <stdint.h>
 
 /** Structure contenant l'information utile du noeud d'un point de vue
     recherche de solution. Quelque soit la structure de l'arbre, on en

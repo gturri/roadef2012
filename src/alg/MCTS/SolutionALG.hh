@@ -2,6 +2,7 @@
 #define SOLUTIONALG_HH
 
 #include <vector>
+#include <cstring>
 
 class ConstraintSystemALG;
 class EvaluationSystemALG;
