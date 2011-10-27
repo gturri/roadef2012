@@ -2,6 +2,7 @@
 #define CONTEXTALG_HH
 #include <vector>
 #include <tr1/unordered_set>
+#include <stdint.h>
 using namespace std;
 using namespace std::tr1;
 
