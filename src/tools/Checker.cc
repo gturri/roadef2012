@@ -142,7 +142,6 @@ bool Checker::checkSpread(){
 
 bool Checker::checkDependances(){
     ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
-    const vector<int>& curSol_l = pContextALG_m->getCurrentSol();
     const int nbServices_l = pContextBO_l->getNbServices();
 
     for ( int idxS1_l=0 ; idxS1_l < nbServices_l ; idxS1_l++ ){
