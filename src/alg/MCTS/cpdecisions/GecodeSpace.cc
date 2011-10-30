@@ -196,8 +196,8 @@ void GecodeSpace::dependency(const ContextBO *pContext_p)
         typedef unordered_set<int> IntSet;
         IntSet s_l = pServ_l->getProcesses();
         IntVarArgs servNeigh_l;
-        for (size_t proc_l = 0; proc_l < s_l.size(); ++proc_l)
-            servNeigh_l << neighborhood_l[proc_l];
+        for (IntSet::const_iterator it_l = s_l.begin(); it_l != s_l.end(); ++it_l)
+            servNeigh_l << neighborhood_l[*it_l];
 
         channel(*this, servNeigh_l, neighborhoods_l[serv_l]);
 
