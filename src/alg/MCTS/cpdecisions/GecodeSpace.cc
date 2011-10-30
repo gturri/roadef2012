@@ -11,15 +11,17 @@
 #include <gecode/minimodel.hh>
 
 using namespace Gecode;
+typedef std::vector<int> Solution;
 
 GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
     machine_m(*this, pContext_p->getNbProcesses(),
               0, pContext_p->getNbMachines() - 1),
-    nbUnmovedProcs_m(*this, 0, pContext_p->getNbProcesses())
+    nbUnmovedProcs_m(*this, 0, pContext_p->getNbProcesses()),
+    bMatrix_m(*this, pContext_p->getNbProcesses() * pContext_p->getNbMachines(),
+              0, 1)
 {
     int nbProc_l = pContext_p->getNbProcesses();
     int nbMach_l = pContext_p->getNbMachines();
-    typedef std::vector<int> Solution;
     const Solution& solInit_l = pContext_p->getSolInit();
 
     // nbUnmovedProcs_m
@@ -31,22 +33,65 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
     rel(*this, nbUnmovedProcs_m, IRT_NQ, nbProc_l);
 
     // matrix proc x mach
-    BoolVarArgs tmpX_l(*this, nbProc_l * nbMach_l, 0, 1);
-    Matrix<BoolVarArgs> x_l(tmpX_l, nbProc_l, nbMach_l);
+    Matrix<BoolVarArgs> x_l(bMatrix_m, nbProc_l, nbMach_l);
     for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
         channel(*this, x_l.col(proc_l), machine_m[proc_l]);
 
-    /*
-     * Capacity
-     */
-    for (int res_l = 0; res_l < pContext_p->getNbRessources(); ++res_l) {
-        // facultative
-        /*
-        RessourceBO *pRes_l = pContext_p->getRessource(res_l);
-        if (pRes_l->isTransient())
-            continue;
-        */
+    capacity(pContext_p);
+    conflict(pContext_p);
+    //spread(pContext_p);
+    dependency(pContext_p);
+    transient(pContext_p);
 
+    // random branching to do a Monte Carlo generation
+    // celui-la est pas top random... faut le randomiser.
+    branch(*this, nbUnmovedProcs_m, INT_VAL_MAX);
+    branch(*this, machine_m,
+           tiebreak(INT_VAR_AFC_MAX,
+                    //INT_VAR_DEGREE_MAX,
+                    INT_VAR_SIZE_MIN,
+                    INT_VAR_RND),
+           INT_VAL_RND);
+}
+
+GecodeSpace::GecodeSpace(bool share_p, GecodeSpace &that) :
+    Space(share_p, that)
+{
+    machine_m.update(*this, share_p, that.machine_m);
+    nbUnmovedProcs_m.update(*this, share_p, that.nbUnmovedProcs_m);
+    bMatrix_m.update(*this, share_p, that.bMatrix_m);
+}
+
+Gecode::Space *GecodeSpace::copy(bool share_p)
+{
+    return new GecodeSpace(share_p, *this);
+}
+
+std::vector<int> GecodeSpace::solution()
+{
+    SpaceStatus status_l = status();
+    assert(status_l == SS_SOLVED && machine_m.assigned());
+    std::vector<int> res_l;
+
+    for (IntVarArray::const_iterator it_l = machine_m.begin();
+         it_l != machine_m.end(); ++it_l) {
+        res_l.push_back(it_l->val());
+    }
+
+    return res_l;
+}
+
+/*
+ * Constraints
+ */
+void GecodeSpace::capacity(const ContextBO *pContext_p)
+{
+    int nbProc_l = pContext_p->getNbProcesses();
+    int nbMach_l = pContext_p->getNbMachines();
+    int nbRes_l = pContext_p->getNbRessources();
+    Matrix<BoolVarArgs> x_l(bMatrix_m, nbProc_l, nbMach_l);
+
+    for (int res_l = 0; res_l < nbRes_l; ++res_l) {
         IntVarArgs load_l(*this, nbMach_l, 0, Int::Limits::max);
         for (int mach_l = 0; mach_l < nbMach_l; ++mach_l) {
             MachineBO *pMach_l = pContext_p->getMachine(mach_l);
@@ -79,11 +124,12 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
         for (int mach_l = 0; mach_l < nbMach_l; ++mach_l)
             linear(*this, sizes_l, x_l.row(mach_l), IRT_EQ, load_l[mach_l]);
     }
+}
 
-    /*
-     * Conflict
-     */
+void GecodeSpace::conflict(const ContextBO *pContext_p)
+{
     int nbServ_l = pContext_p->getNbServices();
+
     for (int serv_l = 0; serv_l < nbServ_l; ++serv_l) {
         ServiceBO *pServ_l = pContext_p->getService(serv_l);
         typedef unordered_set<int> IntSet;
@@ -95,40 +141,39 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
 
         distinct(*this, machine_l);
     }
+}
 
-    /*
-     * Spread
-     */
-    // Quentin, c'est a toi !
-
-    /*
-     * Depedency
-     */
+void GecodeSpace::dependency(const ContextBO *pContext_p)
+{
+    int nbProc_l = pContext_p->getNbProcesses();
+    int nbMach_l = pContext_p->getNbMachines();
+    int nbServ_l = pContext_p->getNbServices();
+    int nbNeigh_l = pContext_p->getNbNeighborhoods();
+ 
+    // creation of neighborhood_l[proc] -> neighborhood corresponding to the
+    // proc
     IntArgs machToNeigh_l;
     for (int mach_l = 0; mach_l < nbMach_l; ++mach_l) {
         MachineBO *pMach_l = pContext_p->getMachine(mach_l);
         machToNeigh_l <<  pMach_l->getNeighborhood()->getId();
     }
     IntSharedArray sMachToNeigh_l(machToNeigh_l);
+    IntVarArgs neighborhood_l(*this, nbProc_l, 0, nbNeigh_l - 1);
+    for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
+        element(*this, sMachToNeigh_l, machine_m[proc_l], neighborhood_l[proc_l]);
 
-    int nbNeigh_l = pContext_p->getNbNeighborhoods();
+    // neighborhoods_l[serv_l] is the set of neighborhoods where we can find
+    // serv_l
     SetVarArray neighborhoods_l(*this, nbServ_l,
                                 IntSet::empty, IntSet(0, nbNeigh_l - 1));
     for (int serv_l = 0; serv_l < nbServ_l; ++serv_l) {
         ServiceBO *pServ_l = pContext_p->getService(serv_l);
         typedef unordered_set<int> IntSet;
         IntSet s_l = pServ_l->getProcesses();
-        IntVarArgs machine_l;
+        IntVarArgs servNeigh_l;
+        for (size_t proc_l = 0; proc_l < s_l.size(); ++proc_l)
+            servNeigh_l << neighborhood_l[proc_l];
 
-        for (IntSet::const_iterator it_l = s_l.begin(); it_l != s_l.end(); ++it_l)
-            machine_l << machine_m[*it_l];
-
-        IntVarArgs servNeigh_l(*this, s_l.size(), 0, nbNeigh_l - 1);
-        for (size_t i_l = 0; i_l < s_l.size(); ++i_l)
-            element(*this, sMachToNeigh_l, machine_l[i_l], servNeigh_l[i_l]);
-
-        // neighborhoods_l[serv_l] is the set of neighborhoods where we can find
-        // serv_l
         channel(*this, servNeigh_l, neighborhoods_l[serv_l]);
 
         // s1 depends on s2 <=> neighborhoods_l[s1] is included in
@@ -138,11 +183,17 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
              it_l != depend_l.end(); ++it_l)
             rel(*this, neighborhoods_l[serv_l], SRT_SUB, neighborhoods_l[*it_l]);
     }
+}
 
-    /*
-     * Transient
-     */
-    for (int res_l = 0; res_l < pContext_p->getNbRessources(); ++res_l) {
+void GecodeSpace::transient(const ContextBO *pContext_p)
+{
+    int nbProc_l = pContext_p->getNbProcesses();
+    int nbMach_l = pContext_p->getNbMachines();
+    int nbRes_l = pContext_p->getNbRessources();
+    Matrix<BoolVarArgs> x_l(bMatrix_m, nbProc_l, nbMach_l);
+    const Solution& solInit_l = pContext_p->getSolInit();
+
+    for (int res_l = 0; res_l < nbRes_l; ++res_l) {
         RessourceBO *pRes_l = pContext_p->getRessource(res_l);
         if (! pRes_l->isTransient())
             continue;
@@ -150,7 +201,6 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
         /*
          * Inspired by the naive imprementation of bin packing in Gecode example
          */
- 
         // Load must be equal to packed items
         IntVarArgs load_l(*this, nbMach_l, 0, Int::Limits::max);
  
@@ -181,44 +231,11 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
             linear(*this, sizes_l, otherProc_l, IRT_EQ, load_l[mach_l]);
         }
     }
-
-    // random branching to do a Monte Carlo generation
-    // celui-la est pas top random... faut le randomiser.
-    branch(*this, nbUnmovedProcs_m, INT_VAL_MAX);
-    branch(*this, machine_m,
-           tiebreak(//INT_VAR_DEGREE_MAX,
-                    INT_VAR_AFC_MAX,
-                    INT_VAR_SIZE_MIN,
-                    INT_VAR_RND),
-           INT_VAL_RND);
 }
 
-GecodeSpace::GecodeSpace(bool share_p, GecodeSpace &that) :
-    Space(share_p, that)
-{
-    machine_m.update(*this, share_p, that.machine_m);
-    nbUnmovedProcs_m.update(*this, share_p, that.nbUnmovedProcs_m);
-}
-
-Gecode::Space *GecodeSpace::copy(bool share_p)
-{
-    return new GecodeSpace(share_p, *this);
-}
-
-std::vector<int> GecodeSpace::solution()
-{
-    SpaceStatus status_l = status();
-    assert(status_l == SS_SOLVED && machine_m.assigned());
-    std::vector<int> res_l;
-
-    for (IntVarArray::const_iterator it_l = machine_m.begin();
-         it_l != machine_m.end(); ++it_l) {
-        res_l.push_back(it_l->val());
-    }
-
-    return res_l;
-}
-
+/*
+ * Decision management
+ */
 void GecodeSpace::addDecision(const CPDecisionALG *pDecision_p)
 {
     dom(*this, machine_m[pDecision_p->target_m], pDecision_p->min_m, pDecision_p->max_m);
