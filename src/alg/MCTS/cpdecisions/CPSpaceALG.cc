@@ -97,7 +97,7 @@ double CPSpaceALG::evaluate() const
 
     // Gecode a pas trouvé de solution réalisable
     if (! pSol_l) {
-        if (search_l.stopped()){
+        if (search_l.stopped()) {
             LOG(INFO) << "Search stopped." << endl;
         }
         return res_l;
@@ -110,7 +110,7 @@ double CPSpaceALG::evaluate() const
     // Quand Gecode intégrera toutes les contraintes, on aura plus besoin de
     // checker
     Checker checker_l(pContext_m->getContextBO(), sol_l);
-    if (checker_l.isValid()){
+    if (checker_l.isValid()) {
         uint64_t intEval_l = checker_l.computeScore();
         res_l = (double) origEval_m / ((double) origEval_m + intEval_l);
         if (pContext_m->checkRapideAndMajBestSol(sol_l, intEval_l)) {

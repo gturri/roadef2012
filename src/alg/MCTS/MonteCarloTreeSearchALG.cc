@@ -33,7 +33,7 @@ double uct(const iterator &it_p)
     double mean_l = it_p->sumEval_m / ni_l;
     double ci_l = sqrt(2. * log(p_l) / ni_l);
 
-    return mean_l + 0.1 * ci_l;
+    return mean_l + 0.001 * ci_l;
 }
 
 iterator
