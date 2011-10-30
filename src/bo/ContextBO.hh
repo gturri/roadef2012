@@ -68,7 +68,7 @@ class ContextBO {
         void setPoidsMMC(int poids_p);
         int getPoidsMMC() const;
 
-        vector<int> getSolInit() const;
+        const vector<int>& getSolInit() const;
 
     private:
         vector<RessourceBO*> vpRessources_m;

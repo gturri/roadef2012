@@ -310,7 +310,7 @@ ostream& operator<<(ostream& os_p, const ContextBO& context_p){
     return os_p;
 }
 
-vector<int> ContextBO::getSolInit() const{
+const vector<int>& ContextBO::getSolInit() const{
     if ( pSolInit_m->empty() ){
         int nbProcesses_l = vpProcesses_m.size();
         pSolInit_m->reserve(nbProcesses_l);

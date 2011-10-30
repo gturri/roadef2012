@@ -39,7 +39,7 @@ ContextBO const * ContextALG::getContextBO() const {
     return pContextBO_m;
 }
 
-vector<int> ContextALG::getCurrentSol() const {
+const vector<int>& ContextALG::getCurrentSol() const {
     return currentSol_m;
 }
 
@@ -74,7 +74,7 @@ int ContextALG::getRessUsedOnMachine(int idxRess_p, int idxMachine_p) const {
     return result_l;
 }
 
-vector<int> ContextALG::getBestSol() const{
+const vector<int>& ContextALG::getBestSol() const{
     return bestSol_m;
 }
 

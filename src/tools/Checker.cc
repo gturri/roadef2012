@@ -65,7 +65,7 @@ bool Checker::checkCapaIncludingTransient(){
 
 bool Checker::checkCapaIncludingTransient(RessourceBO const * pRess_p){
     ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
-    const vector<int> currentSol_l = pContextALG_m->getCurrentSol();
+    const vector<int>& currentSol_l = pContextALG_m->getCurrentSol();
     vector<int> vUsedRess_l(pContextBO_l->getNbMachines(), 0);
 
     const int nbProcess_l = pContextBO_l->getNbProcesses();
@@ -98,7 +98,7 @@ bool Checker::checkCapaIncludingTransient(RessourceBO const * pRess_p){
 
 bool Checker::checkConflict(){
     set<pair<int, int> > assocesMachineService_l;
-    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    const vector<int>& curSol_l = pContextALG_m->getCurrentSol();
     ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
 
     for ( int idxP_l=0 ; idxP_l < pContextBO_l->getNbProcesses() ; idxP_l++ ){
@@ -117,7 +117,7 @@ bool Checker::checkConflict(){
 }
 
 bool Checker::checkSpread(){
-    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    const vector<int>& curSol_l = pContextALG_m->getCurrentSol();
     ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
     vector<set<int> > memory_l(pContextBO_l->getNbServices());; //memory_l[idxService] => liste des locations utilisees
 
@@ -142,7 +142,7 @@ bool Checker::checkSpread(){
 
 bool Checker::checkDependances(){
     ContextBO const * pContextBO_l = pContextALG_m->getContextBO();
-    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    const vector<int>& curSol_l = pContextALG_m->getCurrentSol();
     const int nbServices_l = pContextBO_l->getNbServices();
 
     for ( int idxS1_l=0 ; idxS1_l < nbServices_l ; idxS1_l++ ){
@@ -247,7 +247,7 @@ uint64_t Checker::computeBalanceCost(int idxMachine_p, int idxBC_l ){
 uint64_t Checker::computePMC(){
     uint64_t result_l = 0;
 
-    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    const vector<int>& curSol_l = pContextALG_m->getCurrentSol();
     for ( int idx_l=0 ; idx_l < (int) curSol_l.size() ; idx_l++ ){
         ProcessBO const * pProcess_l = pContextALG_m->getContextBO()->getProcess(idx_l);
         if ( curSol_l[idx_l] != pProcess_l->getMachineInit()->getId() ){
@@ -259,7 +259,7 @@ uint64_t Checker::computePMC(){
 }
 
 uint64_t Checker::computeSMC(){
-    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    const vector<int>& curSol_l = pContextALG_m->getCurrentSol();
     const int nbProcess_l = curSol_l.size();
     const int nbServices_l = pContextALG_m->getContextBO()->getNbServices();
     vector<int> nbProcessMovedByService_l(nbServices_l, 0);
@@ -280,7 +280,7 @@ uint64_t Checker::computeSMC(){
 }
 
 uint64_t Checker::computeMMC(){
-    const vector<int> curSol_l = pContextALG_m->getCurrentSol();
+    const vector<int>& curSol_l = pContextALG_m->getCurrentSol();
     const int nbP_l = curSol_l.size();
     MMCBO* pMMCBO_l = pContextALG_m->getContextBO()->getMMCBO();
     uint64_t result_l(0);

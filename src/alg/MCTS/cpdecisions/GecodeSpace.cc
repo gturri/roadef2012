@@ -20,7 +20,7 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
     int nbProc_l = pContext_p->getNbProcesses();
     int nbMach_l = pContext_p->getNbMachines();
     typedef std::vector<int> Solution;
-    const Solution solInit_l = pContext_p->getSolInit();
+    const Solution& solInit_l = pContext_p->getSolInit();
 
     // nbUnmovedProcs_m
     IntArgs solInitArgs_l;

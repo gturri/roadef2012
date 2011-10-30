@@ -19,7 +19,7 @@ using namespace std;
 ContextALG MCTSStrategyOptim::run( ContextALG contextAlg_p,
                                    time_t heureFinMaxPreconisee_p,
                                    boost::program_options::variables_map const & argv_p) {
-    vector<int> sol_l = contextAlg_p.getCurrentSol();
+    const vector<int>& sol_l = contextAlg_p.getCurrentSol();
 
     /* "ContextAlg, cette solution est peut etre mieux que ce que tu connais, 
      * mais peut etre pas. Verifie le, et met toi a jour si c'est le cas"

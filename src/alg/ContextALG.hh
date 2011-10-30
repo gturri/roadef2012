@@ -37,7 +37,7 @@ class ContextALG {
 
         void setMustWriteBestSol(bool mustWriteBestSol_p);
 
-        vector<int> getCurrentSol() const;
+        const vector<int>& getCurrentSol() const;
         void setCurrentSol(const vector<int>& curSol_p);
 
         /**
@@ -56,7 +56,7 @@ class ContextALG {
          */
         bool checkRapideAndMajBestSol(const vector<int>& candidatBestSol_p, uint64_t score_p);
 
-        vector<int> getBestSol() const;
+        const vector<int>& getBestSol() const;
         uint64_t getScoreBestSol() const;
 
     private:
