@@ -57,6 +57,6 @@ ContextALG MCTSStrategyOptim::run( ContextALG contextAlg_p,
      * si elle le desire, ignorer cette solution initial qu'on lui fourni)
      */
 
-    contextAlg_p.setCurrentSol(contextAlg_p.getBestSol());
+    contextAlg_p.setCurrentSol(SolutionDtoout::getBestSol());
     return contextAlg_p;
 }

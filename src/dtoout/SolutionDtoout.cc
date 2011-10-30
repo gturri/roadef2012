@@ -6,9 +6,13 @@
 #include <fstream>
 #include <sstream>
 #include <boost/foreach.hpp>
+#include <limits>
 using namespace std;
 
 string SolutionDtoout::outFileName_m;
+pthread_mutex_t SolutionDtoout::mutex_m = PTHREAD_MUTEX_INITIALIZER;
+uint64_t SolutionDtoout::bestScoreWritten_m = numeric_limits<uint64_t>::max();
+vector<int> SolutionDtoout::bestSol_m;
 
 void SolutionDtoout::setOutFileName(const string& outFileName_p){
     outFileName_m = outFileName_p;
@@ -32,7 +36,14 @@ void SolutionDtoout::writeSolInit(ContextBO* pContextBO_p, const string& outFile
     }
 }
 
-void SolutionDtoout::writeSol(const vector<int>& vSol_p){
+bool SolutionDtoout::writeSol(const vector<int>& vSol_p, uint64_t score_p){
+    //Vu qu'on n'est pas cense passer souvent ici, on lock en global
+    pthread_mutex_lock(&mutex_m);
+    if ( score_p > bestScoreWritten_m ){
+        pthread_mutex_unlock(&mutex_m);
+        return false;
+    }
+
     ofstream ofs_l(outFileName_m.c_str());
     if ( ! ofs_l ){
         ostringstream oss_l;
@@ -42,4 +53,16 @@ void SolutionDtoout::writeSol(const vector<int>& vSol_p){
     }
 
     copy(vSol_p.begin(), vSol_p.end(), ostream_iterator<int>(ofs_l, " "));
+    bestScoreWritten_m = score_p;
+    bestSol_m = vSol_p;
+    pthread_mutex_unlock(&mutex_m);
+    return true;
+}
+
+uint64_t SolutionDtoout::getBestScore(){
+    return bestScoreWritten_m;
+}
+
+const vector<int>& SolutionDtoout::getBestSol(){
+    return bestSol_m;
 }

@@ -35,6 +35,8 @@ int main(int argc, char **argv) {
          */
         cerr << "creating context" << endl;
         ContextALG contextALG_l(&contextBO_l);
+            //Initialise SolutionDtoout::bestSol_m
+        contextALG_l.checkCompletAndMajBestSol(contextALG_l.getCurrentSol(), false);
         StrategyOptim* pStrategy_l = StrategySelecter::buildStrategy(opt_l);
         cerr << "running method" << endl;
         pStrategy_l->run(contextALG_l, time(0) + opt_l["time"].as<int>(), opt_l);

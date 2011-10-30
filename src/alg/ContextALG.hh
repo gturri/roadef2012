@@ -75,13 +75,6 @@ class ContextALG {
         vector<int> currentSol_m;
 
         /**
-         * Meilleure solution trouvee jusqu'ici.
-         * Attention : on accorde une grande confiance aux classes clientes pour
-         * la maj de cet attribut (pour des raisons de perf')
-         */
-        vector<int> bestSol_m;
-
-        /**
          * score de la meilleure solution
          */
         uint64_t bestScore_m;

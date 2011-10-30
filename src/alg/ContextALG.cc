@@ -17,19 +17,7 @@ ContextALG::ContextALG(ContextBO const * pContextBO_p, bool mustWriteBestSol_p, 
     currentSol_m(pContextBO_p->getSolInit()),
     bestScore_m(numeric_limits<int>::max()),
     mustWriteBestSol_m(mustWriteBestSol_p)
-{
-    Checker checker_l(this);
-
-    //Grace a la lazy evaluation du c++, on ne fait le isValid que s'il est demande
-    if ( ! solInitToCheck_p || checker_l.isValid() ){
-        bestSol_m = currentSol_m;
-        bestScore_m = checker_l.computeScore();
- 
-        //A priori, inutile perdre du temps a tenter d'ecrire, puisqu'il ne s'agit pas d'une nouvelle solution.
-        //En particulier, inutile d'ecrire celle lue depuis les fichiers en entree
-        //vu que si on ecrit rien de l'optim, on aura par defaut ce score
-    }
-}
+{}
 
 void ContextALG::setMustWriteBestSol(bool mustWriteBestSol_p){
     mustWriteBestSol_m = mustWriteBestSol_p;
@@ -74,10 +62,6 @@ int ContextALG::getRessUsedOnMachine(int idxRess_p, int idxMachine_p) const {
     return result_l;
 }
 
-const vector<int>& ContextALG::getBestSol() const{
-    return bestSol_m;
-}
-
 uint64_t ContextALG::getScoreBestSol() const {
     return bestScore_m;
 }
@@ -92,14 +76,5 @@ bool ContextALG::checkCompletAndMajBestSol(const vector<int>& candidatBestSol_p,
 }
 
 bool ContextALG::checkRapideAndMajBestSol(const vector<int>& candidatBestSol_p, uint64_t score_p){
-    if ( score_p < bestScore_m ){
-        if ( mustWriteBestSol_m ){
-            SolutionDtoout::writeSol(candidatBestSol_p);
-        }
-
-        bestSol_m = candidatBestSol_p;
-        bestScore_m = score_p;
-        return true;
-    }
-    return false;
+    return SolutionDtoout::writeSol(candidatBestSol_p, score_p);
 }
