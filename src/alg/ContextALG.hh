@@ -68,11 +68,6 @@ class ContextALG {
         vector<int> currentSol_m;
 
         /**
-         * score de la meilleure solution
-         */
-        uint64_t bestScore_m;
-
-        /**
          * Quand une meilleure sol est trouvee, celle-ci est aussitot ecrite.
          * Ce comportement n'est pas souhaitable lorsque l'on travaille sur un sous-contexte
          * Cette attribut permet de piloter ce comportement

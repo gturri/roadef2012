@@ -40,7 +40,7 @@ bool SolutionDtoout::writeSol(const vector<int>& vSol_p, uint64_t score_p){
     //Vu qu'on n'est pas cense passer souvent ici, on lock en global
     pthread_mutex_lock(&mutex_m);
     try {
-        if ( score_p > bestScoreWritten_m ){
+        if (score_p >= bestScoreWritten_m) {
             pthread_mutex_unlock(&mutex_m);
             return false;
         }
@@ -56,10 +56,13 @@ bool SolutionDtoout::writeSol(const vector<int>& vSol_p, uint64_t score_p){
         copy(vSol_p.begin(), vSol_p.end(), ostream_iterator<int>(ofs_l, " "));
         bestScoreWritten_m = score_p;
         bestSol_m = vSol_p;
-    } catch ( string exc){
+    } catch (string exc) {
         pthread_mutex_unlock(&mutex_m);
         throw exc;
-    } catch ( ... ){
+    } catch (std::exception exc) {
+        pthread_mutex_unlock(&mutex_m);
+        throw exc;
+    } catch (...) {
         pthread_mutex_unlock(&mutex_m);
         throw string("Une exception a ete levee lors de l'ecriture d'une solution");
     }

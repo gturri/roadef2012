@@ -15,7 +15,6 @@ using namespace std;
 ContextALG::ContextALG(ContextBO const * pContextBO_p, bool mustWriteBestSol_p, bool solInitToCheck_p) :
     pContextBO_m(pContextBO_p),
     currentSol_m(pContextBO_p->getSolInit()),
-    bestScore_m(numeric_limits<int>::max()),
     mustWriteBestSol_m(mustWriteBestSol_p)
 {}
 
@@ -63,7 +62,7 @@ int ContextALG::getRessUsedOnMachine(int idxRess_p, int idxMachine_p) const {
 }
 
 uint64_t ContextALG::getScoreBestSol() const {
-    return bestScore_m;
+    return SolutionDtoout::getBestScore();
 }
 
 bool ContextALG::checkCompletAndMajBestSol(const vector<int>& candidatBestSol_p, bool checkValidite_p){
