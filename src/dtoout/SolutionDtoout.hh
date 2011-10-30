@@ -46,6 +46,10 @@ class SolutionDtoout {
          */
         static const vector<int>& getBestSol();
 
+#ifdef UTEST
+        static void reinit(const string& outfile_p);
+#endif
+
     private:
         /**
          * Fichier sur lequel la solution doit etre ecrite

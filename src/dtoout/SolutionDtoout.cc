@@ -66,3 +66,12 @@ uint64_t SolutionDtoout::getBestScore(){
 const vector<int>& SolutionDtoout::getBestSol(){
     return bestSol_m;
 }
+
+#ifdef UTEST
+void SolutionDtoout::reinit(const string& outfile_p){
+    outFileName_m = outfile_p;
+    pthread_mutex_unlock(&mutex_m);
+    bestScoreWritten_m = numeric_limits<uint64_t>::max();
+    bestSol_m.clear();
+}
+#endif

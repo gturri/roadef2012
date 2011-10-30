@@ -100,6 +100,7 @@ testU_SOURCES = \
 	$(top_srcdir)/src/gtests/dtoin/ServiceDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/SolutionDtoinTest.cc \
 	$(top_srcdir)/src/gtests/dtoin/TestDtoinHelper.cc \
+	$(top_srcdir)/src/gtests/dtoout/SolutionDtooutTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerBalanceCostTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerCapaTest.cc \
 	$(top_srcdir)/src/gtests/tools/CheckerConflictTest.cc \
@@ -117,6 +118,7 @@ testU_SOURCES = \
 testU_CPPFLAGS = \
 	$(GTEST_INCLUDE) \
 	$(GMOCK_INCLUDE) \
+	-DUTEST \
 	-I $(top_srcdir)/src
 
 testU_LDADD = \
