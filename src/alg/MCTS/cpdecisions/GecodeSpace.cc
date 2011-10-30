@@ -135,15 +135,17 @@ void GecodeSpace::capacity(const ContextBO *pContext_p)
         rel(*this, load_l[mach_l], IRT_LQ, capa_l);
     }
 
-    IntArgs sizes_l(nbProc_l);
+    IntArgs sizes_l;
     int totalSize_l = 0;
     for (int proc_l = 0; proc_l < nbProc_l; ++proc_l) {
         ProcessBO *pProc_l = pContext_p->getProcess(proc_l);
-        for (int res_l = 0; res_l < nbRes_l; ++res_l) {
-            int req_l = pProc_l->getRequirement(res_l);
-            sizes_l[proc_l] += req_l;
-            totalSize_l += req_l;
-        }
+        int machSize_l = 0;
+
+        for (int res_l = 0; res_l < nbRes_l; ++res_l)
+            machSize_l += pProc_l->getRequirement(res_l);
+
+        totalSize_l += machSize_l;
+        sizes_l << machSize_l;
     }
 
     linear(*this, load_l, IRT_EQ, totalSize_l);
