@@ -124,6 +124,31 @@ void GecodeSpace::capacity(const ContextBO *pContext_p)
         for (int mach_l = 0; mach_l < nbMach_l; ++mach_l)
             linear(*this, sizes_l, x_l.row(mach_l), IRT_EQ, load_l[mach_l]);
     }
+
+    // we do an agregated resource on each machine to combine knowledge
+    IntVarArgs load_l(*this, nbMach_l, 0, Int::Limits::max);
+    for (int mach_l = 0; mach_l < nbMach_l; ++mach_l) {
+        MachineBO *pMach_l = pContext_p->getMachine(mach_l);
+        int capa_l = 0;
+        for (int res_l = 0; res_l < nbRes_l; ++res_l)
+            capa_l += pMach_l->getCapa(res_l);
+        rel(*this, load_l[mach_l], IRT_LQ, capa_l);
+    }
+
+    IntArgs sizes_l(nbProc_l);
+    int totalSize_l = 0;
+    for (int proc_l = 0; proc_l < nbProc_l; ++proc_l) {
+        ProcessBO *pProc_l = pContext_p->getProcess(proc_l);
+        for (int res_l = 0; res_l < nbRes_l; ++res_l) {
+            int req_l = pProc_l->getRequirement(res_l);
+            sizes_l[proc_l] += req_l;
+            totalSize_l += req_l;
+        }
+    }
+
+    linear(*this, load_l, IRT_EQ, totalSize_l);
+    for (int mach_l = 0; mach_l < nbMach_l; ++mach_l)
+        linear(*this, sizes_l, x_l.row(mach_l), IRT_EQ, load_l[mach_l]);
 }
 
 void GecodeSpace::conflict(const ContextBO *pContext_p)
