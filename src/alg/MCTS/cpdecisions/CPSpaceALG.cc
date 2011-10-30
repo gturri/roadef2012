@@ -2,6 +2,7 @@
 
 #include "CPSpaceALG.hh"
 #include "alg/ContextALG.hh"
+#include "dtoout/SolutionDtoout.hh"
 #include "tools/Checker.hh"
 #include "tools/Log.hh"
 
@@ -113,7 +114,7 @@ double CPSpaceALG::evaluate() const
     if (checker_l.isValid()) {
         uint64_t intEval_l = checker_l.computeScore();
         res_l = (double) origEval_m / ((double) origEval_m + intEval_l);
-        if (pContext_m->checkRapideAndMajBestSol(sol_l, intEval_l)) {
+        if (SolutionDtoout::writeSol(sol_l, intEval_l)) {
             LOG(INFO) << "Better solution: " << intEval_l
                       << ", eval = " << res_l << endl;
         }

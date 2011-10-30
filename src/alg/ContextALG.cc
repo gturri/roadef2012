@@ -72,9 +72,5 @@ bool ContextALG::checkCompletAndMajBestSol(const vector<int>& candidatBestSol_p,
         return false;
     }
 
-    return checkRapideAndMajBestSol(candidatBestSol_p, checker_l.computeScore());
-}
-
-bool ContextALG::checkRapideAndMajBestSol(const vector<int>& candidatBestSol_p, uint64_t score_p){
-    return SolutionDtoout::writeSol(candidatBestSol_p, score_p);
+    return SolutionDtoout::writeSol(candidatBestSol_p, checker_l.computeScore());
 }

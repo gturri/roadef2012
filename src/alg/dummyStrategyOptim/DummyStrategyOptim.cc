@@ -35,7 +35,7 @@ ContextALG DummyStrategyOptim::run(ContextALG contextAlg_p, time_t heureFinMaxPr
         Checker checker2_l(contextAlg_p.getContextBO(), sol_l);
         int scoreApres_l = checker2_l.computeScore();
         if ( scoreApres_l > scoreAvant_l ){
-            bool bestSolMaj_l = contextAlg_p.checkRapideAndMajBestSol(sol_l, scoreApres_l);
+            bool bestSolMaj_l = SolutionDtoout::writeSol(sol_l, scoreApres_l);
 
             /* Ici, on a verifie qu'on a une meilleure sol que ce qu'on avait avant.
              * On est donc sur que le contextALG a fait sa maj

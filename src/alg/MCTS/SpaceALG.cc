@@ -1,6 +1,7 @@
 #include "SpaceALG.hh"
 
 #include "alg/ContextALG.hh"
+#include "dtoout/SolutionDtoout.hh"
 #include "SolutionALG.hh"
 #include "DecisionALG.hh"
 #include "RestrictionALG.hh"
@@ -73,7 +74,7 @@ double SpaceALG::evaluate() const
     if (checker_l.isValid()){
         uint64_t intEval_l = checker_l.computeScore();
         eval_l = (double) origEval_m / (origEval_m + intEval_l);
-        if (pContext_m->checkRapideAndMajBestSol(sol_l, intEval_l)) {
+        if (SolutionDtoout::writeSol(sol_l, intEval_l)) {
             LOG(INFO) << "Better solution: " << intEval_l
                       << ", eval = " << eval_l << endl;
         }
