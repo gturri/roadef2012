@@ -89,7 +89,7 @@ double CPSpaceALG::evaluate() const
         return res_l;
 
     // Montecarlo: on demande une solution à Gecode
-    Search::FailStop stop_l(1000);
+    Search::FailStop stop_l(100);
     Search::Options options_l;
     options_l.stop = &stop_l;
     //options_l.c_d = 1000;
