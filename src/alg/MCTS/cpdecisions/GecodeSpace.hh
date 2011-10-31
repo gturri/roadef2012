@@ -4,6 +4,7 @@
 #include "CPDecisionALG.hh"
 #include "bo/ContextBO.hh"
 #include <gecode/int.hh>
+#include <gecode/minimodel.hh>
 #include <vector>
 
 class GecodeSpace: public Gecode::Space
@@ -15,11 +16,11 @@ public:
     std::vector<int> solution();
 
     // constraints
-    void capacity(const ContextBO*);
+    void capacity(const ContextBO*, Gecode::Matrix<Gecode::BoolVarArgs>&);
     void conflict(const ContextBO*);
     //void spread(const ContextBO*);
     void dependency(const ContextBO*);
-    void transient(const ContextBO*);
+    void transient(const ContextBO*, Gecode::Matrix<Gecode::BoolVarArgs>&);
 
     // Decision management
     void addDecision(const CPDecisionALG*);

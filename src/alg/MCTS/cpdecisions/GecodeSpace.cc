@@ -37,11 +37,11 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
     for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
         channel(*this, x_l.col(proc_l), machine_m[proc_l]);
 
-    capacity(pContext_p);
+    capacity(pContext_p, x_l);
     conflict(pContext_p);
     //spread(pContext_p);
     dependency(pContext_p);
-    transient(pContext_p);
+    transient(pContext_p, x_l);
 
     // random branching to do a Monte Carlo generation
     // celui-la est pas top random... faut le randomiser.
@@ -84,12 +84,11 @@ std::vector<int> GecodeSpace::solution()
 /*
  * Constraints
  */
-void GecodeSpace::capacity(const ContextBO *pContext_p)
+void GecodeSpace::capacity(const ContextBO *pContext_p, Matrix<BoolVarArgs> &x_p)
 {
     int nbProc_l = pContext_p->getNbProcesses();
     int nbMach_l = pContext_p->getNbMachines();
     int nbRes_l = pContext_p->getNbRessources();
-    Matrix<BoolVarArgs> x_l(bMatrix_m, nbProc_l, nbMach_l);
 
     for (int res_l = 0; res_l < nbRes_l; ++res_l) {
         IntVarArgs load_l(*this, nbMach_l, 0, Int::Limits::max);
@@ -122,7 +121,7 @@ void GecodeSpace::capacity(const ContextBO *pContext_p)
  
         // Load must be equal to packed items 
         for (int mach_l = 0; mach_l < nbMach_l; ++mach_l)
-            linear(*this, sizes_l, x_l.row(mach_l), IRT_EQ, load_l[mach_l]);
+            linear(*this, sizes_l, x_p.row(mach_l), IRT_EQ, load_l[mach_l]);
     }
 
     // we do an agregated resource on each machine to combine knowledge
@@ -150,7 +149,7 @@ void GecodeSpace::capacity(const ContextBO *pContext_p)
 
     linear(*this, load_l, IRT_EQ, totalSize_l);
     for (int mach_l = 0; mach_l < nbMach_l; ++mach_l)
-        linear(*this, sizes_l, x_l.row(mach_l), IRT_EQ, load_l[mach_l]);
+        linear(*this, sizes_l, x_p.row(mach_l), IRT_EQ, load_l[mach_l]);
 }
 
 void GecodeSpace::conflict(const ContextBO *pContext_p)
@@ -212,12 +211,11 @@ void GecodeSpace::dependency(const ContextBO *pContext_p)
     }
 }
 
-void GecodeSpace::transient(const ContextBO *pContext_p)
+void GecodeSpace::transient(const ContextBO *pContext_p, Matrix<BoolVarArgs> &x_p)
 {
     int nbProc_l = pContext_p->getNbProcesses();
     int nbMach_l = pContext_p->getNbMachines();
     int nbRes_l = pContext_p->getNbRessources();
-    Matrix<BoolVarArgs> x_l(bMatrix_m, nbProc_l, nbMach_l);
     const Solution& solInit_l = pContext_p->getSolInit();
 
     for (int res_l = 0; res_l < nbRes_l; ++res_l) {
@@ -244,7 +242,7 @@ void GecodeSpace::transient(const ContextBO *pContext_p)
                 if (solInit_l[proc_l] == mach_l)
                     unremovableCapa_l += req_l;
                 else {
-                    otherProc_l << x_l(proc_l, mach_l);
+                    otherProc_l << x_p(proc_l, mach_l);
                     sizes_l << req_l;
                 }
             }
