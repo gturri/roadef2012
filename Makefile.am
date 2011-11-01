@@ -123,5 +123,6 @@ testU_CPPFLAGS = \
 
 testU_LDADD = \
 	$(GMOCK_LIBS) \
+	-lboost_thread
 	-lpthread
 

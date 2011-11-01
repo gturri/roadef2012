@@ -1,5 +1,8 @@
 #include "dtoout/SolutionDtoout.hh"
+#include <boost/thread.hpp>
 #include <gtest/gtest.h>
+using namespace boost;
+using namespace boost::date_time;
 
 TEST(SolutionDtoout, keepBestScore){
     SolutionDtoout::reinit("/dev/null");
@@ -34,12 +37,23 @@ TEST(SolutionDtoout, throwIfWrongFile){
     ASSERT_ANY_THROW(SolutionDtoout::writeSol(vector<int>(), 42));
 }
 
+struct callableSolutionDtooutWrite {
+    void operator()(const vector<int>& sol_p, int score_p){
+        try {
+            SolutionDtoout::writeSol(sol_p, score_p);
+        } catch ( ... ) {
+            //Rien : on s'attend a avoir une exception
+        }
+    }
+};
+
 TEST(SolutionDtoout, unlockIfWrongFile){
-    //FIXME : Le risque, si le teste plante, c'est qu'au lieu d'un echec, on reste bloque dans une etreinte fatale...
-    //Fix eventuel : lancer le writeSol dans un thread, l'attendre 1s, puis s'il n'a pas abouti, le killer et signaler un echec
-    //(mais, on risque un faux positif sur une machine surchargee... (ou attendre 10s ? Mais ca devient long pour un test U, en cas d'echec...)
     SolutionDtoout::reinit("/W/T/F.txt");
     ASSERT_ANY_THROW(SolutionDtoout::writeSol(vector<int>(), 42));
-    ASSERT_ANY_THROW(SolutionDtoout::writeSol(vector<int>(), 13));
+
+
+    callableSolutionDtooutWrite call_l;
+    thread thread_l(call_l, vector<int>(), 13);
+    ASSERT_TRUE(thread_l.timed_join(boost::posix_time::millisec(3000)));
 
 }
