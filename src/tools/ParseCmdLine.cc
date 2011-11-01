@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-#define TEAM_ID 666 /* TODO : completer quand on sera inscrit et qu'on aura notre identifiant d'equipe */
+#define TEAM_ID "S32"
 
 string ParseCmdLine::getHelp(){
     ostringstream oss_l;
