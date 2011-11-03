@@ -13,7 +13,7 @@
 using namespace Gecode;
 typedef std::vector<int> Solution;
 
-GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
+GecodeSpace::GecodeSpace(const ContextBO *pContext_p, const vector<int> &perm_p) :
     machine_m(*this, pContext_p->getNbProcesses(),
               0, pContext_p->getNbMachines() - 1),
     nbUnmovedProcs_m(*this, 0, pContext_p->getNbProcesses()),
@@ -22,12 +22,12 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
 {
     int nbProc_l = pContext_p->getNbProcesses();
     int nbMach_l = pContext_p->getNbMachines();
-    const Solution& solInit_l = pContext_p->getSolInit();
+    const Solution &solInit_l = pContext_p->getSolInit();
 
     // nbUnmovedProcs_m
-    IntArgs solInitArgs_l;
-    for (Solution::const_iterator it_l = solInit_l.begin(); it_l != solInit_l.end(); ++it_l)
-        solInitArgs_l << *it_l;
+    IntArgs solInitArgs_l(nbProc_l);
+    for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
+        solInitArgs_l[perm_p[proc_l]] = solInit_l[proc_l];
     count(*this, machine_m, solInitArgs_l, IRT_EQ, nbUnmovedProcs_m);
     // on veut pas la solution initiale
     rel(*this, nbUnmovedProcs_m, IRT_NQ, nbProc_l);
@@ -37,21 +37,18 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p) :
     for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
         channel(*this, x_l.col(proc_l), machine_m[proc_l]);
 
-    capacity(pContext_p, x_l);
-    conflict(pContext_p);
-    //spread(pContext_p);
-    dependency(pContext_p);
-    transient(pContext_p, x_l);
+    capacity(pContext_p, perm_p, x_l);
+    conflict(pContext_p, perm_p);
+    //spread(pContext_p, perm_p);
+    dependency(pContext_p, perm_p);
+    transient(pContext_p, perm_p, x_l);
 
     // random branching to do a Monte Carlo generation
     // celui-la est pas top random... faut le randomiser.
     branch(*this, nbUnmovedProcs_m, INT_VAL_MAX);
-    branch(*this, machine_m,
-           tiebreak(INT_VAR_AFC_MAX,
-                    //INT_VAR_DEGREE_MAX,
-                    INT_VAR_SIZE_MIN,
-                    INT_VAR_RND),
-           INT_VAL_RND);
+    // celui-la tout seul est bien random, mais ca marche pas encore assez bien
+    // pour le moment (correct pour a1_1)
+    branch(*this, machine_m, INT_VAR_NONE, INT_VAL_RND);
 }
 
 GecodeSpace::GecodeSpace(bool share_p, GecodeSpace &that) :
@@ -67,15 +64,15 @@ Gecode::Space *GecodeSpace::copy(bool share_p)
     return new GecodeSpace(share_p, *this);
 }
 
-std::vector<int> GecodeSpace::solution()
+std::vector<int> GecodeSpace::solution(const vector<int> &perm_p)
 {
     SpaceStatus status_l = status();
     assert(status_l == SS_SOLVED && machine_m.assigned());
-    std::vector<int> res_l;
+    assert(perm_p.size() == machine_m.size());
+    std::vector<int> res_l(perm_p.size());
 
-    for (IntVarArray::const_iterator it_l = machine_m.begin();
-         it_l != machine_m.end(); ++it_l) {
-        res_l.push_back(it_l->val());
+    for (size_t proc_l = 0; proc_l < perm_p.size(); ++proc_l) {
+        res_l[proc_l] = machine_m[perm_p[proc_l]].val();
     }
 
     return res_l;
@@ -84,7 +81,7 @@ std::vector<int> GecodeSpace::solution()
 /*
  * Constraints
  */
-void GecodeSpace::capacity(const ContextBO *pContext_p, Matrix<BoolVarArgs> &x_p)
+void GecodeSpace::capacity(const ContextBO *pContext_p, const vector<int> &perm_p, Matrix<BoolVarArgs> &x_p)
 {
     int nbProc_l = pContext_p->getNbProcesses();
     int nbMach_l = pContext_p->getNbMachines();
@@ -103,7 +100,7 @@ void GecodeSpace::capacity(const ContextBO *pContext_p, Matrix<BoolVarArgs> &x_p
         for (int proc_l = 0; proc_l < nbProc_l; ++proc_l) {
             ProcessBO *pProc_l = pContext_p->getProcess(proc_l);
             int req_l = pProc_l->getRequirement(res_l);
-            sizes_l[proc_l] = req_l;
+            sizes_l[perm_p[proc_l]] = req_l;
             totalSize_l += req_l;
         }
 
@@ -134,7 +131,7 @@ void GecodeSpace::capacity(const ContextBO *pContext_p, Matrix<BoolVarArgs> &x_p
         rel(*this, load_l[mach_l], IRT_LQ, capa_l);
     }
 
-    IntArgs sizes_l;
+    IntArgs sizes_l(nbProc_l);
     int totalSize_l = 0;
     for (int proc_l = 0; proc_l < nbProc_l; ++proc_l) {
         ProcessBO *pProc_l = pContext_p->getProcess(proc_l);
@@ -144,7 +141,7 @@ void GecodeSpace::capacity(const ContextBO *pContext_p, Matrix<BoolVarArgs> &x_p
             machSize_l += pProc_l->getRequirement(res_l);
 
         totalSize_l += machSize_l;
-        sizes_l << machSize_l;
+        sizes_l[perm_p[proc_l]] = machSize_l;
     }
 
     linear(*this, load_l, IRT_EQ, totalSize_l);
@@ -152,7 +149,7 @@ void GecodeSpace::capacity(const ContextBO *pContext_p, Matrix<BoolVarArgs> &x_p
         linear(*this, sizes_l, x_p.row(mach_l), IRT_EQ, load_l[mach_l]);
 }
 
-void GecodeSpace::conflict(const ContextBO *pContext_p)
+void GecodeSpace::conflict(const ContextBO *pContext_p, const vector<int> &perm_p)
 {
     int nbServ_l = pContext_p->getNbServices();
 
@@ -163,13 +160,13 @@ void GecodeSpace::conflict(const ContextBO *pContext_p)
         IntVarArgs machine_l;
 
         for (IntSet::const_iterator it_l = s_l.begin(); it_l != s_l.end(); ++it_l)
-            machine_l << machine_m[*it_l];
+            machine_l << machine_m[perm_p[*it_l]];
 
         distinct(*this, machine_l);
     }
 }
 
-void GecodeSpace::dependency(const ContextBO *pContext_p)
+void GecodeSpace::dependency(const ContextBO *pContext_p, const vector<int> &perm_p)
 {
     int nbProc_l = pContext_p->getNbProcesses();
     int nbMach_l = pContext_p->getNbMachines();
@@ -198,7 +195,7 @@ void GecodeSpace::dependency(const ContextBO *pContext_p)
         IntSet s_l = pServ_l->getProcesses();
         IntVarArgs servNeigh_l;
         for (IntSet::const_iterator it_l = s_l.begin(); it_l != s_l.end(); ++it_l)
-            servNeigh_l << neighborhood_l[*it_l];
+            servNeigh_l << neighborhood_l[perm_p[*it_l]];
 
         channel(*this, servNeigh_l, neighborhoods_l[serv_l]);
 
@@ -211,7 +208,7 @@ void GecodeSpace::dependency(const ContextBO *pContext_p)
     }
 }
 
-void GecodeSpace::transient(const ContextBO *pContext_p, Matrix<BoolVarArgs> &x_p)
+void GecodeSpace::transient(const ContextBO *pContext_p, const vector<int> &perm_p, Matrix<BoolVarArgs> &x_p)
 {
     int nbProc_l = pContext_p->getNbProcesses();
     int nbMach_l = pContext_p->getNbMachines();
@@ -242,7 +239,7 @@ void GecodeSpace::transient(const ContextBO *pContext_p, Matrix<BoolVarArgs> &x_
                 if (solInit_l[proc_l] == mach_l)
                     unremovableCapa_l += req_l;
                 else {
-                    otherProc_l << x_p(proc_l, mach_l);
+                    otherProc_l << x_p(perm_p[proc_l], mach_l);
                     sizes_l << req_l;
                 }
             }

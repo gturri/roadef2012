@@ -3,9 +3,12 @@
 #include "CPSpaceALG.hh"
 #include "alg/ContextALG.hh"
 #include "dtoout/SolutionDtoout.hh"
+#include "bo/ProcessBO.hh"
+#include "bo/MachineBO.hh"
 #include "tools/Checker.hh"
 #include "tools/Log.hh"
 
+#include <algorithm>
 #include <gecode/search.hh>
 
 using namespace Gecode;
@@ -39,6 +42,7 @@ void CPSpaceALG::copy(const CPSpaceALG &that)
 {
     delete pGecodeSpace_m;
     pGecodeSpace_m = 0;
+    perm_m = that.perm_m;
 
     if (that.pGecodeSpace_m->status() != SS_FAILED) {
         pGecodeSpace_m = static_cast<GecodeSpace*>(that.pGecodeSpace_m->clone(false));
@@ -73,11 +77,46 @@ void CPSpaceALG::addDecision(DecisionALG *pDecision_p)
     }
 }
 
+struct Comp {
+    Comp(const vector<double> &v_p) : size_m(v_p) {}
+    const vector<double> &size_m;
+    bool operator()(int i_p, int j_p) { return size_m[i_p] < size_m[j_p]; }
+};
+
+std::vector<int> permutation(const ContextBO *pContext_p)
+{
+    int nbProc_l = pContext_p->getNbProcesses();
+    int nbRes_l = pContext_p->getNbRessources();
+    int nbMach_l = pContext_p->getNbMachines();
+    vector<double> resScale_l(nbRes_l);
+    vector<double> size_l(nbProc_l);
+    vector<int> perm_l(nbProc_l);
+
+    for (int mach_l = 0; mach_l < nbMach_l; ++mach_l) {
+        MachineBO *pMach_l = pContext_p->getMachine(mach_l);
+        for (int res_l = 0; res_l < nbRes_l; ++res_l)
+            resScale_l[res_l] += pMach_l->getCapa(res_l);
+    }
+
+    for (int proc_l = 0; proc_l < nbProc_l; ++proc_l) {
+        ProcessBO *pProc_l = pContext_p->getProcess(proc_l);
+        perm_l[proc_l] = proc_l;
+        for (int res_l = 0; res_l < nbRes_l; ++res_l)
+            size_l[proc_l] += (double) pProc_l->getRequirement(res_l) / resScale_l[res_l];
+    }
+
+    Comp comp_l(size_l);
+    sort(perm_l.begin(), perm_l.end(), comp_l);
+
+    return perm_l;
+}
+
 void CPSpaceALG::setpContext(ContextALG *pContext_p)
 {
     SpaceALG::setpContext(pContext_p);
     delete pGecodeSpace_m;
-    pGecodeSpace_m = new GecodeSpace(pContext_p->getContextBO());
+    perm_m = permutation(pContext_p->getContextBO());
+    pGecodeSpace_m = new GecodeSpace(pContext_p->getContextBO(), perm_m);
 }
 
 double CPSpaceALG::evaluate() const
@@ -105,7 +144,7 @@ double CPSpaceALG::evaluate() const
     }
 
     // on récupère la solution
-    std::vector<int> sol_l = pSol_l->solution();
+    std::vector<int> sol_l = pSol_l->solution(perm_m);
     delete pSol_l;
 
     // Quand Gecode intégrera toutes les contraintes, on aura plus besoin de

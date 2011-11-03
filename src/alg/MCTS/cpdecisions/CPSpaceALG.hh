@@ -26,6 +26,7 @@ private:
 
 protected:
     GecodeSpace *pGecodeSpace_m;
+    std::vector<int> perm_m;
 };
 
 #endif

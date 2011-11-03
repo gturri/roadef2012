@@ -10,17 +10,17 @@
 class GecodeSpace: public Gecode::Space
 {
 public:
-    GecodeSpace(const ContextBO*);
+    GecodeSpace(const ContextBO*, const vector<int>&);
     GecodeSpace(bool, GecodeSpace&);
     virtual Gecode::Space *copy(bool);
-    std::vector<int> solution();
+    std::vector<int> solution(const vector<int>&);
 
     // constraints
-    void capacity(const ContextBO*, Gecode::Matrix<Gecode::BoolVarArgs>&);
-    void conflict(const ContextBO*);
+    void capacity(const ContextBO*, const vector<int>&, Gecode::Matrix<Gecode::BoolVarArgs>&);
+    void conflict(const ContextBO*, const vector<int>&);
     //void spread(const ContextBO*);
-    void dependency(const ContextBO*);
-    void transient(const ContextBO*, Gecode::Matrix<Gecode::BoolVarArgs>&);
+    void dependency(const ContextBO*, const vector<int>&);
+    void transient(const ContextBO*, const vector<int>&, Gecode::Matrix<Gecode::BoolVarArgs>&);
 
     // Decision management
     void addDecision(const CPDecisionALG*);
