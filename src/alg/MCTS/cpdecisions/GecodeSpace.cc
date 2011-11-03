@@ -46,9 +46,15 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p, const vector<int> &perm_p)
     // random branching to do a Monte Carlo generation
     // celui-la est pas top random... faut le randomiser.
     branch(*this, nbUnmovedProcs_m, INT_VAL_MAX);
+    branch(*this, machine_m,
+           tiebreak(INT_VAR_AFC_MAX,
+                    //INT_VAR_DEGREE_MAX,
+                    INT_VAR_SIZE_MIN,
+                    INT_VAR_RND),
+           INT_VAL_RND);
     // celui-la tout seul est bien random, mais ca marche pas encore assez bien
     // pour le moment (correct pour a1_1)
-    branch(*this, machine_m, INT_VAR_NONE, INT_VAL_RND);
+    //branch(*this, machine_m, INT_VAR_NONE, INT_VAL_RND);
 }
 
 GecodeSpace::GecodeSpace(bool share_p, GecodeSpace &that) :
