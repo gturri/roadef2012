@@ -146,17 +146,53 @@ double CPSpaceALG::evaluate() const
     // on récupère la solution
     std::vector<int> sol_l = pSol_l->solution(perm_m);
     delete pSol_l;
-
-    Checker checker_l(pContext_m->getContextBO(), sol_l);
-    assert(checker_l.isValid());
-    uint64_t intEval_l = checker_l.computeScore();
-    res_l = (double) origEval_m / ((double) origEval_m + intEval_l);
-    if (SolutionDtoout::writeSol(sol_l, intEval_l)) {
-        LOG(INFO) << "Better solution: " << intEval_l
-                  << ", eval = " << res_l << endl;
-    }
+    uint64_t eval_l = localsearch(sol_l);
+    res_l = (double) origEval_m / ((double) origEval_m + eval_l);
 
     return res_l;
 }
+
+uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
+{
+    bool foundBetter_l = true;
+    Checker checker_l(pContext_m->getContextBO(), bestSol_p);
+    assert(checker_l.isValid());
+    uint64_t bestEval_l = checker_l.computeScore();
+    Search::MemoryStop stop_l(256 * 1024 * 1024);
+    Search::Options options_l;
+    options_l.stop = &stop_l;
+    options_l.c_d = 1;
+    options_l.clone = false;
+
+    while (foundBetter_l) {
+        foundBetter_l = false;
+        GecodeSpace *pSpace_l = static_cast<GecodeSpace*>(pGecodeSpace_m->clone(false));
+        pSpace_l->restrictNbMove(1, bestSol_p, perm_m);
+        DFS<GecodeSpace> search_l(pSpace_l, options_l);
+        // done by search because of options_l.clone = false
+        //delete pSpace_l;
+        GecodeSpace *pSol_l = 0;
+
+        while (!foundBetter_l && (pSol_l = search_l.next())) {
+            std::vector<int> sol_l = pSol_l->solution(perm_m);
+            delete pSol_l;
+            Checker checker_l(pContext_m->getContextBO(), sol_l);
+            assert(checker_l.isValid());
+            uint64_t eval_l = checker_l.computeScore();
+
+            if (eval_l < bestEval_l) {
+                bestEval_l = eval_l;
+                bestSol_p = sol_l;
+                foundBetter_l = true;
+                if (SolutionDtoout::writeSol(bestSol_p, bestEval_l)) {
+                    LOG(INFO) << "Better solution: " << bestEval_l << endl;
+                }
+            }
+        }
+    }
+
+    return bestEval_l;
+}
+
 
 #endif //USE_GECODE

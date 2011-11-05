@@ -330,4 +330,20 @@ GecodeSpace::DecisionPool GecodeSpace::generateDecisions()
     return res_l;
 }
 
+/*
+ * Local search
+ */
+void GecodeSpace::restrictNbMove(int nb_p, const vector<int> &sol_p, const vector<int> &perm_p)
+{
+    assert((int) perm_p.size() == machine_m.size());
+    assert((int) sol_p.size() == machine_m.size());
+    int nbProc_l = machine_m.size();
+    IntArgs solArgs_l(nbProc_l);
+    for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
+        solArgs_l[perm_p[proc_l]] = sol_p[proc_l];
+
+    count(*this, machine_m, solArgs_l, IRT_EQ, nbProc_l - nb_p);
+}
+
+
 #endif //USE_GECODE

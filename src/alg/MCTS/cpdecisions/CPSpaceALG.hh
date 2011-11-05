@@ -21,6 +21,8 @@ public:
     virtual void setpContext(ContextALG *);
     virtual double evaluate() const;
 
+    virtual uint64_t localsearch(std::vector<int>) const;
+
 private:
     void copy(const CPSpaceALG&);
 

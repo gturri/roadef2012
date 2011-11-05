@@ -27,6 +27,9 @@ public:
     typedef std::vector<DecisionALG*> DecisionPool;
     DecisionPool generateDecisions();
 
+    // LocalSearch
+    void restrictNbMove(int, const vector<int>&, const vector<int>&);
+
 protected:
     // machine[ProcessId] == the machine on which ProcessId is affectd
     Gecode::IntVarArray machine_m;
