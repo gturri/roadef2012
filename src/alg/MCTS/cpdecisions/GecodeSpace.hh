@@ -18,7 +18,7 @@ public:
     // constraints
     void capacity(const ContextBO*, const vector<int>&, Gecode::Matrix<Gecode::BoolVarArgs>&);
     void conflict(const ContextBO*, const vector<int>&);
-    //void spread(const ContextBO*);
+    void spread(const ContextBO*, const vector<int>&);
     void dependency(const ContextBO*, const vector<int>&);
     void transient(const ContextBO*, const vector<int>&, Gecode::Matrix<Gecode::BoolVarArgs>&);
 

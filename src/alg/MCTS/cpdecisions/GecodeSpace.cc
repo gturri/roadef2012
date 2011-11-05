@@ -1,6 +1,7 @@
 #ifdef USE_GECODE
 
 #include "GecodeSpace.hh"
+#include "bo/LocationBO.hh"
 #include "bo/MachineBO.hh"
 #include "bo/NeighborhoodBO.hh"
 #include "bo/ProcessBO.hh"
@@ -39,7 +40,7 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p, const vector<int> &perm_p)
 
     capacity(pContext_p, perm_p, x_l);
     conflict(pContext_p, perm_p);
-    //spread(pContext_p, perm_p);
+    spread(pContext_p, perm_p);
     dependency(pContext_p, perm_p);
     transient(pContext_p, perm_p, x_l);
 
@@ -74,7 +75,7 @@ std::vector<int> GecodeSpace::solution(const vector<int> &perm_p)
 {
     SpaceStatus status_l = status();
     assert(status_l == SS_SOLVED && machine_m.assigned());
-    assert(perm_p.size() == machine_m.size());
+    assert((int) perm_p.size() == machine_m.size());
     std::vector<int> res_l(perm_p.size());
 
     for (size_t proc_l = 0; proc_l < perm_p.size(); ++proc_l) {
@@ -165,10 +166,53 @@ void GecodeSpace::conflict(const ContextBO *pContext_p, const vector<int> &perm_
         IntSet s_l = pServ_l->getProcesses();
         IntVarArgs machine_l;
 
+        if (s_l.size() < 2)
+            continue;
+
         for (IntSet::const_iterator it_l = s_l.begin(); it_l != s_l.end(); ++it_l)
             machine_l << machine_m[perm_p[*it_l]];
 
         distinct(*this, machine_l);
+    }
+}
+
+void GecodeSpace::spread(const ContextBO *pContext_p, const vector<int> &perm_p)
+{
+    int nbProc_l = pContext_p->getNbProcesses();
+    int nbMach_l = pContext_p->getNbMachines();
+    int nbServ_l = pContext_p->getNbServices();
+    int nbLoc_l = pContext_p->getNbLocations();
+
+    if (nbLoc_l < 2)
+        return;
+
+    // creation of location_l[proc] -> location corresponding to the
+    // proc
+    IntArgs machToLoc_l;
+    for (int mach_l = 0; mach_l < nbMach_l; ++mach_l) {
+        MachineBO *pMach_l = pContext_p->getMachine(mach_l);
+        machToLoc_l <<  pMach_l->getLocation()->getId();
+    }
+    IntSharedArray sMachToLoc_l(machToLoc_l);
+    IntVarArgs location_l(*this, nbProc_l, 0, nbLoc_l - 1);
+    for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
+        element(*this, sMachToLoc_l, machine_m[proc_l], location_l[proc_l]);
+
+
+    for (int serv_l = 0; serv_l < nbServ_l; ++serv_l) {
+        ServiceBO *pServ_l = pContext_p->getService(serv_l);
+        int spreadMin_l = pServ_l->getSpreadMin();
+
+        if (spreadMin_l < 2)
+            continue;
+
+        typedef unordered_set<int> IntSet;
+        IntSet s_l = pServ_l->getProcesses();
+        IntVarArgs servLoc_l;
+        for (IntSet::const_iterator it_l = s_l.begin(); it_l != s_l.end(); ++it_l)
+            servLoc_l << location_l[perm_p[*it_l]];
+
+        nvalues(*this, servLoc_l, IRT_GQ,  spreadMin_l);
     }
 }
 

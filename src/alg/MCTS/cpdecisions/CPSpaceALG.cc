@@ -147,18 +147,13 @@ double CPSpaceALG::evaluate() const
     std::vector<int> sol_l = pSol_l->solution(perm_m);
     delete pSol_l;
 
-    // Quand Gecode intégrera toutes les contraintes, on aura plus besoin de
-    // checker
     Checker checker_l(pContext_m->getContextBO(), sol_l);
-    if (checker_l.isValid()) {
-        uint64_t intEval_l = checker_l.computeScore();
-        res_l = (double) origEval_m / ((double) origEval_m + intEval_l);
-        if (SolutionDtoout::writeSol(sol_l, intEval_l)) {
-            LOG(INFO) << "Better solution: " << intEval_l
-                      << ", eval = " << res_l << endl;
-        }
-    } else {
-        LOG(INFO) << "Simulation not valid." << endl;
+    assert(checker_l.isValid());
+    uint64_t intEval_l = checker_l.computeScore();
+    res_l = (double) origEval_m / ((double) origEval_m + intEval_l);
+    if (SolutionDtoout::writeSol(sol_l, intEval_l)) {
+        LOG(INFO) << "Better solution: " << intEval_l
+                  << ", eval = " << res_l << endl;
     }
 
     return res_l;
