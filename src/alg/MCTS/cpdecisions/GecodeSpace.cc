@@ -48,10 +48,7 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p, const vector<int> &perm_p)
     // celui-la est pas top random... faut le randomiser.
     branch(*this, nbUnmovedProcs_m, INT_VAL_MAX);
     branch(*this, machine_m,
-           tiebreak(INT_VAR_AFC_MAX,
-                    //INT_VAR_DEGREE_MAX,
-                    INT_VAR_SIZE_MIN,
-                    INT_VAR_RND),
+           tiebreak(INT_VAR_AFC_MAX, INT_VAR_SIZE_MIN),
            INT_VAL_RND);
     // celui-la tout seul est bien random, mais ca marche pas encore assez bien
     // pour le moment (correct pour a1_1)
@@ -73,14 +70,12 @@ Gecode::Space *GecodeSpace::copy(bool share_p)
 
 std::vector<int> GecodeSpace::solution(const vector<int> &perm_p)
 {
-    SpaceStatus status_l = status();
-    assert(status_l == SS_SOLVED && machine_m.assigned());
+    assert(status() == SS_SOLVED && machine_m.assigned());
     assert((int) perm_p.size() == machine_m.size());
     std::vector<int> res_l(perm_p.size());
 
-    for (size_t proc_l = 0; proc_l < perm_p.size(); ++proc_l) {
+    for (size_t proc_l = 0; proc_l < perm_p.size(); ++proc_l)
         res_l[proc_l] = machine_m[perm_p[proc_l]].val();
-    }
 
     return res_l;
 }
