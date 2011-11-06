@@ -43,16 +43,6 @@ GecodeSpace::GecodeSpace(const ContextBO *pContext_p, const vector<int> &perm_p)
     spread(pContext_p, perm_p);
     dependency(pContext_p, perm_p);
     transient(pContext_p, perm_p, x_l);
-
-    // random branching to do a Monte Carlo generation
-    // celui-la est pas top random... faut le randomiser.
-    branch(*this, nbUnmovedProcs_m, INT_VAL_MAX);
-    branch(*this, machine_m,
-           tiebreak(INT_VAR_AFC_MAX, INT_VAR_SIZE_MIN),
-           INT_VAL_RND);
-    // celui-la tout seul est bien random, mais ca marche pas encore assez bien
-    // pour le moment (correct pour a1_1)
-    //branch(*this, machine_m, INT_VAR_NONE, INT_VAL_RND);
 }
 
 GecodeSpace::GecodeSpace(bool share_p, GecodeSpace &that) :
@@ -312,7 +302,7 @@ GecodeSpace::DecisionPool GecodeSpace::generateDecisions()
 {
     DecisionPool res_l;
 
-    if (status() != SS_BRANCH)
+    if (isSolution())
         return res_l;
 
     // find the bigest var
@@ -328,6 +318,35 @@ GecodeSpace::DecisionPool GecodeSpace::generateDecisions()
     res_l.push_back(new CPDecisionALG(target_l, machine_m[target_l].med() + 1, machine_m[target_l].max()));
 
     return res_l;
+}
+
+bool GecodeSpace::isSolution()
+{
+    status();
+    return machine_m.assigned();
+}
+
+/*
+ * Branching
+ */
+void GecodeSpace::postBranching(BranchMethod bm_p)
+{
+    switch (bm_p) {
+    case MC:
+        // random branching to do a Monte Carlo generation
+        // celui-la est pas top random... faut le randomiser.
+        branch(*this, nbUnmovedProcs_m, INT_VAL_MAX);
+        branch(*this, machine_m,
+               tiebreak(INT_VAR_AFC_MAX, INT_VAR_SIZE_MIN),
+               INT_VAL_RND);
+        // celui-la tout seul est bien random, mais ca marche pas encore assez
+        // bien pour le moment (correct pour a1_1)
+        //branch(*this, machine_m, INT_VAR_NONE, INT_VAL_RND);
+        break;
+    case LS:
+        branch(*this, machine_m, INT_VAR_RND, INT_VAL_MIN);
+        break;
+    }
 }
 
 /*

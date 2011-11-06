@@ -56,7 +56,7 @@ SpaceALG * CPSpaceALG::clone()
 
 bool CPSpaceALG::isSolution() const
 {
-    return pGecodeSpace_m == 0 || pGecodeSpace_m->status() == SS_SOLVED;
+    return pGecodeSpace_m == 0 || pGecodeSpace_m->isSolution();
 }
 
 CPSpaceALG::DecisionsPool CPSpaceALG::generateDecisions() const
@@ -124,15 +124,18 @@ double CPSpaceALG::evaluate() const
     double res_l = 0.;
 
     // si on a pas de Gecode, le pb est FAILED
-    if (! pGecodeSpace_m)
+    if (! pGecodeSpace_m || pGecodeSpace_m->status() == SS_FAILED)
         return res_l;
 
     // Montecarlo: on demande une solution à Gecode
     Search::FailStop stop_l(100);
     Search::Options options_l;
     options_l.stop = &stop_l;
+    options_l.clone = false;
     //options_l.c_d = 1000;
-    DFS<GecodeSpace> search_l(pGecodeSpace_m, options_l);
+    GecodeSpace *pSpace_l = static_cast<GecodeSpace*>(pGecodeSpace_m->clone(false));
+    pSpace_l->postBranching(GecodeSpace::MC);
+    DFS<GecodeSpace> search_l(pSpace_l, options_l);
     GecodeSpace *pSol_l = search_l.next();
 
     // Gecode a pas trouvé de solution réalisable
@@ -168,12 +171,11 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
         foundBetter_l = false;
         GecodeSpace *pSpace_l = static_cast<GecodeSpace*>(pGecodeSpace_m->clone(false));
         pSpace_l->restrictNbMove(1, bestSol_p, perm_m);
+        pSpace_l->postBranching(GecodeSpace::LS);
         DFS<GecodeSpace> search_l(pSpace_l, options_l);
-        // done by search because of options_l.clone = false
-        //delete pSpace_l;
         GecodeSpace *pSol_l = 0;
 
-        while (!foundBetter_l && (pSol_l = search_l.next())) {
+        while ((pSol_l = search_l.next()) != 0) {
             std::vector<int> sol_l = pSol_l->solution(perm_m);
             delete pSol_l;
             Checker checker_l(pContext_m->getContextBO(), sol_l);

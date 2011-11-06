@@ -10,6 +10,8 @@
 class GecodeSpace: public Gecode::Space
 {
 public:
+    enum BranchMethod {MC, LS};
+
     GecodeSpace(const ContextBO*, const vector<int>&);
     GecodeSpace(bool, GecodeSpace&);
     virtual Gecode::Space *copy(bool);
@@ -26,6 +28,10 @@ public:
     void addDecision(const CPDecisionALG*);
     typedef std::vector<DecisionALG*> DecisionPool;
     DecisionPool generateDecisions();
+    bool isSolution();
+
+    // branching
+    void postBranching(BranchMethod);
 
     // LocalSearch
     void restrictNbMove(int, const vector<int>&, const vector<int>&);
