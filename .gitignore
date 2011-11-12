@@ -10,6 +10,7 @@ config.h.in
 config.sub
 configure
 depcomp
+fast/
 install-sh
 ltmain.sh
 m4/libtool.m4
@@ -22,6 +23,8 @@ temp.txt
 .deps/
 .libs/
 Makefile
+script/resultats.txt
+solution_checker/solution_checker
 config.h
 config.log
 config.status
