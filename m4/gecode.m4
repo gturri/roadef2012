@@ -1,5 +1,5 @@
 AC_DEFUN([AC_GECODE], [
-        withGecode=false
+        withGecode=true
         AC_ARG_WITH(gecode-dir,
             AC_HELP_STRING([--with-gecode-dir=DIR],[where the root of gecode is installed]),
             [
