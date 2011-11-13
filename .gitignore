@@ -1,6 +1,12 @@
 .*.sw*
 *~
 *.o
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.pdf
 Makefile.in
 aclocal.m4
 autom4te.cache/

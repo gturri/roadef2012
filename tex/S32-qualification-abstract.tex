@@ -1,7 +1,9 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper,twocolumn]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage[margin=2cm]{geometry}
 
 \title{Qualification abstract of team S32:\\
   An exact metaheuristic}
@@ -16,17 +18,63 @@
 
 \section{Introduction}
 
+We developped a new metaheuristic to solve the problem of the
+ROADEF/EURO challenge.  Basically, it can be viewed as the hybridation
+of a branch and bound with a GRASP using Monte Carlo Tree Search.
+
+First, we present the method and its different parts.  Then, we show
+the results we have on the given instances. Finally, an overview of
+the improvement we will do to the method is exposed.
+
 \section{Method}
 
 \subsection{Monte Carlo Tree Search}
 
+presentation
+
+usage in the game of Go
+
+our adaptations to optimisation problems
+
 \subsection{Search Tree}
+
+process with the most possibilities, and median branching
+
+no lower bound for the moment
 
 \subsection{Monte Carlo Simulation}
 
+random solution close to the given initial solution
+
 \subsection{Local Search}
 
+Simple greedy
+
+\subsection{Technical details}
+
+C++, autotools, boost, Gecode, git
+
+Tested on Linux, Cygwin and OpenBSD, should work on any Unix and maybe
+on Windows.
+
+ISC License.
+
 \section{Results}
+
+
+
+\section{Perspectives}
+
+improvement of the Monte Carlo Simulation using an heuristic to assign
+a process to a machine
+
+improvement of the local search (tabu search, simulated annealing, LP)
+
+improvement of the search tree
+
+parallel search
+
+using a lower bound
 
 \section{Conclusion}
 
