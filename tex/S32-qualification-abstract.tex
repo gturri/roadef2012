@@ -5,8 +5,8 @@
 \usepackage{hyperref}
 \usepackage[margin=2cm]{geometry}
 
-\title{Qualification abstract of team S32:\\
-  An exact metaheuristic}
+\title{Qualification~abstract of team~S32:
+  An~exact~metaheuristic}
 
 \author{Pierre-Etienne Bougué \and Florian Colin \and Denis Daste
   \and Kamal Fadlaoui \and Quentin Lequy \and Guillaume Pinot \and
@@ -61,14 +61,39 @@ ISC License.
 
 \section{Results}
 
+The results of our method on the given instances are represented on
+tab~\ref{tab:results}.
 
+\begin{table}
+  \centering
+  \label{tab:results}
+  \caption{Results of version 90e70fc on a 1.6GHz Intel Atom processor
+    after 5\,min}
+  \begin{tabular}{|c|r|r|}
+    \hline
+    instance & initial solution & solution\\
+    \hline
+    a1\_1 &   49528750 &   44306501\\
+    a1\_2 & 1061649570 & 1011480564\\
+    a1\_3 &  583662270 &  583662270\\
+    a1\_4 &  632499600 &  620106923\\
+    a1\_5 &  782189690 &  750529736\\
+    a2\_1 &  391189190 &  370121352\\
+    a2\_2 & 1876768120 & 1790800317\\
+    a2\_3 & 2272487840 & 2219967994\\
+    a2\_4 & 3223516130 & 3174351443\\
+    a2\_5 &  787355300 &  787355300\\
+    \hline
+  \end{tabular}
+\end{table}
 
 \section{Perspectives}
 
 improvement of the Monte Carlo Simulation using an heuristic to assign
 a process to a machine
 
-improvement of the local search (tabu search, simulated annealing, LP)
+improvement of the local search (tabu search, simulated annealing, LP,
+incremental evaluation)
 
 improvement of the search tree
 
