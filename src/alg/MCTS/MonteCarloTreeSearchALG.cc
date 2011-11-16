@@ -13,6 +13,15 @@
 #include <algorithm>
 #include "tools/Log.hh"
 
+#include <boost/tuple/tuple.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/bind/bind.hpp>
+
+using boost::ref;
+using boost::bind;
+using boost::thread_group;
+using boost::tuple;
+
 typedef MonteCarloTreeSearchALG::Tree::ChildrenPool ChildrenPool;
 typedef MonteCarloTreeSearchALG::Tree::iterator iterator; 
 
@@ -127,6 +136,11 @@ SpaceALG * MonteCarloTreeSearchALG::initNewSpace()
     return pInitialSpace_m->clone();
 }
 
+void callable_evaluate(SpaceALG * pSpace_p,double & d_p)
+{
+    d_p = pSpace_p->evaluate();
+}
+
 int MonteCarloTreeSearchALG::performDescent()
 {
     SpaceALG * pSpace_l = initNewSpace();
@@ -147,19 +161,44 @@ int MonteCarloTreeSearchALG::performDescent()
     int nbSimu_l = 0;
     double sumEval_l = 0;
 
+    typedef tuple<SpaceALG *,DecisionALG *,double> Eval;
+    typedef std::list<Eval> EvalPool;
+    EvalPool pool_l;
+
+    boost::thread_group group_l;
+
     for (DecisionsPool::iterator it_l = decisions_l.begin();
          it_l != decisions_l.end(); ++it_l) {
         SpaceALG * pChildSpace_l = pSpace_l->clone();
         pChildSpace_l->addDecision(*it_l);
         // on construit la solution
-        double eval_l =  pChildSpace_l->evaluate();
+        //double eval_l =  pChildSpace_l->evaluate();
+        pool_l.push_back(Eval(pChildSpace_l,*it_l,0.0));
+        std::cout << "launching thread on " << pChildSpace_l << std::endl;
+        group_l.create_thread( bind(callable_evaluate,
+                                    ref(pChildSpace_l),
+                                    ref(pool_l.back().get<2>())) );
+
+    }
+
+    group_l.join_all();
+
+    for(EvalPool::iterator it_l = pool_l.begin(); it_l != pool_l.end(); ++it_l)
+    {
+        SpaceALG * pChildSpace_l = it_l->get<0>();
+        double eval_l = it_l->get<2>();
+        std::cout << "result of thread on " 
+                  << pChildSpace_l 
+                  << ": " << eval_l  << std::endl;
 
         if (pChildSpace_l->isSolution()) {
             // on delete la decision car on ne l'ajoute pas à l'arbre
-            delete *it_l;
+            //delete *it_l;
+            delete it_l->get<1>();
         } else {
             // si c'est pas une solution, on l'ajoute à l'arbre
-            NodeContentALG newNC_l(*it_l);
+            //NodeContentALG newNC_l(*it_l);
+            NodeContentALG newNC_l(it_l->get<1>());
             iterator newNode_l = pTree_m->addChildren(current_l, newNC_l);
 
             // on met à jour les évaluations
