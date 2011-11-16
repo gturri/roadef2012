@@ -58,6 +58,15 @@ Gecode::Space *GecodeSpace::copy(bool share_p)
     return new GecodeSpace(share_p, *this);
 }
 
+GecodeSpace *GecodeSpace::safeClone()
+{
+    if (status() != SS_FAILED) {
+        GecodeSpace *that = static_cast<GecodeSpace*>(clone(false));
+        that->status();
+        return that;
+    } else return 0;
+}
+
 std::vector<int> GecodeSpace::solution(const vector<int> &perm_p)
 {
     assert(status() == SS_SOLVED && machine_m.assigned());
@@ -354,14 +363,26 @@ void GecodeSpace::postBranching(BranchMethod bm_p)
  */
 void GecodeSpace::restrictNbMove(int nb_p, const vector<int> &sol_p, const vector<int> &perm_p)
 {
-    assert((int) perm_p.size() == machine_m.size());
-    assert((int) sol_p.size() == machine_m.size());
     int nbProc_l = machine_m.size();
+    assert((int) perm_p.size() == nbProc_l);
+    assert((int) sol_p.size() == nbProc_l);
     IntArgs solArgs_l(nbProc_l);
     for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
         solArgs_l[perm_p[proc_l]] = sol_p[proc_l];
 
     count(*this, machine_m, solArgs_l, IRT_EQ, nbProc_l - nb_p);
+}
+
+void GecodeSpace::restrictExceptProc(int exceptProc_p, const vector<int> &sol_p, const vector<int> &perm_p)
+{
+    int nbProc_l = machine_m.size();
+    assert((int) perm_p.size() == nbProc_l);
+    assert((int) sol_p.size() == nbProc_l);
+    assert(0 <= exceptProc_p && exceptProc_p < nbProc_l);
+
+    for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
+        if (proc_l != exceptProc_p)
+            rel(*this, machine_m[perm_p[proc_l]], IRT_EQ, sol_p[proc_l]);
 }
 
 
