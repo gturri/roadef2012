@@ -158,6 +158,8 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
 {
     bool foundBetter_l = true;
     int nbProc_l = pContext_m->getContextBO()->getNbProcesses();
+    int lastImprovedProc_l = 0;
+    int aProc_l = nbProc_l - 1;
     Checker checker_l(pContext_m->getContextBO(), bestSol_p);
     assert(checker_l.isValid());
     uint64_t bestEval_l = checker_l.computeScore();
@@ -173,7 +175,7 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
         pSpace_l->restrictNbMove(1, bestSol_p, perm_m);
         pSpace_l->postBranching(GecodeSpace::LS);
 
-        for (int aProc_l = nbProc_l - 1; !foundBetter_l && aProc_l >= 0; --aProc_l) {
+        do {
             int proc_l = perm_m[aProc_l];
             GecodeSpace *pCurSpace_l = pSpace_l->safeClone();
             pCurSpace_l->restrictExceptProc(proc_l, bestSol_p, perm_m);
@@ -191,12 +193,16 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
                     bestEval_l = eval_l;
                     bestSol_p = sol_l;
                     foundBetter_l = true;
+                    lastImprovedProc_l = aProc_l;
                     if (SolutionDtoout::writeSol(bestSol_p, bestEval_l)) {
                         LOG(INFO) << "Better solution: " << bestEval_l << endl;
                     }
                 }
             }
-        }
+
+            if (--aProc_l < 0)
+                aProc_l = nbProc_l - 1;
+        } while (!foundBetter_l && aProc_l != lastImprovedProc_l);
 
         delete pSpace_l;
     }
