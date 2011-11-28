@@ -30,11 +30,36 @@ the improvement we will do to the method is exposed.
 
 \subsection{Monte Carlo Tree Search}
 
-presentation
+\cite{kocsis2006bandit} proposed to guide the exploration of a tree
+using multi-armed bandit technics and Monte Carlo as an evaluation of
+a node.  This method is also known as UCT (for Upper Confidence bound
+for Tree, the name of the main formula of the method) or MCTS (for
+Monte Carlo Tree Search).  Thanks to this method, Mogo, a Go
+artificial intelligence, became competitive with humans
+\cite{gelly2007contribution}.  Because this method allow to explore a
+tree integrating the exploration exploitation problem, we decided to
+base our optimisation method on MCTS.
 
-usage in the game of Go
+Basically, the method works as follow:
+\begin{itemize}
+\item UCT choose a node to expand.
+\item The node is expanded, and one Monte Carlo simulation is done at
+  each new created node. Each Monte Carlo simulation returns an
+  evaluation of its node between 0 and 1.
+\item The evaluation of the simulation are used to update the
+  knowledge of the problem.
+\end{itemize}
+This sequence is done until the stop condition is meet.
 
-our adaptations to optimisation problems
+We adapted MCTS to optimization problems. Our main modification is
+that we manage solved nodes.  As a consequence, if our method runs
+enough time, it will stop with the optimal solution.
+
+This method is composed of different modules:
+\begin{itemize}
+\item a search tree;
+\item a Monte Carlo Simulation system.
+\end{itemize}
 
 \subsection{Search Tree}
 
@@ -103,6 +128,7 @@ using a lower bound
 
 \section{Conclusion}
 
+\bibliographystyle{plain}
 \bibliography{bibliography}
 
 \end{document}
