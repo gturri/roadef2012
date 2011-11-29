@@ -63,26 +63,40 @@ This method is composed of different modules:
 
 \subsection{Search Tree}
 
-process with the most possibilities, and median branching
-
-no lower bound for the moment
+We use a simple branching scheme: we select the processus with the
+most possible machine assignable, and we cut this list in two equal
+parts.
 
 \subsection{Monte Carlo Simulation}
 
-random solution close to the given initial solution
+The simulation is the core of the method.  According to
+\cite{gelly2007contribution}, a good simulation must be random, and
+improving the simulation with heuristics improve the results a lot.
+Because of that, we choose to first randomly generate a solution, and
+then improving it with a local search.
 
-\subsection{Local Search}
+Because generating a purely feasible random solution is very
+difficult, we search randomly a feasible solution near the given
+initial solution.
 
-Simple greedy
+On the feasible solution provided by the Monte Carlo method, we launch
+a greedy algorithm to improve the solution.  The algorithm try to move
+every processus in imprortance order to every possible machine and
+select the move if it improve the current solution.
 
 \subsection{Technical details}
 
-C++, autotools, boost, Gecode, git
+Our program use C++ with the STL and the Boost library.  We also use
+the autotools to build the project and git to manage the sources.
 
-Tested on Linux, Cygwin and OpenBSD, should work on any Unix and maybe
-on Windows.
+To manage the constraints, we use Gecode, a C++ constraint programming
+library under the MIT license.  Particularly, the Monte Carlo is done
+using Gecode search procedures, and the local search use Gecode
+filtering.
 
-ISC License.
+Finally, our code is licenced under the ISC license, a well known BSD
+style license.  So, our program and its dependencies are under BSD
+style licences.
 
 \section{Results}
 
@@ -127,6 +141,11 @@ parallel search
 using a lower bound
 
 \section{Conclusion}
+
+In this article we presented a new metaheuristic and applied it to a
+real world problem.  We improve the solution on every given
+instances.  Moreover, we identified a lot of possibilities of
+improvement.
 
 \bibliographystyle{plain}
 \bibliography{bibliography}
