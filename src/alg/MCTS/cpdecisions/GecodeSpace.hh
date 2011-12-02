@@ -16,6 +16,7 @@ public:
     GecodeSpace(bool, GecodeSpace&);
     virtual Gecode::Space *copy(bool);
     std::vector<int> solution(const vector<int>&);
+    GecodeSpace *safeClone();
 
     // constraints
     void capacity(const ContextBO*, const vector<int>&, Gecode::Matrix<Gecode::BoolVarArgs>&);
@@ -35,6 +36,7 @@ public:
 
     // LocalSearch
     void restrictNbMove(int, const vector<int>&, const vector<int>&);
+    void restrictExceptProc(int, const vector<int>&, const vector<int>&);
 
 protected:
     // machine[ProcessId] == the machine on which ProcessId is affectd
