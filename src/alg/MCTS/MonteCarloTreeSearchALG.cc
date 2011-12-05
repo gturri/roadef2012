@@ -174,9 +174,8 @@ int MonteCarloTreeSearchALG::performDescent()
         // on construit la solution
         //double eval_l =  pChildSpace_l->evaluate();
         pool_l.push_back(Eval(pChildSpace_l,*it_l,0.0));
-        std::cout << "launching thread on " << pChildSpace_l << std::endl;
         group_l.create_thread( bind(callable_evaluate,
-                                    ref(pChildSpace_l),
+                                    ref(pool_l.back().get<0>()),
                                     ref(pool_l.back().get<2>())) );
 
     }
@@ -187,9 +186,6 @@ int MonteCarloTreeSearchALG::performDescent()
     {
         SpaceALG * pChildSpace_l = it_l->get<0>();
         double eval_l = it_l->get<2>();
-        std::cout << "result of thread on " 
-                  << pChildSpace_l 
-                  << ": " << eval_l  << std::endl;
 
         if (pChildSpace_l->isSolution()) {
             // on delete la decision car on ne l'ajoute pas à l'arbre
