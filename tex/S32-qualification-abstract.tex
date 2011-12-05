@@ -30,79 +30,144 @@ the improvement we will do to the method is exposed.
 
 \subsection{Monte Carlo Tree Search}
 
-presentation
+\cite{kocsis2006bandit} proposed to guide the exploration of a tree
+using multi-armed bandit technics and Monte Carlo as an evaluation of
+a node.  This method is also known as UCT (for Upper Confidence bound
+for Tree, the name of the main formula of the method) or MCTS (for
+Monte Carlo Tree Search).  Thanks to this method, Mogo, a Go
+artificial intelligence, became competitive with humans
+\cite{gelly2007contribution}.  Because this method allow to explore a
+tree integrating the exploration exploitation problem, we decided to
+base our optimisation method on MCTS.
 
-usage in the game of Go
+Basically, the method works as follow:
+\begin{itemize}
+\item UCT choose a node to expand.
+\item The node is expanded, and one Monte Carlo simulation is done at
+  each new created node. Each Monte Carlo simulation returns an
+  evaluation of its node between 0 and 1.
+\item The evaluation of the simulation are used to update the
+  knowledge of the problem.
+\end{itemize}
+This sequence is done until the stop condition is meet.
 
-our adaptations to optimisation problems
+We adapted MCTS to optimization problems. Our main modification is
+that we manage solved nodes.  As a consequence, if our method runs
+enough time, it will stop with the optimal solution.
+
+This method is composed of different modules:
+\begin{itemize}
+\item a search tree;
+\item a Monte Carlo Simulation system.
+\end{itemize}
 
 \subsection{Search Tree}
 
-process with the most possibilities, and median branching
-
-no lower bound for the moment
+We use a simple branching scheme: we select the processus with the
+most possible machine assignable, and we cut this list in two equal
+parts.
 
 \subsection{Monte Carlo Simulation}
 
-random solution close to the given initial solution
+The simulation is the core of the method.  According to
+\cite{gelly2007contribution}, a good simulation must be random, and
+improving the simulation with heuristics improve the results a lot.
+Because of that, we choose to first randomly generate a solution, and
+then improving it with a local search.
 
-\subsection{Local Search}
+Because generating a purely feasible random solution is very
+difficult, we search randomly a feasible solution near the given
+initial solution.
 
-Simple greedy
+On the feasible solution provided by the Monte Carlo method, we launch
+a method of descente to improve the solution.  The method try to move
+every processus in importance order to every possible machine and
+select the move if it improve the current solution.
 
 \subsection{Technical details}
 
-C++, autotools, boost, Gecode, git
+Our program use C++ with the STL and the Boost library.  We also use
+the autotools to build the project and git to manage the sources.
 
-Tested on Linux, Cygwin and OpenBSD, should work on any Unix and maybe
-on Windows.
+To manage the constraints, we use Gecode, a C++ constraint programming
+library under the MIT license.  Particularly, the Monte Carlo is done
+using Gecode search procedures, and the local search use Gecode
+filtering.
 
-ISC License.
+The different simulations at a given node are done in parallel using
+boost thread.
+
+Finally, our code is licenced under the ISC license, a well known BSD
+style license.  So, our program and its dependencies are under BSD
+style licences.
 
 \section{Results}
 
 The results of our method on the given instances are represented on
-tab~\ref{tab:results}.
+tab~\ref{tab:results}.  We improved every given instances.
 
 \begin{table}
   \centering
   \label{tab:results}
-  \caption{Results of version 90e70fc on a 1.6GHz Intel Atom processor
+  \caption{Results of version c532113 on a 1.6GHz Intel Atom processor
     after 5\,min}
   \begin{tabular}{|c|r|r|}
     \hline
     instance & initial solution & solution\\
     \hline
     a1\_1 &   49528750 &   44306501\\
-    a1\_2 & 1061649570 & 1011480564\\
-    a1\_3 &  583662270 &  583662270\\
-    a1\_4 &  632499600 &  620106923\\
-    a1\_5 &  782189690 &  750529736\\
-    a2\_1 &  391189190 &  370121352\\
-    a2\_2 & 1876768120 & 1790800317\\
-    a2\_3 & 2272487840 & 2219967994\\
-    a2\_4 & 3223516130 & 3174351443\\
-    a2\_5 &  787355300 &  787355300\\
+    a1\_2 & 1061649570 &  911336551\\
+    a1\_3 &  583662270 &  583379455\\
+    a1\_4 &  632499600 &  375837838\\
+    a1\_5 &  782189690 &  737698361\\
+    a2\_1 &  391189190 &   27096127\\
+    a2\_2 & 1876768120 & 1376369463\\
+    a2\_3 & 2272487840 & 1774597843\\
+    a2\_4 & 3223516130 & 2247406998\\
+    a2\_5 &  787355300 &  741201684\\
     \hline
   \end{tabular}
 \end{table}
 
 \section{Perspectives}
 
-improvement of the Monte Carlo Simulation using an heuristic to assign
-a process to a machine
+We have indentified several items to improve. These items are not
+implemented for the moment due to lack of time.
 
-improvement of the local search (tabu search, simulated annealing, LP,
-incremental evaluation)
+First, we will improve the Monte Carlo simulation using a heuristic
+that take into account the fact that a machine have several
+ressources.  These ideas are inspired by multiprocessor scheduling
+heuristics and vector packing.  This will allow to generate easily a
+random solution without using the given initial solution. Moreover,
+the solution will be balanced, so it can have a good evaluation.
 
-improvement of the search tree
+Then, we will improve our local search.  Our area of improvement are
+\begin{itemize}
+\item changing the neighborhood (swap, partial reaffectation using
+  linear programming, ...);
+\item changing the local search algorithm (tabu search, simulated
+  annealing, ...);
+\item improving the speed of the local search (method to avoid useless
+  moves, improvement of the incremental checker, ...).
+\end{itemize}
 
-parallel search
+We will also improve the search tree.  Finding the most interesting
+procesus to branch on can improve the quality of the search.  Then, we
+can use the knowledge of the problem to restrict the possibilities of
+the choosen processus (using the localtions and the neighborhood for
+example).  We can also search for more complex branching scheme.
 
-using a lower bound
+Finally, we can reduce the search space by using a lower bound (and
+integrate it inside the MCTS).
 
 \section{Conclusion}
 
+In this article we presented a new metaheuristic and applied it to a
+real world problem.  We improve the solution on every given
+instances.  Moreover, we identified a lot of possibilities of
+improvement.
+
+\bibliographystyle{plain}
 \bibliography{bibliography}
 
 \end{document}
