@@ -80,8 +80,8 @@ difficult, we search randomly a feasible solution near the given
 initial solution.
 
 On the feasible solution provided by the Monte Carlo method, we launch
-a greedy algorithm to improve the solution.  The algorithm try to move
-every processus in imprortance order to every possible machine and
+a method of descente to improve the solution.  The method try to move
+every processus in importance order to every possible machine and
 select the move if it improve the current solution.
 
 \subsection{Technical details}
@@ -94,6 +94,9 @@ library under the MIT license.  Particularly, the Monte Carlo is done
 using Gecode search procedures, and the local search use Gecode
 filtering.
 
+The different simulations at a given node are done in parallel using
+boost thread.
+
 Finally, our code is licenced under the ISC license, a well known BSD
 style license.  So, our program and its dependencies are under BSD
 style licences.
@@ -101,7 +104,7 @@ style licences.
 \section{Results}
 
 The results of our method on the given instances are represented on
-tab~\ref{tab:results}.
+tab~\ref{tab:results}.  We improved every given instances.
 
 \begin{table}
   \centering
@@ -128,17 +131,34 @@ tab~\ref{tab:results}.
 
 \section{Perspectives}
 
-improvement of the Monte Carlo Simulation using an heuristic to assign
-a process to a machine
+We have indentified several items to improve. These items are not
+implemented for the moment due to lack of time.
 
-improvement of the local search (tabu search, simulated annealing, LP,
-incremental evaluation)
+First, we will improve the Monte Carlo simulation using a heuristic
+that take into account the fact that a machine have several
+ressources.  These ideas are inspired by multiprocessor scheduling
+heuristics and vector packing.  This will allow to generate easily a
+random solution without using the given initial solution. Moreover,
+the solution will be balanced, so it can have a good evaluation.
 
-improvement of the search tree
+Then, we will improve our local search.  Our area of improvement are
+\begin{itemize}
+\item changing the neighborhood (swap, partial reaffectation using
+  linear programming, ...);
+\item changing the local search algorithm (tabu search, simulated
+  annealing, ...);
+\item improving the speed of the local search (method to avoid useless
+  moves, improvement of the incremental checker, ...).
+\end{itemize}
 
-parallel search
+We will also improve the search tree.  Finding the most interesting
+procesus to branch on can improve the quality of the search.  Then, we
+can use the knowledge of the problem to restrict the possibilities of
+the choosen processus (using the localtions and the neighborhood for
+example).  We can also search for more complex branching scheme.
 
-using a lower bound
+Finally, we can reduce the search space by using a lower bound (and
+integrate it inside the MCTS).
 
 \section{Conclusion}
 
