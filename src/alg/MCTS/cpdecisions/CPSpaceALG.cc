@@ -158,6 +158,7 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
 {
     bool foundBetter_l = true;
     int nbProc_l = pContext_m->getContextBO()->getNbProcesses();
+    int maxIter_l = 100;
     int lastImprovedProc_l = 0;
     int aProc_l = nbProc_l - 1;
     Checker checker_l(pContext_m->getContextBO(), bestSol_p);
@@ -172,18 +173,162 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
     while (foundBetter_l) {
         foundBetter_l = false;
         GecodeSpace *pSpace_l = pGecodeSpace_m->safeClone();
+
+        // Nombre de mouvement possible = 1
         pSpace_l->restrictNbMove(1, bestSol_p, perm_m);
+
         pSpace_l->postBranching(GecodeSpace::LS);
 
         do {
             int proc_l = perm_m[aProc_l];
             GecodeSpace *pCurSpace_l = pSpace_l->safeClone();
             pCurSpace_l->restrictExceptProc(proc_l, bestSol_p, perm_m);
-            DFS<GecodeSpace> search_l(pCurSpace_l, options_l);
+
+        	DFS<GecodeSpace> search_l(pCurSpace_l, options_l);
+
             GecodeSpace *pSol_l = 0;
 
-            while ((pSol_l = search_l.next()) != 0) {
+            double nbMoveDone_l = 0;
+            while ((pSol_l = search_l.next()) != 0 ) {
+
+            	++nbMoveDone_l;
+
                 std::vector<int> sol_l = pSol_l->solution(perm_m);
+
+                delete pSol_l;
+                Checker checker_l(pContext_m->getContextBO(), sol_l);
+                assert(checker_l.isValid());
+                uint64_t eval_l = checker_l.computeScore();
+
+                if (eval_l < bestEval_l) {
+                    bestEval_l = eval_l;
+                    bestSol_p = sol_l;
+                    foundBetter_l = true;
+                    lastImprovedProc_l = aProc_l;
+                    if (SolutionDtoout::writeSol(bestSol_p, bestEval_l)) {
+                        LOG(INFO) << "Better solution: " << bestEval_l << endl;
+                        cout << "Better solution: " << bestEval_l << endl;
+                    }
+                }
+            }
+
+            if (--aProc_l < 1) {
+                aProc_l = nbProc_l - 1;
+            }
+        } while (!foundBetter_l && aProc_l != lastImprovedProc_l);
+
+        delete pSpace_l;
+    }
+
+    return bestEval_l;
+}
+
+uint64_t CPSpaceALG::localsearch2(std::vector<int> bestSol_p) const
+{
+    bool foundBetter_l = true;
+    int nbProc_l = pContext_m->getContextBO()->getNbProcesses();
+    int maxIter_l = 100;
+    int lastImprovedProc_l = 0;
+    int aProc_l = nbProc_l - 1;
+    Checker checker_l(pContext_m->getContextBO(), bestSol_p);
+    assert(checker_l.isValid());
+    uint64_t bestEval_l = checker_l.computeScore();
+    Search::MemoryStop stop_l(256 * 1024 * 1024);
+    Search::Options options_l;
+    options_l.stop = &stop_l;
+    options_l.c_d = 1;
+    options_l.clone = false;
+
+    while (foundBetter_l) {
+        foundBetter_l = false;
+        GecodeSpace *pSpace_l = pGecodeSpace_m->safeClone();
+
+//        // Nombre de mouvement possible = 1
+//        pSpace_l->restrictNbMove(1, bestSol_p, perm_m);
+
+        pSpace_l->postBranching(GecodeSpace::LS);
+
+        do {
+
+        	//
+        	// PARTIE EVALUATION DU NOMBRE DE PROCS A RECALCULER
+        	//
+        	vector<int> vProcFree_l;
+        	int proc1_l = perm_m[aProc_l];
+        	vProcFree_l.push_back(proc1_l);
+
+        	GecodeSpace *pCurSpace_l = pSpace_l->safeClone();
+        	pCurSpace_l->restrictExceptProcs(vProcFree_l, bestSol_p, perm_m);
+        	int nbPossibilities_l = pCurSpace_l->nbPossibilitiesForProc(proc1_l, perm_m);
+
+//        	cout << "FLC; aProc = " << aProc_l << ", sur nbProc = " << nbProc_l << endl;
+
+        	bool addAProc_l = true;
+        	if( nbPossibilities_l <= maxIter_l ) {
+
+				int idxProcToAdd_l = aProc_l-1;
+				while(idxProcToAdd_l >= 0)
+				{
+					GecodeSpace *pCurSpace2_l = pSpace_l->safeClone();
+					int procToAdd_l = perm_m[idxProcToAdd_l];
+					vProcFree_l.push_back(procToAdd_l);
+
+					pCurSpace2_l->restrictExceptProcs(vProcFree_l, bestSol_p, perm_m);
+
+					// recalcule de la borne max du nombre de mouvements possibles
+					nbPossibilities_l = 1;
+					for(int idxProc=vProcFree_l.size();--idxProc>=0;) {
+						int nbCurrentPoss_l = pCurSpace2_l->nbPossibilitiesForProc(vProcFree_l[idxProc], perm_m);
+
+						if( nbCurrentPoss_l > 1 ) {
+							nbPossibilities_l *= nbCurrentPoss_l;
+//							cout << "FLC; nb Possibilites pour proc " << vProcFree_l[idxProc] << " = "
+//									<< nbCurrentPoss_l << endl;
+						}
+					}
+
+//					cout << "FLC; aProc = " << aProc_l << ", sur nbProc = " << nbProc_l << endl;
+//					cout << "FLC; nouveau nbPossibilites=" << nbPossibilities_l << endl;
+
+					if( nbPossibilities_l > maxIter_l ) {
+						// on depasse la combinatoire toleree, on va resoudre avec ca deja
+						delete pCurSpace2_l;
+						break;
+					}
+					// sinon on continue de chercher
+					delete pCurSpace_l;
+					pCurSpace_l = pCurSpace2_l;
+					--idxProcToAdd_l;
+				}
+				aProc_l = idxProcToAdd_l+1;
+        	}
+
+        	//
+        	// FIN PARTIE EVALUATION DU NOMBRE DE PROCS A RECALCULER
+        	//
+
+        	DFS<GecodeSpace> search_l(pCurSpace_l, options_l);
+
+        	// enlevage du premier mouvement quand on ne met pas de contrainte sur le nombre
+        	// de mouvement que doit avoir la solution par rapport a la meilleure solution
+        	// => le premier mouvement est la solution initiale
+        	search_l.next();
+
+            GecodeSpace *pSol_l = 0;
+
+            double nbMoveDone_l = 0;
+            while ((pSol_l = search_l.next()) != 0 ) {
+
+            	++nbMoveDone_l;
+
+                std::vector<int> sol_l = pSol_l->solution(perm_m);
+
+//                cout << "FLC;Mouvement;";
+//                for(int idxProc=0;idxProc<sol_l.size();++idxProc) {
+//                	cout << idxProc << "/" << sol_l[idxProc] << ";";
+//                }
+//                cout << endl;
+
                 delete pSol_l;
                 Checker checker_l(pContext_m->getContextBO(), sol_l);
                 assert(checker_l.isValid());
@@ -199,9 +344,11 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
                     }
                 }
             }
+//            cout << "FLC; nbMoveDone = " << nbMoveDone_l << endl;
 
-            if (--aProc_l < 0)
+            if (--aProc_l < 1) {
                 aProc_l = nbProc_l - 1;
+            }
         } while (!foundBetter_l && aProc_l != lastImprovedProc_l);
 
         delete pSpace_l;

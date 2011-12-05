@@ -22,6 +22,7 @@ public:
     virtual double evaluate() const;
 
     virtual uint64_t localsearch(std::vector<int>) const;
+    virtual uint64_t localsearch2(std::vector<int>) const;
 
 private:
     void copy(const CPSpaceALG&);

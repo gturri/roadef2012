@@ -37,6 +37,8 @@ public:
     // LocalSearch
     void restrictNbMove(int, const vector<int>&, const vector<int>&);
     void restrictExceptProc(int, const vector<int>&, const vector<int>&);
+    void restrictExceptProcs(const vector<int> vExceptProcs_p, const vector<int>&, const vector<int>&);
+    int nbPossibilitiesForProc(int proc_p, const vector<int> &perm_p);
 
 protected:
     // machine[ProcessId] == the machine on which ProcessId is affectd
