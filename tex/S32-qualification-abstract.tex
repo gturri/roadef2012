@@ -19,75 +19,93 @@
 \section{Introduction}
 
 We developped a new metaheuristic to solve the problem of the
-ROADEF/EURO challenge.  Basically, it can be viewed as the hybridation
-of a branch and bound with a GRASP using Monte Carlo Tree Search.
+ROADEF/EURO challenge.  This method is an hybridation
+of a Branch and Bound with a GRASP using Monte Carlo Tree Search.
 
 First, we present the method and its different parts.  Then, we show
-the results we have on the given instances. Finally, an overview of
-the improvement we will do to the method is exposed.
+the results obtained on the given instances.  Finally, we expose an overview of
+the improvements we intend doing to the method.
 
 \section{Method}
 
 \subsection{Monte Carlo Tree Search}
 
-\cite{kocsis2006bandit} proposed to guide the exploration of a tree
-using multi-armed bandit technics and Monte Carlo as an evaluation of
+Kocsis and Szepesv\'ari\cite{kocsis2006bandit} proposed to guide the exploration 
+of a tree using multi-armed bandit technics and Monte Carlo to evaluate
 a node.  This method is also known as UCT (for Upper Confidence bound
 for Tree, the name of the main formula of the method) or MCTS (for
-Monte Carlo Tree Search).  Thanks to this method, Mogo, a Go
-artificial intelligence, became competitive with humans
-\cite{gelly2007contribution}.  Because this method allow to explore a
-tree integrating the exploration exploitation problem, we decided to
-base our optimisation method on MCTS.
+Monte Carlo Tree Search).  Thanks to this method, Mogo, an
+artificial intelligence for Go game, became competitive with 
+humans\cite{gelly2007contribution}.  Because this method allows to 
+explore a tree integrating the exploration-exploitation problem,
+we decided to base our optimization method on MCTS.
 
-Basically, the method works as follow:
+The method works as follow:
 \begin{itemize}
-\item UCT choose a node to expand.
-\item The node is expanded, and one Monte Carlo simulation is done at
-  each new created node. Each Monte Carlo simulation returns an
+\item UCT chooses a node to expand.
+\item The node is expanded, and a Monte Carlo simulation is done for
+  each newly created node. Each Monte Carlo simulation returns an
   evaluation of its node between 0 and 1.
-\item The evaluation of the simulation are used to update the
+\item The evaluation is used to update the
   knowledge of the problem.
 \end{itemize}
-This sequence is done until the stop condition is meet.
+This sequence is repeated until the stop condition is met.
+
 
 We adapted MCTS to optimization problems. Our main modification is
-that we manage solved nodes.  As a consequence, if our method runs
-enough time, it will stop with the optimal solution.
+the management of solved nodes.  As a consequence, if our method runs
+long enough, it will stop with the optimal solution.
 
-This method is composed of different modules:
+This method is composed of two main modules:
 \begin{itemize}
-\item a search tree;
+\item a Search Tree;
 \item a Monte Carlo Simulation system.
 \end{itemize}
 
 \subsection{Search Tree}
 
-process with the most possibilities, and median branching
-
-no lower bound for the moment
+We use a simple branching scheme: we select the processus with the
+most possible machine assignable, and we cut this list in two equal
+parts.
 
 \subsection{Monte Carlo Simulation}
 
-random solution close to the given initial solution
+The simulation is the core of the method.  According to
+Gelly\cite{gelly2007contribution}, a good simulation must be random, and
+improving the simulation with heuristics improves the results a lot.
+That is why we chose to first randomly generate a solution, and
+then improve it with a local search.
 
-\subsection{Local Search}
+Because generating a purely random feasible solution is very
+difficult, we search randomly a feasible solution near the
+initial solution given.
 
-Simple greedy
+On the feasible solution provided by the Monte Carlo method, we launch
+a method of descente to improve the solution.  The method tries to move
+every processus (ordered by importance) to every possible machine and
+select the move if it improves the current solution.
 
 \subsection{Technical details}
 
-C++, autotools, boost, Gecode, git
+Our program uses C++ with the STL and the Boost library.  We also use
+the autotools to build the project and Git to manage the sources.
 
-Tested on Linux, Cygwin and OpenBSD, should work on any Unix and maybe
-on Windows.
+To manage the constraints, we use Gecode, a C++ constraint programming
+library under the MIT license.  Particularly, the Monte Carlo is done
+using Gecode search procedures, and the local search uses Gecode
+filtering.
 
-ISC License.
+The different simulations at a given node are done in parallel using
+boost thread.
+
+Finally, our code is licenced under the ISC license, a well known BSD
+style license.  So, our program and its dependencies are under BSD
+style licences.
 
 \section{Results}
 
 The results of our method on the given instances are represented on
-tab~\ref{tab:results}.
+tab~\ref{tab:results}.  We improved every given instance.
 
 \begin{table}
   \centering
@@ -114,19 +132,41 @@ tab~\ref{tab:results}.
 
 \section{Perspectives}
 
-improvement of the Monte Carlo Simulation using an heuristic to assign
-a process to a machine
+We have indentified several items to improve. These items are not
+implemented for the moment due to lack of time.
 
-improvement of the local search (tabu search, simulated annealing, LP,
-incremental evaluation)
+First, we will improve the Monte Carlo simulation using a heuristic
+that considers the fact that a machine have several
+ressources.  These ideas are inspired by multiprocessor scheduling
+heuristics and vector packing.  This will allow to generate easily a
+random solution without using the given initial solution. Moreover,
+the solution will be balanced, so it can have a good evaluation.
 
-improvement of the search tree
+Then, we will improve our local search.  Our area of improvement are :
+\begin{itemize}
+\item changing the neighborhood (swap, partial reaffectation using
+  linear programming, ...);
+\item changing the local search algorithm (tabu search, simulated
+  annealing, ...);
+\item improving the speed of the local search (method to avoid useless
+  moves, improvement of the incremental checker, ...).
+\end{itemize}
 
-parallel search
+We will also improve the search tree.  Finding the most interesting
+processus to branch on can improve the quality of the search.  Then, we
+can use the knowledge of the problem to restrict the possibilities of
+a choosen processus (using the locations and the neighbourhoods for
+example).  We can also search for more complex branching scheme.
 
-using a lower bound
+Finally, we can reduce the search space by using a lower bound (and
+integrate it inside the MCTS).
 
 \section{Conclusion}
+
+In this article we presented a new metaheuristic and applied it to a
+real world problem.  We improve the solution on every given
+instances.  Moreover, we identified a lot of possibilities of
+improvement for our MCTS method.
 
 \bibliographystyle{plain}
 \bibliography{bibliography}
