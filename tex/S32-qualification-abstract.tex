@@ -30,15 +30,15 @@ the improvements we intend doing to the method.
 
 \subsection{Monte Carlo Tree Search}
 
-Kocsis and Szepesv\'ari\cite{kocsis2006bandit} proposed to guide the exploration of a tree
-using multi-armed bandit technics and Monte Carlo to evaluate
+Kocsis and Szepesv\'ari\cite{kocsis2006bandit} proposed to guide the exploration 
+of a tree using multi-armed bandit technics and Monte Carlo to evaluate
 a node.  This method is also known as UCT (for Upper Confidence bound
 for Tree, the name of the main formula of the method) or MCTS (for
 Monte Carlo Tree Search).  Thanks to this method, Mogo, an
-artificial intelligence for Go game, became competitive with humans
-\cite{gelly2007contribution}.  Because this method allows to explore a
-tree integrating the exploration-exploitation problem, we decided to
-base our optimization method on MCTS.
+artificial intelligence for Go game, became competitive with 
+humans\cite{gelly2007contribution}.  Because this method allows to 
+explore a tree integrating the exploration-exploitation problem,
+we decided to base our optimization method on MCTS.
 
 The method works as follow:
 \begin{itemize}
@@ -81,7 +81,7 @@ difficult, we search randomly a feasible solution near the
 initial solution given.
 
 On the feasible solution provided by the Monte Carlo method, we launch
-a greedy algorithm to improve the solution.  The algorithm tries to move
+a method of descente to improve the solution.  The method tries to move
 every processus (ordered by importance) to every possible machine and
 select the move if it improves the current solution.
 
@@ -95,6 +95,9 @@ library under the MIT license.  Particularly, the Monte Carlo is done
 using Gecode search procedures, and the local search uses Gecode
 filtering.
 
+The different simulations at a given node are done in parallel using
+boost thread.
+
 Finally, our code is licenced under the ISC license, a well known BSD
 style license.  So, our program and its dependencies are under BSD
 style licences.
@@ -102,7 +105,7 @@ style licences.
 \section{Results}
 
 The results of our method on the given instances are represented on
-tab~\ref{tab:results}.
+tab~\ref{tab:results}.  We improved every given instance.
 
 \begin{table}
   \centering
@@ -129,16 +132,34 @@ tab~\ref{tab:results}.
 
 \section{Perspectives}
 
-We identified several ways to improve the results of our method :
+We have indentified several items to improve. These items are not
+implemented for the moment due to lack of time.
+
+First, we will improve the Monte Carlo simulation using a heuristic
+that considers the fact that a machine have several
+ressources.  These ideas are inspired by multiprocessor scheduling
+heuristics and vector packing.  This will allow to generate easily a
+random solution without using the given initial solution. Moreover,
+the solution will be balanced, so it can have a good evaluation.
+
+Then, we will improve our local search.  Our area of improvement are :
 \begin{itemize}
-\item improving the Monte Carlo Simulation using a heuristic to assign
-a process to a machine
-\item improving the local search by testing multiple technics : tabu search, simulated annealing, LP.
-\item increasing the speed of local search evaluations using an incremental evaluation.
-\item improving of the tree search
-\item using parallel search : we do not use parallel computing so far, but it is totally applicable to a tree search.
-\item using a lower bound
+\item changing the neighborhood (swap, partial reaffectation using
+  linear programming, ...);
+\item changing the local search algorithm (tabu search, simulated
+  annealing, ...);
+\item improving the speed of the local search (method to avoid useless
+  moves, improvement of the incremental checker, ...).
 \end{itemize}
+
+We will also improve the search tree.  Finding the most interesting
+processus to branch on can improve the quality of the search.  Then, we
+can use the knowledge of the problem to restrict the possibilities of
+a choosen processus (using the locations and the neighbourhoods for
+example).  We can also search for more complex branching scheme.
+
+Finally, we can reduce the search space by using a lower bound (and
+integrate it inside the MCTS).
 
 \section{Conclusion}
 
