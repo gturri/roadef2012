@@ -1,5 +1,5 @@
 #!/bin/sh -x
-CXX="ccache g++"
+CXX="g++"
 CXXFLAGS="-O2"
 
 $CXX -c $CXXFLAGS solution_checker.cc
