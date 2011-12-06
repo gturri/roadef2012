@@ -4,7 +4,7 @@
 # Les variables ci dessous peuvent etre modifiees au besoin
 # (en pratique, le besoin de les modifier devrait etre assez minime)
 
-PATH_BINAIRE=../fast/
+PATH_BINAIRE=../build/
 PATH_EVALUATEUR=../solution_checker/solution_checker
 TEMPS=300
 FICHIER_SORTIE=resultats.txt
