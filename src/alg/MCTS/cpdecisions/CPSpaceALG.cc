@@ -183,7 +183,7 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
             GecodeSpace *pCurSpace_l = pSpace_l->safeClone();
             pCurSpace_l->restrictExceptProc(proc_l, bestSol_p, perm_m);
 
-        	DFS<GecodeSpace> search_l(pCurSpace_l, options_l);
+            DFS<GecodeSpace> search_l(pCurSpace_l, options_l);
 
             GecodeSpace *pSol_l = 0;
 
@@ -240,61 +240,61 @@ uint64_t CPSpaceALG::localsearch2(std::vector<int> bestSol_p) const
 
         do {
 
-        	//
-        	// PARTIE EVALUATION DU NOMBRE DE PROCS A RECALCULER
-        	//
-        	vector<int> vProcFree_l;
-        	int proc1_l = perm_m[aProc_l];
-        	vProcFree_l.push_back(proc1_l);
+            //
+            // PARTIE EVALUATION DU NOMBRE DE PROCS A RECALCULER
+            //
+            vector<int> vProcFree_l;
+            int proc1_l = perm_m[aProc_l];
+            vProcFree_l.push_back(proc1_l);
 
-        	GecodeSpace *pCurSpace_l = pSpace_l->safeClone();
-        	pCurSpace_l->restrictExceptProcs(vProcFree_l, bestSol_p, perm_m);
-        	int nbPossibilities_l = pCurSpace_l->nbPossibilitiesForProc(proc1_l, perm_m);
+            GecodeSpace *pCurSpace_l = pSpace_l->safeClone();
+            pCurSpace_l->restrictExceptProcs(vProcFree_l, bestSol_p, perm_m);
+            int nbPossibilities_l = pCurSpace_l->nbPossibilitiesForProc(proc1_l, perm_m);
 
-        	if( nbPossibilities_l <= maxIter_l ) {
+            if( nbPossibilities_l <= maxIter_l ) {
 
-				int idxProcToAdd_l = aProc_l-1;
-				while(idxProcToAdd_l >= 0)
-				{
-					GecodeSpace *pCurSpace2_l = pSpace_l->safeClone();
-					int procToAdd_l = perm_m[idxProcToAdd_l];
-					vProcFree_l.push_back(procToAdd_l);
+                int idxProcToAdd_l = aProc_l-1;
+                while(idxProcToAdd_l >= 0)
+                {
+                    GecodeSpace *pCurSpace2_l = pSpace_l->safeClone();
+                    int procToAdd_l = perm_m[idxProcToAdd_l];
+                    vProcFree_l.push_back(procToAdd_l);
 
-					pCurSpace2_l->restrictExceptProcs(vProcFree_l, bestSol_p, perm_m);
+                    pCurSpace2_l->restrictExceptProcs(vProcFree_l, bestSol_p, perm_m);
 
-					// recalcule de la borne max du nombre de mouvements possibles
-					nbPossibilities_l = 1;
-					for(int idxProc=vProcFree_l.size();--idxProc>=0;) {
-						int nbCurrentPoss_l = pCurSpace2_l->nbPossibilitiesForProc(vProcFree_l[idxProc], perm_m);
+                    // recalcule de la borne max du nombre de mouvements possibles
+                    nbPossibilities_l = 1;
+                    for(int idxProc=vProcFree_l.size();--idxProc>=0;) {
+                        int nbCurrentPoss_l = pCurSpace2_l->nbPossibilitiesForProc(vProcFree_l[idxProc], perm_m);
 
-						if( nbCurrentPoss_l > 1 ) {
-							nbPossibilities_l *= nbCurrentPoss_l;
-						}
-					}
+                        if( nbCurrentPoss_l > 1 ) {
+                            nbPossibilities_l *= nbCurrentPoss_l;
+                        }
+                    }
 
-					if( nbPossibilities_l > maxIter_l ) {
-						// on depasse la combinatoire toleree, on va resoudre avec ca deja
-						delete pCurSpace2_l;
-						break;
-					}
-					// sinon on continue de chercher
-					delete pCurSpace_l;
-					pCurSpace_l = pCurSpace2_l;
-					--idxProcToAdd_l;
-				}
-				aProc_l = idxProcToAdd_l+1;
-        	}
+                    if( nbPossibilities_l > maxIter_l ) {
+                        // on depasse la combinatoire toleree, on va resoudre avec ca deja
+                        delete pCurSpace2_l;
+                        break;
+                    }
+                    // sinon on continue de chercher
+                    delete pCurSpace_l;
+                    pCurSpace_l = pCurSpace2_l;
+                    --idxProcToAdd_l;
+                }
+                aProc_l = idxProcToAdd_l+1;
+            }
 
-        	//
-        	// FIN PARTIE EVALUATION DU NOMBRE DE PROCS A RECALCULER
-        	//
+            //
+            // FIN PARTIE EVALUATION DU NOMBRE DE PROCS A RECALCULER
+            //
 
-        	DFS<GecodeSpace> search_l(pCurSpace_l, options_l);
+            DFS<GecodeSpace> search_l(pCurSpace_l, options_l);
 
-        	// enlevage du premier mouvement quand on ne met pas de contrainte sur le nombre
-        	// de mouvement que doit avoir la solution par rapport a la meilleure solution
-        	// => le premier mouvement est la solution initiale
-        	search_l.next();
+            // enlevage du premier mouvement quand on ne met pas de contrainte sur le nombre
+            // de mouvement que doit avoir la solution par rapport a la meilleure solution
+            // => le premier mouvement est la solution initiale
+            delete search_l.next();
 
             GecodeSpace *pSol_l = 0;
 
@@ -318,6 +318,7 @@ uint64_t CPSpaceALG::localsearch2(std::vector<int> bestSol_p) const
             }
 
             if (--aProc_l < 0) {
+                break;// la condition d'arrêt a l'air de merder alors je force un tour
                 aProc_l = nbProc_l - 1;
             }
         } while (!foundBetter_l && aProc_l != lastImprovedProc_l);
