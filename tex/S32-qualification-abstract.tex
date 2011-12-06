@@ -23,20 +23,20 @@ ROADEF/EURO challenge.  This method is an hybridation
 of a Branch and Bound with a GRASP using Monte Carlo Tree Search.
 
 First, we present the method and its different parts.  Then, we show
-the results obtained on the given instances.  Finally, we expose an overview of
-the improvements we intend doing to the method.
+the results obtained on the given instances.  Finally, we expose an
+overview of the improvements we intend doing to the method.
 
 \section{Method}
 
 \subsection{Monte Carlo Tree Search}
 
-Kocsis and Szepesv\'ari\cite{kocsis2006bandit} proposed to guide the exploration 
+\cite{kocsis2006bandit} proposed to guide the exploration 
 of a tree using multi-armed bandit technics and Monte Carlo to evaluate
 a node.  This method is also known as UCT (for Upper Confidence bound
 for Tree, the name of the main formula of the method) or MCTS (for
 Monte Carlo Tree Search).  Thanks to this method, Mogo, an
 artificial intelligence for Go game, became competitive with 
-humans\cite{gelly2007contribution}.  Because this method allows to 
+humans \cite{gelly2007contribution}.  Because this method allows to 
 explore a tree integrating the exploration-exploitation problem,
 we decided to base our optimization method on MCTS.
 
@@ -50,7 +50,6 @@ The method works as follow:
   knowledge of the problem.
 \end{itemize}
 This sequence is repeated until the stop condition is met.
-
 
 We adapted MCTS to optimization problems. Our main modification is
 the management of solved nodes.  As a consequence, if our method runs
@@ -71,7 +70,7 @@ parts.
 \subsection{Monte Carlo Simulation}
 
 The simulation is the core of the method.  According to
-Gelly\cite{gelly2007contribution}, a good simulation must be random, and
+\cite{gelly2007contribution}, a good simulation must be random, and
 improving the simulation with heuristics improves the results a lot.
 That is why we chose to first randomly generate a solution, and
 then improve it with a local search.
@@ -81,7 +80,7 @@ difficult, we search randomly a feasible solution near the
 initial solution given.
 
 On the feasible solution provided by the Monte Carlo method, we launch
-a method of descente to improve the solution.  The method tries to move
+a method of descent to improve the solution.  The method tries to move
 every processus (ordered by importance) to every possible machine and
 select the move if it improves the current solution.
 
