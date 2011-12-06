@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/usr/bin/env bash
 
 # Genere les resultats pour les pre-qualifs de decembre
 # Les variables ci dessous peuvent etre modifiees au besoin
