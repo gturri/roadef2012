@@ -21,8 +21,7 @@ for i in 1 2; do
 
     #Afin que le fichier existe meme si on ne trouve pas de solution
     SOLFILE=solutionFile_a_${i}_${j}
-    rm -f $SOLFILE
-    cp $SOL_INIT benchOut.txt
+    cp $SOL_INIT $SOLFILE
 
     #Lancement du run
     ${PATH_BINAIRE}/machineReassignment -t ${TEMPS} -i $SOL_INIT -p $MODEL -s 0 -o $SOLFILE &
@@ -33,7 +32,7 @@ for i in 1 2; do
     echo -n "\tFin du run $i $j"
     SCORE_INITIAL=$($PATH_EVALUATEUR $MODEL $SOL_INIT $SOL_INIT | grep "Solution is valid" | cut -d " " -f 8)
 
-    SCORE_FINAL=$($PATH_EVALUATEUR $MODEL $SOL_INIT benchOut.txt | grep "Solution is valid" | cut -d " " -f 8)
+    SCORE_FINAL=$($PATH_EVALUATEUR $MODEL $SOL_INIT $SOLFILE | grep "Solution is valid" | cut -d " " -f 8)
 
     if [ "x$SCORE_FINAL" = "x" ]; then
       echo ""
@@ -49,5 +48,3 @@ for i in 1 2; do
 
   done
 done
-
-rm -f benchOut.txt
