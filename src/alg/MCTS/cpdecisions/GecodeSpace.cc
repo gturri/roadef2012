@@ -354,7 +354,6 @@ void GecodeSpace::postBranching(BranchMethod bm_p)
         break;
     case LS:
         branch(*this, machine_m, INT_VAR_RND, INT_VAL_MIN);
-//        branch(*this, machine_m, INT_VAR_RND, INT_VAL_RND);
         break;
     }
 }
@@ -392,14 +391,12 @@ void GecodeSpace::restrictExceptProcs(const vector<int> vExceptProcs_p, const ve
     assert((int) perm_p.size() == nbProc_l);
     assert((int) sol_p.size() == nbProc_l);
 
-//    cout << "FLC; liste des procs a ne pas figer :" << endl;
     for (int proc_l = 0; proc_l < nbProc_l; ++proc_l)
     {
     	bool procAFiger_l = true;
     	for(int idxProcExcept=vExceptProcs_p.size();--idxProcExcept>=0;) {
     		if( vExceptProcs_p[idxProcExcept] == proc_l ) {
     			procAFiger_l = false;
-//    			cout << "FLC; " << proc_l << endl;
     			break;
     		}
     	}

@@ -158,7 +158,6 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
 {
     bool foundBetter_l = true;
     int nbProc_l = pContext_m->getContextBO()->getNbProcesses();
-    int maxIter_l = 100;
     int lastImprovedProc_l = 0;
     int aProc_l = nbProc_l - 1;
     Checker checker_l(pContext_m->getContextBO(), bestSol_p);
@@ -188,11 +187,7 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
 
             GecodeSpace *pSol_l = 0;
 
-            double nbMoveDone_l = 0;
-            while ((pSol_l = search_l.next()) != 0 ) {
-
-            	++nbMoveDone_l;
-
+            while ((pSol_l = search_l.next()) != 0) {
                 std::vector<int> sol_l = pSol_l->solution(perm_m);
 
                 delete pSol_l;
@@ -207,12 +202,11 @@ uint64_t CPSpaceALG::localsearch(std::vector<int> bestSol_p) const
                     lastImprovedProc_l = aProc_l;
                     if (SolutionDtoout::writeSol(bestSol_p, bestEval_l)) {
                         LOG(INFO) << "Better solution: " << bestEval_l << endl;
-                        cout << "Better solution: " << bestEval_l << endl;
                     }
                 }
             }
 
-            if (--aProc_l < 1) {
+            if (--aProc_l < 0) {
                 aProc_l = nbProc_l - 1;
             }
         } while (!foundBetter_l && aProc_l != lastImprovedProc_l);
@@ -242,10 +236,6 @@ uint64_t CPSpaceALG::localsearch2(std::vector<int> bestSol_p) const
     while (foundBetter_l) {
         foundBetter_l = false;
         GecodeSpace *pSpace_l = pGecodeSpace_m->safeClone();
-
-//        // Nombre de mouvement possible = 1
-//        pSpace_l->restrictNbMove(1, bestSol_p, perm_m);
-
         pSpace_l->postBranching(GecodeSpace::LS);
 
         do {
@@ -261,9 +251,6 @@ uint64_t CPSpaceALG::localsearch2(std::vector<int> bestSol_p) const
         	pCurSpace_l->restrictExceptProcs(vProcFree_l, bestSol_p, perm_m);
         	int nbPossibilities_l = pCurSpace_l->nbPossibilitiesForProc(proc1_l, perm_m);
 
-//        	cout << "FLC; aProc = " << aProc_l << ", sur nbProc = " << nbProc_l << endl;
-
-        	bool addAProc_l = true;
         	if( nbPossibilities_l <= maxIter_l ) {
 
 				int idxProcToAdd_l = aProc_l-1;
@@ -282,13 +269,8 @@ uint64_t CPSpaceALG::localsearch2(std::vector<int> bestSol_p) const
 
 						if( nbCurrentPoss_l > 1 ) {
 							nbPossibilities_l *= nbCurrentPoss_l;
-//							cout << "FLC; nb Possibilites pour proc " << vProcFree_l[idxProc] << " = "
-//									<< nbCurrentPoss_l << endl;
 						}
 					}
-
-//					cout << "FLC; aProc = " << aProc_l << ", sur nbProc = " << nbProc_l << endl;
-//					cout << "FLC; nouveau nbPossibilites=" << nbPossibilities_l << endl;
 
 					if( nbPossibilities_l > maxIter_l ) {
 						// on depasse la combinatoire toleree, on va resoudre avec ca deja
@@ -316,18 +298,8 @@ uint64_t CPSpaceALG::localsearch2(std::vector<int> bestSol_p) const
 
             GecodeSpace *pSol_l = 0;
 
-            double nbMoveDone_l = 0;
             while ((pSol_l = search_l.next()) != 0 ) {
-
-            	++nbMoveDone_l;
-
                 std::vector<int> sol_l = pSol_l->solution(perm_m);
-
-//                cout << "FLC;Mouvement;";
-//                for(int idxProc=0;idxProc<sol_l.size();++idxProc) {
-//                	cout << idxProc << "/" << sol_l[idxProc] << ";";
-//                }
-//                cout << endl;
 
                 delete pSol_l;
                 Checker checker_l(pContext_m->getContextBO(), sol_l);
@@ -344,9 +316,8 @@ uint64_t CPSpaceALG::localsearch2(std::vector<int> bestSol_p) const
                     }
                 }
             }
-//            cout << "FLC; nbMoveDone = " << nbMoveDone_l << endl;
 
-            if (--aProc_l < 1) {
+            if (--aProc_l < 0) {
                 aProc_l = nbProc_l - 1;
             }
         } while (!foundBetter_l && aProc_l != lastImprovedProc_l);
