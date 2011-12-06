@@ -20,11 +20,12 @@ for i in 1 2; do
     MODEL=../instances/model_a${i}_${j}.txt
 
     #Afin que le fichier existe meme si on ne trouve pas de solution
-    rm -f benchOut.txt
+    SOLFILE=solutionFile_a_${i}_${j}
+    rm -f $SOLFILE
     cp $SOL_INIT benchOut.txt
 
     #Lancement du run
-    ${PATH_BINAIRE}/machineReassignment -t ${TEMPS} -i $SOL_INIT -p $MODEL -s 0 -o benchOut.txt &
+    ${PATH_BINAIRE}/machineReassignment -t ${TEMPS} -i $SOL_INIT -p $MODEL -s 0 -o $SOLFILE &
     sleep ${TEMPS}
     kill %%
 
