@@ -1,0 +1,71 @@
+Import('buildTest buildGenerateur logLvl')
+
+opts = Variables()
+env = Environment(CPPPATH=["..", ".", "/usr/local/include"])
+env["CXXFLAGS"].append(ARGUMENTS.get("CXXFLAGS", ""))
+env["LINKFLAGS"].append(ARGUMENTS.get("LDFLAGS", ""))
+env["CXX"] = ARGUMENTS.get("CXX", env["CXX"])
+env.MergeFlags('-DMIN_LOG_LVL=' + str(logLvl))
+
+objCommon = env.Object(Glob("tools/*.cc"))
+objCommon += env.Object(Glob("dtoout/*cc"))
+objCommon += env.Object(Glob("dtoin/*cc"))
+objCommon += env.Object(Glob("bo/*cc"))
+objCommon += env.Object(Glob("alg/*cc"))
+objCommon += env.Object(Glob("alg/printDebug/*cc"))
+objCommon += env.Object(Glob("alg/dummyStrategyOptim/*cc"))
+objCommon += env.Object(Glob("alg/MCTS/*cc"))
+objCommon += env.Object(Glob("alg/MCTS/cpdecisions/*cc"))
+objCommon += env.Object(Glob("alg/MCTS/oneprocessdecisions/*cc"))
+
+if not buildTest:
+  env.Program(target="machineReassignement", source=[objCommon, "main.cc"])
+
+#Adding flags for boost
+env.MergeFlags("""-lboost_program_options-mt 
+    -lboost_regex-mt 
+    -lboost_thread-mt 
+    -lboost_thread-mt
+    -I/usr/local/include 
+    -L/usr/local/lib""")
+
+
+#Dealing with Gecode
+if GetOption("gecode"):
+  msg = "Using gecode"
+  if ARGUMENTS.has_key('GECODE_PATH'):
+    msg += " from " + ARGUMENTS['GECODE_PATH']
+    env['CPPPATH'].append(ARGUMENTS['GECODE_PATH'] + "/include")
+    env.MergeFlags('-L' + ARGUMENTS['GECODE_PATH'] + "/lib")
+  env['CCFLAGS'].append("-DUSE_GECODE")
+  env.MergeFlags('-pthread -lgecodesearch -lgecodeminimodel -lgecodeint -lgecodekernel -lgecodesupport -lgecodeset')
+  print msg
+
+
+#Dealing with the generator
+if not buildTest and buildGenerateur:
+  print "Compiling the generator"
+  objGenerateur = env.Object(Glob("generateur/*cc"))
+  objGenerateur += env.Object(Glob("generateur/alg/*cc"))
+  env.Program(target="generateurInstance", source=[objCommon, objGenerateur])
+
+
+#Dealing with unit tests
+if buildTest:
+  env.MergeFlags('-DUTEST')
+  msg = "Compiling unit tests"
+
+  if ARGUMENTS.has_key('GTEST_PATH'):
+    msg += " from " + ARGUMENTS['GTEST_PATH']
+    path = ARGUMENTS['GTEST_PATH']
+    env.MergeFlags('-I'+path+'/include -I'+path+'/gtest/include -L'+path+'/make/')
+  env.MergeFlags('-lgmock_main.a')
+  print msg
+
+  objGTests = env.Object(Glob("gtests/*cc"))
+  objGTests += env.Object(Glob("gtests/bo/*cc"))
+  objGTests += env.Object(Glob("gtests/dtoin/*cc"))
+  objGTests += env.Object(Glob("gtests/dtoout/*cc"))
+  objGTests += env.Object(Glob("gtests/tools/*cc"))
+  objGTests += env.Object(Glob("generateur/alg/*cc"))
+  env.Program(target="UTests", source=[objGTests, objCommon])
