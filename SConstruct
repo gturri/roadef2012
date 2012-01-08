@@ -1,6 +1,7 @@
 import os
 
-#CacheDir('/home/guillaume/cache')
+CacheDir(os.environ["HOME"] + '/cache')
+print "Caching files in " + os.environ["HOME"] + '/cache'
 
 AddOption("--generateur", action="store_true", default=False)
 AddOption("--gtests", action="store_true", default=False)
