@@ -31,7 +31,6 @@ temp.txt
 .libs/
 Makefile
 script/resultats.txt
-solution_checker/solution_checker
 config.h
 config.log
 config.status
