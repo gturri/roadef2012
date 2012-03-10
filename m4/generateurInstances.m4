@@ -1,5 +1,5 @@
 AC_DEFUN([AC_GENERATEUR_INSTANCES], [
-        compileGenerateur=true
+        compileGenerateur=false
         AC_ARG_WITH(
             [generateur],
             AC_HELP_STRING([--with-generateur],[activer pour compiler le generateur d'instances]),

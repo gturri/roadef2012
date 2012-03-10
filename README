@@ -1,54 +1,24 @@
-====== Compilation  ======
-À titre indicatif, pour compiler dans un dossier "build", avec le flag de debug (-g), executer, depuis la racine de l'arborescence :
+Overview
+--------
+This project correspond to a participation to the mathematical optimization
+challenge, Roadef 2012. More information about this challenge is available at
+http://challenge.roadef.org/2012/en/index.php
+
+Information about the mathematical method used may be found in
+the "doc" folder
+
+
+Installation
+------------
+To compile this project, you will need a recent version of Boost,
+and a version of Gecode
+
+This project uses the classical GNU compilations tools.
+In practice, you'll therefore just need to execute e.g. the following commands:
+
 > ./autogen.sh 
 > mkdir build
 > cd build/
-> ../configure CXXFLAGS="-g"
+> ../configure CXXFLAGS="-O2"
 > make -j
 
-Puis, pour lancer le binaire faire, depuis le dossier build : ./machineReassignment
-
-(Pour supprimer les fichiers de compil, depuis le dossier de compil : make clean)
-
-On peut bien sur jouer de maniere classique avec le script configure.
-Par ailleurs, certaines options propres a ce projet sont parametrable a configure-time.
-Ex qui mixe un peu tout :
-> ../configure \
-> --with-libgmock-dir=/path/to/gmock \
-> --with-log-level=warning \
-> CXXFLAGS="-g -Wall" \
-> CXX="ccache g++"
-
-
-====== Ajouter un fichier de sources ======
-  * Si c'est un fichier d'entete, rien à faire.
-  * Si c'est un .cc, l'ajouter dans le Makefile.am (selon les versions des autotools, il peut etre necessaire, pour compiler, de recommencer depuis ./autogen.sh)
-
-
-====== Git : guide basique d'utilisation ======
-===== Pour commiter =====
-  * Pour chaque fichier a commiter (y compris pour ajouter les nouveaux fichiers) : git add fic1 fic2 ...
-  * git commit
-
-Si tous les fichiers modifiés doivent être commités, on peut utiliser le raccourci : git commit -a
-
-===== Pour récupérer les modifs des autres ======
-  * git fetch
-  * puis, en étant sur la branche master : git merge origin/master
-
-(Si la copie de travail est clean, on peut faire deux en un avec : git pull ; mais ce n'est pas conseillé)
-
-===== Pour envoyer ses modifs commités =====
-  * git push
-
-Si "ça ne passe pas", c'est qu'on n'a pas les derniers changements des autres. Dans ce cas, les récupérer au préalable (fetch), les merger, puis pusher
-Attention : ne *jamais* forcer un push avec l'option -f (à chaque fois qu'on fait ça, Dieu tue un chaton)
-
-===== Pour compiler les tests U =====
-Pour ne pas les compiler, il suffit de ne rien faire (ou, ce qui revient au meme, de passer au ./configure l'option --without-libgmock)
-
-Pour les compiler, il faut :
-1 - récupérer la lib gmock, la dezipper
-2 - la compiler en faisant "make" dans gmock-1.6.0/make (il est important de compiler dans le sous dossier "make" : c'est là que les autotools s'attendront à trouver le .a)
-3 - Passer à ./configure l'option --with-libgmock-dir=/path/to/gmock-1.6.0
-4 - L'exécution de "make" generera alors, en plus du binaire d'optimisation, un binaire nommé "testU", qu'il suffit d'exécuter pour lancer les tests
